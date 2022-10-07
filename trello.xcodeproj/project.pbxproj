@@ -1,0 +1,629 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D14839E28DEF4870021C6FC /* trelloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14839D28DEF4870021C6FC /* trelloApp.swift */; };
+		3D1483A028DEF4870021C6FC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14839F28DEF4870021C6FC /* ContentView.swift */; };
+		3D1483A228DEF4890021C6FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1483A128DEF4890021C6FC /* Assets.xcassets */; };
+		3D1483A528DEF4890021C6FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D1483A428DEF4890021C6FC /* Preview Assets.xcassets */; };
+		3D1483B028DEF4890021C6FC /* trelloTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483AF28DEF4890021C6FC /* trelloTests.swift */; };
+		3D1483BA28DEF48A0021C6FC /* trelloUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483B928DEF48A0021C6FC /* trelloUITests.swift */; };
+		3D1483BC28DEF48A0021C6FC /* trelloUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483BB28DEF48A0021C6FC /* trelloUITestsLaunchTests.swift */; };
+		3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CA28DEF70E0021C6FC /* Card.swift */; };
+		3D1483CD28DEF7A20021C6FC /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CC28DEF7A20021C6FC /* List.swift */; };
+		3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */; };
+		3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632B828E078FC0063B4C4 /* TrelloApi.swift */; };
+		3D4632BB28E079140063B4C4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BA28E079140063B4C4 /* Board.swift */; };
+		3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BC28E0C0760063B4C4 /* Label.swift */; };
+		3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BE28E0C21A0063B4C4 /* LabelView.swift */; };
+		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
+		3DE65E2F28F029BA0003D0B5 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */; };
+		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3D1483AC28DEF4890021C6FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D14839228DEF4870021C6FC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D14839928DEF4870021C6FC;
+			remoteInfo = trello;
+		};
+		3D1483B628DEF48A0021C6FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D14839228DEF4870021C6FC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D14839928DEF4870021C6FC;
+			remoteInfo = trello;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3D14839A28DEF4870021C6FC /* trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trello.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D14839D28DEF4870021C6FC /* trelloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trelloApp.swift; sourceTree = "<group>"; };
+		3D14839F28DEF4870021C6FC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3D1483A128DEF4890021C6FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D1483A428DEF4890021C6FC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3D1483A628DEF4890021C6FC /* trello.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = trello.entitlements; sourceTree = "<group>"; };
+		3D1483AB28DEF4890021C6FC /* trelloTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trelloTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D1483AF28DEF4890021C6FC /* trelloTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trelloTests.swift; sourceTree = "<group>"; };
+		3D1483B528DEF48A0021C6FC /* trelloUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trelloUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D1483B928DEF48A0021C6FC /* trelloUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trelloUITests.swift; sourceTree = "<group>"; };
+		3D1483BB28DEF48A0021C6FC /* trelloUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trelloUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3D1483CA28DEF70E0021C6FC /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		3D1483CC28DEF7A20021C6FC /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloListView.swift; sourceTree = "<group>"; };
+		3D4632B828E078FC0063B4C4 /* TrelloApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloApi.swift; sourceTree = "<group>"; };
+		3D4632BA28E079140063B4C4 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		3D4632BC28E0C0760063B4C4 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		3D4632BE28E0C21A0063B4C4 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
+		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D14839728DEF4870021C6FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483A828DEF4890021C6FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483B228DEF48A0021C6FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D14839128DEF4870021C6FC = {
+			isa = PBXGroup;
+			children = (
+				3D14839C28DEF4870021C6FC /* trello */,
+				3D1483AE28DEF4890021C6FC /* trelloTests */,
+				3D1483B828DEF48A0021C6FC /* trelloUITests */,
+				3D14839B28DEF4870021C6FC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3D14839B28DEF4870021C6FC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D14839A28DEF4870021C6FC /* trello.app */,
+				3D1483AB28DEF4890021C6FC /* trelloTests.xctest */,
+				3D1483B528DEF48A0021C6FC /* trelloUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3D14839C28DEF4870021C6FC /* trello */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483C928DEF7030021C6FC /* models */,
+				3D1483C828DEF6730021C6FC /* views */,
+				3D4632B828E078FC0063B4C4 /* TrelloApi.swift */,
+				3D14839D28DEF4870021C6FC /* trelloApp.swift */,
+				3D14839F28DEF4870021C6FC /* ContentView.swift */,
+				3D1483A128DEF4890021C6FC /* Assets.xcassets */,
+				3D1483A628DEF4890021C6FC /* trello.entitlements */,
+				3D1483A328DEF4890021C6FC /* Preview Content */,
+			);
+			path = trello;
+			sourceTree = "<group>";
+		};
+		3D1483A328DEF4890021C6FC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483A428DEF4890021C6FC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3D1483AE28DEF4890021C6FC /* trelloTests */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483AF28DEF4890021C6FC /* trelloTests.swift */,
+			);
+			path = trelloTests;
+			sourceTree = "<group>";
+		};
+		3D1483B828DEF48A0021C6FC /* trelloUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483B928DEF48A0021C6FC /* trelloUITests.swift */,
+				3D1483BB28DEF48A0021C6FC /* trelloUITestsLaunchTests.swift */,
+			);
+			path = trelloUITests;
+			sourceTree = "<group>";
+		};
+		3D1483C828DEF6730021C6FC /* views */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */,
+				3DD56A4428DF0488001FFD8D /* CardView.swift */,
+				3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */,
+				3D4632BE28E0C21A0063B4C4 /* LabelView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		3D1483C928DEF7030021C6FC /* models */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483CA28DEF70E0021C6FC /* Card.swift */,
+				3D1483CC28DEF7A20021C6FC /* List.swift */,
+				3D4632BA28E079140063B4C4 /* Board.swift */,
+				3D4632BC28E0C0760063B4C4 /* Label.swift */,
+				3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3D14839928DEF4870021C6FC /* trello */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trello" */;
+			buildPhases = (
+				3D14839628DEF4870021C6FC /* Sources */,
+				3D14839728DEF4870021C6FC /* Frameworks */,
+				3D14839828DEF4870021C6FC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = trello;
+			productName = trello;
+			productReference = 3D14839A28DEF4870021C6FC /* trello.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3D1483AA28DEF4890021C6FC /* trelloTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1483C228DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trelloTests" */;
+			buildPhases = (
+				3D1483A728DEF4890021C6FC /* Sources */,
+				3D1483A828DEF4890021C6FC /* Frameworks */,
+				3D1483A928DEF4890021C6FC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D1483AD28DEF4890021C6FC /* PBXTargetDependency */,
+			);
+			name = trelloTests;
+			productName = trelloTests;
+			productReference = 3D1483AB28DEF4890021C6FC /* trelloTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3D1483B428DEF48A0021C6FC /* trelloUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D1483C528DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trelloUITests" */;
+			buildPhases = (
+				3D1483B128DEF48A0021C6FC /* Sources */,
+				3D1483B228DEF48A0021C6FC /* Frameworks */,
+				3D1483B328DEF48A0021C6FC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D1483B728DEF48A0021C6FC /* PBXTargetDependency */,
+			);
+			name = trelloUITests;
+			productName = trelloUITests;
+			productReference = 3D1483B528DEF48A0021C6FC /* trelloUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3D14839228DEF4870021C6FC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1400;
+				LastUpgradeCheck = 1400;
+				TargetAttributes = {
+					3D14839928DEF4870021C6FC = {
+						CreatedOnToolsVersion = 14.0;
+					};
+					3D1483AA28DEF4890021C6FC = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 3D14839928DEF4870021C6FC;
+					};
+					3D1483B428DEF48A0021C6FC = {
+						CreatedOnToolsVersion = 14.0;
+						TestTargetID = 3D14839928DEF4870021C6FC;
+					};
+				};
+			};
+			buildConfigurationList = 3D14839528DEF4870021C6FC /* Build configuration list for PBXProject "trello" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3D14839128DEF4870021C6FC;
+			productRefGroup = 3D14839B28DEF4870021C6FC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3D14839928DEF4870021C6FC /* trello */,
+				3D1483AA28DEF4890021C6FC /* trelloTests */,
+				3D1483B428DEF48A0021C6FC /* trelloUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D14839828DEF4870021C6FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1483A528DEF4890021C6FC /* Preview Assets.xcassets in Resources */,
+				3D1483A228DEF4890021C6FC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483A928DEF4890021C6FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483B328DEF48A0021C6FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D14839628DEF4870021C6FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1483A028DEF4870021C6FC /* ContentView.swift in Sources */,
+				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
+				3DE65E2F28F029BA0003D0B5 /* ListViewModel.swift in Sources */,
+				3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */,
+				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
+				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,
+				3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */,
+				3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */,
+				3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */,
+				3D14839E28DEF4870021C6FC /* trelloApp.swift in Sources */,
+				3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */,
+				3D4632BB28E079140063B4C4 /* Board.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483A728DEF4890021C6FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1483B028DEF4890021C6FC /* trelloTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3D1483B128DEF48A0021C6FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D1483BC28DEF48A0021C6FC /* trelloUITestsLaunchTests.swift in Sources */,
+				3D1483BA28DEF48A0021C6FC /* trelloUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3D1483AD28DEF4890021C6FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D14839928DEF4870021C6FC /* trello */;
+			targetProxy = 3D1483AC28DEF4890021C6FC /* PBXContainerItemProxy */;
+		};
+		3D1483B728DEF48A0021C6FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D14839928DEF4870021C6FC /* trello */;
+			targetProxy = 3D1483B628DEF48A0021C6FC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3D1483BD28DEF48A0021C6FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3D1483BE28DEF48A0021C6FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		3D1483C028DEF48A0021C6FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = trello/trello.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3D1483C128DEF48A0021C6FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = trello/trello.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3D1483C328DEF48A0021C6FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/trello.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/trello";
+			};
+			name = Debug;
+		};
+		3D1483C428DEF48A0021C6FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/trello.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/trello";
+			};
+			name = Release;
+		};
+		3D1483C628DEF48A0021C6FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = trello;
+			};
+			name = Debug;
+		};
+		3D1483C728DEF48A0021C6FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = trello;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3D14839528DEF4870021C6FC /* Build configuration list for PBXProject "trello" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1483BD28DEF48A0021C6FC /* Debug */,
+				3D1483BE28DEF48A0021C6FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trello" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1483C028DEF48A0021C6FC /* Debug */,
+				3D1483C128DEF48A0021C6FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1483C228DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trelloTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1483C328DEF48A0021C6FC /* Debug */,
+				3D1483C428DEF48A0021C6FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D1483C528DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trelloUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D1483C628DEF48A0021C6FC /* Debug */,
+				3D1483C728DEF48A0021C6FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3D14839228DEF4870021C6FC /* Project object */;
+}
