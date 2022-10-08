@@ -13,11 +13,13 @@ class TrelloApi: ObservableObject {
     let token: String;
     
     @Published var board: Board;
+    @Published var boards: [BasicBoard];
     
     init(key: String, token: String) {
         self.key = key
         self.token = token
-        self.board = Board(id: "", name: "", lists: [], cards: [], prefs: Board.Prefs())
+        self.board = Board(id: "", name: "", prefs: BoardPrefs())
+        self.boards = []
     }
     
     static var DateFormatter: ISO8601DateFormatter {
@@ -25,6 +27,39 @@ class TrelloApi: ObservableObject {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         return formatter
+    }
+    
+    func getBoards(completion: @escaping ([BasicBoard]) -> Void = { boards in }) {
+        guard let url = URL(string: "https://api.trello.com/1/members/me/boards?key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+        
+        let urlRequest = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let decodedBoards = try JSONDecoder().decode([BasicBoard].self, from: data)
+                        
+                        self.boards = decodedBoards
+                        completion(self.boards)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+            } else {
+                print("Status code: ", response.statusCode)
+            }
+        }
+        
+        dataTask.resume()
     }
     
     func getBoard(id: String, completion: @escaping (Board) -> Void = { board in }) {
@@ -57,12 +92,15 @@ class TrelloApi: ObservableObject {
                             decodedBoard.lists[i] = list
                         }
                         
+                        self.objectWillChange.send()
                         self.board = decodedBoard
                         completion(self.board)
                     } catch let error {
                         print("Error decoding: ", error)
                     }
                 }
+            } else {
+                print("Status code: ", response.statusCode)
             }
         }
         

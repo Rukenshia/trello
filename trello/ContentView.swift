@@ -37,27 +37,48 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack {
-            ScrollView([.horizontal]) {
-                ScrollView([.vertical]) {
-                    VStack(){
-                        HStack(alignment: .top) {
-                            ForEach($trelloApi.board.lists) { list in
-                                TrelloListView(list: list, listIdx: 0)
-                                    .fixedSize(horizontal: false, vertical: true)
+        HStack {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Boards")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                    .padding(.leading, 4)
+                Divider()
+                    .frame(width: 200)
+                ForEach(self.$trelloApi.boards) { board in
+                    SidebarBoardView(board: board, currentBoard: self.$trelloApi.board)
+                }
+                Spacer()
+            }
+            .frame(alignment: .top)
+            .frame(minWidth: 200, maxWidth: 200)
+            .padding(8)
+            VStack {
+                ScrollView([.horizontal]) {
+                    ScrollView([.vertical]) {
+                        VStack(){
+                            HStack(alignment: .top) {
+                                ForEach($trelloApi.board.lists) { list in
+                                    TrelloListView(list: list, listIdx: 0)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
                             }
+                            .padding()
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
-                        .padding()
-                        .frame(maxHeight: .infinity, alignment: .top)
                     }
                 }
             }
-            .frame(minWidth: 1600, minHeight: 600, alignment: .top)
+            .background(self.backgroundImage)
+        }.onAppear {
+            trelloApi.getBoards { boards in
+                if (boards.count > 0) {
+                    trelloApi.getBoard(id: boards[0].id)
+                }
+            }
         }
-        .onAppear {
-            trelloApi.getBoard(id: "6341a4127ff49a0259c89348")
-        }
-        .background(self.backgroundImage)
+        .frame(minWidth: 1600, minHeight: 600, alignment: .top)
     }
 }
 
