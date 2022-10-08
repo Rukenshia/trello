@@ -13,19 +13,11 @@ class TrelloApi: ObservableObject {
     let token: String;
     
     @Published var board: Board;
-    @Published var lists: [List];
-    
-    var anyCancellable: AnyCancellable? = nil
     
     init(key: String, token: String) {
         self.key = key
         self.token = token
         self.board = Board(id: "", name: "", lists: [], cards: [], prefs: Board.Prefs())
-        self.lists = []
-        
-        anyCancellable = self.objectWillChange.sink{ v in
-            print("objectWillChange \(v)")
-        }
     }
     
     static var DateFormatter: ISO8601DateFormatter {
@@ -66,7 +58,6 @@ class TrelloApi: ObservableObject {
                         }
                         
                         self.board = decodedBoard
-                        self.lists = self.board.lists
                         completion(self.board)
                     } catch let error {
                         print("Error decoding: ", error)

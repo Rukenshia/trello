@@ -11,7 +11,7 @@ import Combine
 struct CardView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     
-    @State var card: Card;
+    @Binding var card: Card;
     
     @State private var color: Color;
     @State private var showDetails: Bool;
@@ -25,9 +25,9 @@ struct CardView: View {
     
     private let timer: Publishers.Autoconnect<Timer.TimerPublisher>;
     
-    init(card: Card) {
+    init(card: Binding<Card>) {
         self._isHovering = State(initialValue: false);
-        self.card = card
+        self._card = card
         self._color = State(initialValue: Color("CardBg").opacity(0.9))
         self._showDetails = State(initialValue: false)
         
@@ -129,12 +129,10 @@ struct CardView: View {
                                     self.trelloApi.markAsDone(card: card, completion: { newCard in
                                         trelloApi.objectWillChange.send()
                                         card.idLabels = newCard.idLabels
+                                        card = newCard
+                                        print(newCard)
                                     }, after_timeout: {
-                                        
-                                        trelloApi.objectWillChange.send()
-                                        self.trelloApi.getBoard(id: "5e491a01d252b36e22de0666", completion: { board in
-                                            trelloApi.objectWillChange.send()
-                                        })
+                                        print("after_timeout")
                                     })
                                 }) {
                                     Image(systemName: "checkmark")
@@ -233,7 +231,7 @@ struct CardView: View {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(card: Card(id: UUID().uuidString, name: "Test card", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now)))
+        CardView(card: .constant(Card(id: UUID().uuidString, name: "Test card", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))))
             .frame(width: 280)
     }
 }

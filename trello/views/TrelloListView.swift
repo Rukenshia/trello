@@ -19,12 +19,13 @@ extension NSTableView {
 
 struct TrelloListView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
+    @Binding var list: List;
     let listIdx: Int;
     
     @State private var selection: Card? = nil;
     
     var background: Color {
-        if self.trelloApi.lists[self.listIdx].cards.first(where: { card in card.name == "📍 HOY" }) == nil {
+        if self.list.cards.first(where: { card in card.name == "📍 HOY" }) == nil {
             return Color("SecondaryBg").opacity(0.95)
         }
         
@@ -33,17 +34,17 @@ struct TrelloListView: View {
     
     var body: some View {
         VStack() {
-            Text(self.trelloApi.lists[self.listIdx].name)
+            Text(self.list.name)
                 .lineLimit(1)
                 .font(.system(size: 18))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
             Divider().padding(.bottom, 6)
             SwiftUI.List {
-                ForEach(self.trelloApi.lists[self.listIdx].cards, id: \.self) { card in
-                    if card.name == "📍 HOY" {
-                        EmptyView()
-                    } else {
+                ForEach(self.$list.cards, id: \.self) { card in
+//                    if card.name == "📍 HOY" {
+//                        EmptyView()
+//                    } else {
                         // TODO: Ideally the whole card should be draggable, but for some reason I couldn't figure
                         //       out it does not work because of the .onTapGesture handler in the CardView,
                         //       so now there's a "dot" you can drag from.
@@ -51,22 +52,22 @@ struct TrelloListView: View {
                             Circle().fill(Color("CardBg")).frame(width: 8, height: 8).opacity(1)
                             CardView(card: card)
                         }
-                    }
+//                    }
                 }
                 .onMove { source, dest in
                     if dest < 0 {
                         return
                     }
                     
-                    self.trelloApi.lists[self.listIdx].cards.move(fromOffsets: source, toOffset: dest)
+                    self.list.cards.move(fromOffsets: source, toOffset: dest)
                 }
                 .onDelete { offsets in
-                    self.trelloApi.lists[self.listIdx].cards.remove(atOffsets: offsets)
+                    self.list.cards.remove(atOffsets: offsets)
                 }
                 .onInsert(of: [String(describing: Card.self)], perform: onInsert)
             }
             .listStyle(.plain)
-            .frame(minHeight: self.trelloApi.lists[self.listIdx].cards.count > 20 ? CGFloat(self.trelloApi.lists[self.listIdx].cards.count) * 40: CGFloat(self.trelloApi.lists[self.listIdx].cards.count) * 108, maxHeight: .infinity) // 76
+            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 108, maxHeight: .infinity) // 76
             // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
             //       the number of cards is too high, I'd like to limit it at some point. When minHeight
             //       is not set, the list has a height of 0 and nothing works
@@ -74,7 +75,7 @@ struct TrelloListView: View {
         .padding()
         .background(background)
         .cornerRadius(16)
-        .frame(minWidth: self.trelloApi.lists[self.listIdx].cards.count > 0 ? 300 : 150, minHeight: 150)
+        .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 150)
     }
     
     private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
@@ -82,7 +83,7 @@ struct TrelloListView: View {
         //            if provider.canLoadObject(ofClass: Card.self) {
         //                _ = provider.loadObject(ofClass: Card.self) { card, error in
         //                    DispatchQueue.main.async {
-        //                        self.trelloApi.lists[self.listIdx].cards.insert(card!, at: offset)
+        //                        self.list.cards.insert(card!, at: offset)
         //                    }
         //                }
         //            }
