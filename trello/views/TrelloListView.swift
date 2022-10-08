@@ -18,12 +18,13 @@ extension NSTableView {
 }
 
 struct TrelloListView: View {
-    @State var list: List;
-    @State var listModel: ListViewModel;
+    @EnvironmentObject var trelloApi: TrelloApi;
+    let listIdx: Int;
+    
     @State private var selection: Card? = nil;
     
     var background: Color {
-        if list.cards.first(where: { card in card.name == "📍 HOY" }) == nil {
+        if self.trelloApi.lists[self.listIdx].cards.first(where: { card in card.name == "📍 HOY" }) == nil {
             return Color("SecondaryBg").opacity(0.95)
         }
         
@@ -32,14 +33,14 @@ struct TrelloListView: View {
     
     var body: some View {
         VStack() {
-            Text(list.name)
+            Text(self.trelloApi.lists[self.listIdx].name)
                 .lineLimit(1)
                 .font(.system(size: 18))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
             Divider().padding(.bottom, 6)
             SwiftUI.List {
-                ForEach(list.cards, id: \.self) { card in
+                ForEach(self.trelloApi.lists[self.listIdx].cards, id: \.self) { card in
                     if card.name == "📍 HOY" {
                         EmptyView()
                     } else {
@@ -57,15 +58,15 @@ struct TrelloListView: View {
                         return
                     }
                     
-                    self.list.cards.move(fromOffsets: source, toOffset: dest)
+                    self.trelloApi.lists[self.listIdx].cards.move(fromOffsets: source, toOffset: dest)
                 }
                 .onDelete { offsets in
-                    self.list.cards.remove(atOffsets: offsets)
+                    self.trelloApi.lists[self.listIdx].cards.remove(atOffsets: offsets)
                 }
                 .onInsert(of: [String(describing: Card.self)], perform: onInsert)
             }
             .listStyle(.plain)
-            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 108, maxHeight: .infinity) // 76
+            .frame(minHeight: self.trelloApi.lists[self.listIdx].cards.count > 20 ? CGFloat(self.trelloApi.lists[self.listIdx].cards.count) * 40: CGFloat(self.trelloApi.lists[self.listIdx].cards.count) * 108, maxHeight: .infinity) // 76
             // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
             //       the number of cards is too high, I'd like to limit it at some point. When minHeight
             //       is not set, the list has a height of 0 and nothing works
@@ -73,7 +74,7 @@ struct TrelloListView: View {
         .padding()
         .background(background)
         .cornerRadius(16)
-        .frame(minWidth: list.cards.count > 0 ? 300 : 150, minHeight: 150)
+        .frame(minWidth: self.trelloApi.lists[self.listIdx].cards.count > 0 ? 300 : 150, minHeight: 150)
     }
     
     private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
@@ -81,7 +82,7 @@ struct TrelloListView: View {
         //            if provider.canLoadObject(ofClass: Card.self) {
         //                _ = provider.loadObject(ofClass: Card.self) { card, error in
         //                    DispatchQueue.main.async {
-        //                        self.list.cards.insert(card!, at: offset)
+        //                        self.trelloApi.lists[self.listIdx].cards.insert(card!, at: offset)
         //                    }
         //                }
         //            }
@@ -90,18 +91,18 @@ struct TrelloListView: View {
     }
 }
 
-struct TrelloListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrelloListView(list: List(id: UUID().uuidString, name: "lunes", cards: [
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "A very long card name to test how wrapping behaves", due: TrelloApi.DateFormatter.string(from: Date.now)),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-        ]))
-        .frame(width: 300)
-    }
-}
+//struct TrelloListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TrelloListView(listIdx: 0, list: List(id: UUID().uuidString, name: "lunes", cards: []), list: ListViewModel(cards: [
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "A very long card name to test how wrapping behaves", due: TrelloApi.DateFormatter.string(from: Date.now)),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+//        ]))
+//        .frame(width: 300)
+//    }
+//}

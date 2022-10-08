@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class TrelloApi: ObservableObject {
     let key: String;
@@ -14,11 +15,17 @@ class TrelloApi: ObservableObject {
     @Published var board: Board;
     @Published var lists: [List];
     
+    var anyCancellable: AnyCancellable? = nil
+    
     init(key: String, token: String) {
         self.key = key
         self.token = token
         self.board = Board(id: "", name: "", lists: [], cards: [], prefs: Board.Prefs())
         self.lists = []
+        
+        anyCancellable = self.objectWillChange.sink{ v in
+            print("objectWillChange \(v)")
+        }
     }
     
     static var DateFormatter: ISO8601DateFormatter {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct List: Identifiable, Codable {
+struct List: Identifiable, Codable, Hashable {
     var id: String;
     var name: String;
     var cards: [Card] = [];

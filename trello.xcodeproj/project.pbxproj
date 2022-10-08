@@ -22,7 +22,6 @@
 		3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BC28E0C0760063B4C4 /* Label.swift */; };
 		3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BE28E0C21A0063B4C4 /* LabelView.swift */; };
 		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
-		3DE65E2F28F029BA0003D0B5 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */; };
 		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,7 +62,6 @@
 		3D4632BC28E0C0760063B4C4 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		3D4632BE28E0C21A0063B4C4 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
 		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,7 +168,6 @@
 				3D1483CC28DEF7A20021C6FC /* List.swift */,
 				3D4632BA28E079140063B4C4 /* Board.swift */,
 				3D4632BC28E0C0760063B4C4 /* Label.swift */,
-				3DE65E2E28F029BA0003D0B5 /* ListViewModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -307,7 +304,6 @@
 			files = (
 				3D1483A028DEF4870021C6FC /* ContentView.swift in Sources */,
 				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
-				3DE65E2F28F029BA0003D0B5 /* ListViewModel.swift in Sources */,
 				3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */,
 				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
 				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,

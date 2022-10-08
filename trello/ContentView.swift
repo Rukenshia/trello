@@ -48,8 +48,8 @@ struct ContentView: View {
                 ScrollView([.vertical]) {
                     VStack(){
                         HStack(alignment: .top) {
-                            ForEach(trelloApi.lists) { list in
-                                TrelloListView(list: list, listModel: ListViewModel(cards: list.cards))
+                            ForEach(Array(trelloApi.lists.enumerated()), id: \.element) { (offset, element) in
+                                TrelloListView(listIdx: offset)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                         }
