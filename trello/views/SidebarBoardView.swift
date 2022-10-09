@@ -13,36 +13,42 @@ struct SidebarBoardView: View {
     @Binding var board: BasicBoard;
     @Binding var currentBoard: Board;
     
-    @State var color: Color = Color(.clear)
+    @State var isHovering: Bool = false;
+    @State var color: Color = Color(.clear);
     
     var body: some View {
         Button(action: {
             trelloApi.getBoard(id: board.id)
         }) {
-            Text(board.name)
-                .lineLimit(1)
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
-        .buttonStyle(.plain)
-        .padding(.horizontal, 4)
-        .padding(.vertical, 6)
-        .background(self.color)
-        .cornerRadius(4)
-        .onHover(perform: {hover in
-            withAnimation(.easeInOut(duration: 0.05)) {
-                if self.currentBoard.id == self.board.id {
-                    self.color = Color("CardBg")
-                    return
-                }
-                
-                if hover {
-                    self.color = Color("CardBg")
-                } else {
-                    self.color = Color(.clear)
-                }
+            HStack {
+                Text(board.name)
+                    .lineLimit(1)
+                Spacer()
             }
-        })
+            .contentShape(Rectangle())
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 4)
+            .padding(.vertical, 6)
+            .background(self.color)
+            .cornerRadius(4)
+            .onHover(perform: {hover in
+                isHovering = hover
+                
+                withAnimation(.easeInOut(duration: 0.05)) {
+                    if self.currentBoard.id == self.board.id {
+                        self.color = Color("CardBg")
+                        return
+                    }
+                    
+                    if hover {
+                        self.color = Color("CardBg")
+                    } else {
+                        self.color = Color(.clear)
+                    }
+                }
+            })
+        }
+        .buttonStyle(.plain)
         .onAppear {
             if self.currentBoard.id == self.board.id {
                 self.color = Color("CardBg")
@@ -51,6 +57,10 @@ struct SidebarBoardView: View {
         .onReceive(Just(currentBoard)) { newBoard in
             if newBoard.id == self.board.id {
                 self.color = Color("CardBg")
+            } else {
+                if !self.isHovering {
+                    self.color = Color(.clear)
+                }
             }
         }
     }

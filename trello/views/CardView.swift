@@ -19,6 +19,7 @@ struct CardView: View {
     @State private var dueColor: Color;
     
     @State private var isHovering: Bool;
+    @State private var isMoving: Bool;
     
     private let dateFormatter: DateFormatter;
     private let timeFormatter: DateFormatter;
@@ -27,6 +28,7 @@ struct CardView: View {
     
     init(card: Binding<Card>) {
         self._isHovering = State(initialValue: false);
+        self._isMoving = State(initialValue: false);
         self._card = card
         self._color = State(initialValue: Color("CardBg").opacity(0.9))
         self._showDetails = State(initialValue: false)
@@ -197,6 +199,26 @@ struct CardView: View {
             }
             .onAppear {
                 self.dueColor = self.getDueColor(now: Date.now)
+                
+                
+                NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
+                    if !isHovering {
+                        return nsevent
+                    }
+                    
+                    if nsevent.characters == "m" {
+                        print("keypress in \(card.name)")
+                        self.isMoving = true
+                    }
+                    return nsevent
+                }
+            }
+            .popover(isPresented: self.$isMoving, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
+                VStack(spacing: 8) {
+                    ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
+                        ContextMenuMoveListView(list: list, card: $card)
+                    }
+                }.padding(8)
             }
             
             

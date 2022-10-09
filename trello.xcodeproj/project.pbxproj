@@ -21,6 +21,7 @@
 		3D4632BB28E079140063B4C4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BA28E079140063B4C4 /* Board.swift */; };
 		3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BC28E0C0760063B4C4 /* Label.swift */; };
 		3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BE28E0C21A0063B4C4 /* LabelView.swift */; };
+		3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */; };
 		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
 		3DDB37BA28F20B9E0095886A /* SidebarBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */; };
 		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
@@ -62,6 +63,7 @@
 		3D4632BA28E079140063B4C4 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		3D4632BC28E0C0760063B4C4 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		3D4632BE28E0C21A0063B4C4 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
+		3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuMoveListView.swift; sourceTree = "<group>"; };
 		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBoardView.swift; sourceTree = "<group>"; };
 		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */,
 				3D4632BE28E0C21A0063B4C4 /* LabelView.swift */,
 				3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */,
+				3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
 				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,
 				3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */,
+				3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */,
 				3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */,
 				3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */,
 				3D14839E28DEF4870021C6FC /* trelloApp.swift in Sources */,

@@ -17,6 +17,8 @@ struct ContentView: View {
             url = trelloApi.board.prefs.backgroundImage!
         }
         
+        // TODO: the old background image stays around until the new one is loaded, maybe there's a way
+        //       to force the placeholder in the meantime?
         return AsyncImage(url: URL(string: url)) { phase in
             switch phase {
             case .empty:
@@ -27,10 +29,6 @@ struct ContentView: View {
             case .failure:
                 Image(systemName: "photo")
             @unknown default:
-                // Since the AsyncImagePhase enum isn't frozen,
-                // we need to add this currently unused fallback
-                // to handle any new cases that might be added
-                // in the future:
                 EmptyView()
             }
         }
@@ -78,7 +76,7 @@ struct ContentView: View {
                 }
             }
         }
-        .frame(minWidth: 1600, minHeight: 600, alignment: .top)
+        .frame(minWidth: 900, minHeight: 600, alignment: .top)
     }
 }
 

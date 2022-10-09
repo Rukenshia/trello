@@ -83,17 +83,26 @@ class TrelloApi: ObservableObject {
                         
                         var listMap = Dictionary(uniqueKeysWithValues: decodedBoard.lists.map{ ($0.id, $0) })
                         
+                        if !listMap.isEmpty {
+                    
+                        
+                        
                         for card in decodedBoard.cards {
-                            listMap[card.idList]!.cards.append(card);
+                            if var list = listMap[card.idList] {
+                                list.cards.append(card);
+                                listMap[card.idList]!.cards.append(card);
+                            }
                         }
                         
                         for var (i, list) in decodedBoard.lists.enumerated() {
                             list.cards = listMap[list.id]!.cards
                             decodedBoard.lists[i] = list
                         }
+                    }
                         
                         self.objectWillChange.send()
                         self.board = decodedBoard
+                        print("board changed to \(self.board.name)")
                         completion(self.board)
                     } catch let error {
                         print("Error decoding: ", error)
@@ -133,6 +142,54 @@ class TrelloApi: ObservableObject {
                 DispatchQueue.main.async {
                     do {
                         let newCard = try JSONDecoder().decode(Card.self, from: data)
+                        
+                        completion(newCard)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
+    func moveCard(card: Card, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
+        guard let url = URL(string: "https://api.trello.com/1/cards/\(card.id)?idList=\(destination)&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "PUT"
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let newCard = try JSONDecoder().decode(Card.self, from: data)
+                        
+                        // Remove from old list and add to new locally
+                        if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
+                            self.board.lists[oldList].cards.remove(at: self.board.lists[oldList].cards.firstIndex(of: card)!)
+                        }
+                        if let newList = self.board.lists.firstIndex(where: { list in list.id == destination }) {
+                            self.board.lists[newList].cards.append(newCard)
+                        }
                         
                         completion(newCard)
                     } catch let error {
