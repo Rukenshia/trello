@@ -48,10 +48,7 @@ struct TrelloListView: View {
                         // TODO: Ideally the whole card should be draggable, but for some reason I couldn't figure
                         //       out it does not work because of the .onTapGesture handler in the CardView,
                         //       so now there's a "dot" you can drag from.
-                        HStack {
-                            Circle().fill(Color("CardBg")).frame(width: 8, height: 8).opacity(1)
-                            CardView(card: card)
-                        }
+                        CardView(card: card)
 //                    }
                 }
                 .onMove { source, dest in

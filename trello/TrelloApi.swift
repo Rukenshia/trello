@@ -115,13 +115,8 @@ class TrelloApi: ObservableObject {
         
         dataTask.resume()
     }
-    
-    func markAsDone(card: Card, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void) {
-        guard let doneLabel = self.board.labels.first(where: { label in label.name == "done"}) else {
-            fatalError("No done label exists")
-        }
-        
-        let newLabels = card.idLabels + [doneLabel.id]
+    func addLabelToCard(card: Card, labelId: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
+        let newLabels = card.idLabels + [labelId]
         
         guard let url = URL(string: "https://api.trello.com/1/cards/\(card.id)?idLabels=\(newLabels.joined(separator: ","))&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
@@ -143,6 +138,10 @@ class TrelloApi: ObservableObject {
                     do {
                         let newCard = try JSONDecoder().decode(Card.self, from: data)
                         
+                        let listIdx = self.board.lists.firstIndex(where: { l in l.id == newCard.idList })!
+                        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == newCard.id })!
+                        
+                        self.board.lists[listIdx].cards[cardIdx] = newCard
                         completion(newCard)
                     } catch let error {
                         print("Error decoding: ", error)
@@ -161,6 +160,14 @@ class TrelloApi: ObservableObject {
         }
         
         dataTask.resume()
+    }
+    
+    func markAsDone(card: Card, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void) {
+        guard let doneLabel = self.board.labels.first(where: { label in label.name == "done"}) else {
+            fatalError("No done label exists")
+        }
+        
+        self.addLabelToCard(card: card, labelId: doneLabel.id, completion: completion, after_timeout: after_timeout)
     }
     
     func moveCard(card: Card, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
