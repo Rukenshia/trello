@@ -15,7 +15,8 @@ struct ContextMenuDueDateView: View {
     
     var body: some View {
         VStack {
-            DatePicker("Due", selection: $date)
+            DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
+            DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
             Button(action: {
                 self.trelloApi.setCardDue(card: card, due: self.date, completion: { card in
                     print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
@@ -23,7 +24,13 @@ struct ContextMenuDueDateView: View {
             }) {
                 Text("Save")
             }
-        }.padding(8)
+        }
+        .padding(8)
+        .onAppear {
+            if let due = self.card.dueDate {
+                self.date = due
+            }
+        }
     }
 }
 
