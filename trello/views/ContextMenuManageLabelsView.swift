@@ -19,7 +19,11 @@ struct ContextMenuManageLabelsView: View {
                 
             }
             ScrollView {
-                ForEach(self.$labels.filter{ label in self.filter.isEmpty || label.name.wrappedValue.contains(self.filter) }) { label in
+                ForEach(self.$labels.filter{ label in
+                    (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
+                    && !self.card.idLabels.contains(label.id)
+                    
+                }) { label in
                     ContextMenuLabelView(label: label, card: $card)
                 }
             }

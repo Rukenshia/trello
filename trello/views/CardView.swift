@@ -13,6 +13,7 @@ enum PopoverState {
     
     case moveToList;
     case manageLabels;
+    case dueDate;
 }
 
 struct CardView: View {
@@ -23,6 +24,8 @@ struct CardView: View {
     @State private var color: Color;
     @State private var showDetails: Bool;
     
+    @State private var due: Date?;
+    @State private var dueComplete: Bool = false;
     @State private var dueColor: Color;
     
     @State private var isHovering: Bool;
@@ -56,6 +59,8 @@ struct CardView: View {
             in: .common
         ).autoconnect();
         
+        self.dueComplete = card.wrappedValue.dueComplete;
+        self.due = card.wrappedValue.dueDate;
         self._dueColor = State(initialValue: self.getDueColor(now: Date.now))
     }
     
@@ -69,11 +74,11 @@ struct CardView: View {
     }
     
     private func getDueColor(now: Date) -> Color {
-        guard let due = card.dueDate else {
+        guard let due = self.due else {
             return Color.clear;
         }
         
-        if card.dueComplete {
+        if self.dueComplete {
             return isHovering ? Color("CardDueCompleteBg") : Color("CardDueCompleteBg").opacity(0.85);
         }
         
@@ -104,6 +109,9 @@ struct CardView: View {
     
     var body: some View {
         HStack {
+            // TODO: Ideally the whole card should be draggable, but for some reason I couldn't figure
+            //       out it does not work because of the .onTapGesture handler,
+            //       so now there's a "dot" you can drag from.
             Circle().fill(Color("CardBg")).frame(width: 8, height: 8).opacity(1)
             ZStack {
                 VStack(alignment: .leading) {
@@ -185,7 +193,6 @@ struct CardView: View {
                 .background(self.color)
                 .onHover(perform: {hover in
                     self.isHovering = hover
-                    print("\(self.card.name) hovering=\(hover)")
                     withAnimation(.easeInOut(duration: 0.1)) {
                         if hover {
                             self.color = Color("CardBg")
@@ -206,21 +213,23 @@ struct CardView: View {
                 .sheet(isPresented: $showDetails) {
                     CardDetailsView(card: card, isVisible: $showDetails)
                 }
+                .onReceive(Just(card)) { newCard in
+                    self.due = newCard.dueDate
+                    self.dueComplete = newCard.dueComplete
+                }
                 .onReceive(timer) { newTime in
                     self.dueColor = self.getDueColor(now: newTime)
                 }
                 .onAppear {
                     self.dueColor = self.getDueColor(now: Date.now)
                     
-                    print("\(card.name) on appear")
-                    let cardName = card.name
+                    //                    print("ON APPEAR \(card.name)")
+                    //                    let cardName = card.name
                     monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
-                        print("KEYPRESS HANDLER: ", cardName)
+                        //                        print("KEYPRESS HANDLER: ", cardName)
                         if !isHovering {
                             return nsevent
                         }
-                        
-                        print("handle keypress")
                         
                         switch (nsevent.characters) {
                         case "m":
@@ -228,6 +237,9 @@ struct CardView: View {
                             self.showPopover = true
                         case "l":
                             self.popoverState = .manageLabels
+                            self.showPopover = true
+                        case "d":
+                            self.popoverState = .dueDate
                             self.showPopover = true
                         default:
                             ()
@@ -238,7 +250,6 @@ struct CardView: View {
                 }
                 .onDisappear {
                     if let monitor = self.monitor {
-                        print("REMOVE MONITOR")
                         NSEvent.removeMonitor(monitor)
                     }
                 }
@@ -252,6 +263,8 @@ struct CardView: View {
                         }.padding(8)
                     case .manageLabels:
                         ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: $card)
+                    case .dueDate:
+                        ContextMenuDueDateView(card: $card)
                     default:
                         EmptyView()
                     }

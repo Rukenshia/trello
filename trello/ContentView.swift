@@ -10,6 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     
+    private var timer = Timer.publish(
+        every: 5, // second
+        on: .main,
+        in: .common
+    ).autoconnect();
+    
     var backgroundImage: some View {
         var url = "https://trello-backgrounds.s3.amazonaws.com/54d4b4fc032569bd9870ac0a/original/04b4f28b09473079050638ab87426857/chrome_theme_bg_explorer.jpg";
 
@@ -36,22 +42,7 @@ struct ContentView: View {
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Boards")
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.leading)
-                    .padding(.leading, 4)
-                Divider()
-                    .frame(width: 200)
-                ForEach(self.$trelloApi.boards) { board in
-                    SidebarBoardView(board: board, currentBoard: self.$trelloApi.board)
-                }
-                Spacer()
-            }
-            .frame(alignment: .top)
-            .frame(minWidth: 200, maxWidth: 200)
-            .padding(8)
+            SidebarView()
             VStack {
                 ScrollView([.horizontal]) {
                     ScrollView([.vertical]) {
@@ -77,6 +68,10 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 900, minHeight: 600, alignment: .top)
+        .onReceive(timer) { newTime in
+            self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
+            }
+        }
     }
 }
 

@@ -17,6 +17,10 @@
 		3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CA28DEF70E0021C6FC /* Card.swift */; };
 		3D1483CD28DEF7A20021C6FC /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CC28DEF7A20021C6FC /* List.swift */; };
 		3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */; };
+		3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */; };
+		3D15B19D28F4005D007B95A0 /* ContextMenuDueDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */; };
+		3D15B1A028F40D76007B95A0 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3D15B19F28F40D76007B95A0 /* MarkdownUI */; };
+		3D15B1A228F42366007B95A0 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B1A128F42366007B95A0 /* AddCardView.swift */; };
 		3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632B828E078FC0063B4C4 /* TrelloApi.swift */; };
 		3D4632BB28E079140063B4C4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BA28E079140063B4C4 /* Board.swift */; };
 		3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BC28E0C0760063B4C4 /* Label.swift */; };
@@ -61,6 +65,9 @@
 		3D1483CA28DEF70E0021C6FC /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		3D1483CC28DEF7A20021C6FC /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloListView.swift; sourceTree = "<group>"; };
+		3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuDueDateView.swift; sourceTree = "<group>"; };
+		3D15B1A128F42366007B95A0 /* AddCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardView.swift; sourceTree = "<group>"; };
 		3D4632B828E078FC0063B4C4 /* TrelloApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloApi.swift; sourceTree = "<group>"; };
 		3D4632BA28E079140063B4C4 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		3D4632BC28E0C0760063B4C4 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -78,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D15B1A028F40D76007B95A0 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +177,9 @@
 				3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */,
 				3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */,
 				3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */,
+				3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */,
+				3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */,
+				3D15B1A128F42366007B95A0 /* AddCardView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -200,6 +211,9 @@
 			dependencies = (
 			);
 			name = trello;
+			packageProductDependencies = (
+				3D15B19F28F40D76007B95A0 /* MarkdownUI */,
+			);
 			productName = trello;
 			productReference = 3D14839A28DEF4870021C6FC /* trello.app */;
 			productType = "com.apple.product-type.application";
@@ -272,6 +286,9 @@
 				Base,
 			);
 			mainGroup = 3D14839128DEF4870021C6FC;
+			packageReferences = (
+				3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
+			);
 			productRefGroup = 3D14839B28DEF4870021C6FC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -315,11 +332,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D1483A028DEF4870021C6FC /* ContentView.swift in Sources */,
+				3D15B19D28F4005D007B95A0 /* ContextMenuDueDateView.swift in Sources */,
+				3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */,
 				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
 				3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */,
 				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
 				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,
 				3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */,
+				3D15B1A228F42366007B95A0 /* AddCardView.swift in Sources */,
 				3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */,
 				3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */,
 				3D9E4D0128F314750065F47A /* ContextMenuManageLabelsView.swift in Sources */,
@@ -636,6 +656,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3D15B19F28F40D76007B95A0 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3D14839228DEF4870021C6FC /* Project object */;
 }

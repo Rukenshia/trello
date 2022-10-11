@@ -23,6 +23,8 @@ struct TrelloListView: View {
     let listIdx: Int;
     
     @State private var selection: Card? = nil;
+    @State private var addCardColor: Color = Color(.clear);
+    @State private var showAddCard: Bool = false;
     
     var background: Color {
         if self.list.cards.first(where: { card in card.name == "📍 HOY" }) == nil {
@@ -41,15 +43,8 @@ struct TrelloListView: View {
                 .multilineTextAlignment(.leading)
             Divider().padding(.bottom, 6)
             SwiftUI.List {
-                ForEach(self.$list.cards, id: \.self) { card in
-//                    if card.name == "📍 HOY" {
-//                        EmptyView()
-//                    } else {
-                        // TODO: Ideally the whole card should be draggable, but for some reason I couldn't figure
-                        //       out it does not work because of the .onTapGesture handler in the CardView,
-                        //       so now there's a "dot" you can drag from.
-                        CardView(card: card)
-//                    }
+                ForEach(self.$list.cards) { card in
+                    CardView(card: card)
                 }
                 .onMove { source, dest in
                     if dest < 0 {
@@ -64,10 +59,34 @@ struct TrelloListView: View {
                 .onInsert(of: [String(describing: Card.self)], perform: onInsert)
             }
             .listStyle(.plain)
-            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 108, maxHeight: .infinity) // 76
             // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
             //       the number of cards is too high, I'd like to limit it at some point. When minHeight
             //       is not set, the list has a height of 0 and nothing works
+            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 108, maxHeight: .infinity) // 76
+            Button(action: {
+                self.showAddCard = true
+            }) {
+                HStack {
+                    Image(systemName: "plus")
+                    Text("Add card")
+                }
+            }
+            .onHover { hover in
+                if hover {
+                    self.addCardColor = Color("CardBg");
+                    return;
+                }
+                
+                self.addCardColor = Color(.clear);
+                return;
+            }
+                .buttonStyle(.plain)
+                .padding(4)
+                .background(self.addCardColor)
+                .cornerRadius(4)
+        }
+        .sheet(isPresented: $showAddCard) {
+            AddCardView(list: self.$list, showAddCard: self.$showAddCard)
         }
         .padding()
         .background(background)

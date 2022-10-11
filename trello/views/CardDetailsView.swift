@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MarkdownUI
 
 struct CardDetailsView: View {
     
@@ -14,7 +15,8 @@ struct CardDetailsView: View {
     @Binding var isVisible: Bool;
     
     var body: some View {
-        VStack(alignment: .leading) {
+        
+        VStack {
             HStack {
                 Text(card.name)
                     .font(.title)
@@ -30,16 +32,23 @@ struct CardDetailsView: View {
                 .keyboardShortcut(.cancelAction)
                 .buttonStyle(PlainButtonStyle())
             }
-            Divider()
-            HStack {
-                ForEach(card.labels) { label in
-                    LabelView(label: label)
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    Divider()
+                    HStack {
+                        ForEach(card.labels) { label in
+                            LabelView(label: label)
+                        }
+                    }
+                    Markdown(card.desc)
                 }
-            }
-            Text(card.desc)
+//                Spacer()
+//                VStack(alignment: .leading) {
+//                    Text("")
+//                }
+            }.frame(alignment: .top)
         }
-        .padding(8)
-        .frame(width: (NSApp.keyWindow?.contentView?.bounds.width ?? 400) - 32, height: (NSApp.keyWindow?.contentView?.safeAreaRect.height ?? 600) - 48, alignment: .top)
+        .padding(16)
     }
 }
 
