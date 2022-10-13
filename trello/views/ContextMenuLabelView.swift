@@ -11,6 +11,7 @@ struct ContextMenuLabelView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var label: Label;
     @Binding var card: Card;
+    let applied: Bool;
     
     @State var hovering: Bool = false;
     @State var bgColor: Color = Color(.clear);
@@ -42,9 +43,15 @@ struct ContextMenuLabelView: View {
     
     var body: some View {
         Button(action: {
-            self.trelloApi.addLabelToCard(card: self.card, labelId: label.id, completion: { newCard in
-                print("label added to card")
-            })
+            if self.applied {
+                self.trelloApi.removeLabelFromCard(card: self.card, labelId: label.id, completion: { newCard in
+                    print("label removed from card")
+                })
+            } else {
+                self.trelloApi.addLabelToCard(card: self.card, labelId: label.id, completion: { newCard in
+                    print("label added to card")
+                })
+            }
         }) {
             HStack {
                 Text(label.name)
@@ -70,6 +77,6 @@ struct ContextMenuLabelView: View {
 
 struct ContextMenuLabelView_Previews: PreviewProvider {
     static var previews: some View {
-        ContextMenuLabelView(label: .constant(Label(id: "id", name: "name")), card: .constant(Card(id: "cardid", name: "card")))
+        ContextMenuLabelView(label: .constant(Label(id: "id", name: "name")), card: .constant(Card(id: "cardid", name: "card")), applied: false)
     }
 }

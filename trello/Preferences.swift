@@ -21,4 +21,9 @@ struct Preferences {
         self.trelloKey = UserDefaults.standard.string(forKey: PreferenceKeys.trelloKey);
         self.trelloToken = UserDefaults.standard.string(forKey: PreferenceKeys.trelloToken);
     }
+    
+    func save() {
+        UserDefaults.standard.set(self.trelloKey, forKey: PreferenceKeys.trelloKey);
+        UserDefaults.standard.set(self.trelloToken, forKey: PreferenceKeys.trelloToken);
+    }
 }

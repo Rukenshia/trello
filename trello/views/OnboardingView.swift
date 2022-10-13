@@ -36,6 +36,8 @@ struct OnboardingView: View {
                     if trelloToken != "" {
                         preferences.trelloToken = trelloToken;
                     }
+                    
+                    preferences.save();
                 }) {
                     Text("Save")
                 }

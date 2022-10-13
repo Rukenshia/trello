@@ -14,6 +14,7 @@ enum PopoverState {
     case moveToList;
     case manageLabels;
     case dueDate;
+    case cardColor;
 }
 
 struct CardView: View {
@@ -21,7 +22,7 @@ struct CardView: View {
     
     @Binding var card: Card;
     
-    @State private var color: Color;
+    @State private var color: AnyView;
     @State private var showDetails: Bool;
     
     @State private var due: Date?;
@@ -42,7 +43,7 @@ struct CardView: View {
     init(card: Binding<Card>) {
         self._isHovering = State(initialValue: false);
         self._card = card
-        self._color = State(initialValue: Color("CardBg").opacity(0.9))
+        self._color = State(initialValue: AnyView(Color("CardBg").opacity(0.9)))
         self._showDetails = State(initialValue: false)
         
         self.dateFormatter = DateFormatter()
@@ -61,7 +62,8 @@ struct CardView: View {
         
         self.dueComplete = card.wrappedValue.dueComplete;
         self.due = card.wrappedValue.dueDate;
-        self._dueColor = State(initialValue: self.getDueColor(now: Date.now))
+        self._dueColor = State(initialValue: self.getDueColor(now: Date.now));
+        self._color = State(initialValue: AnyView(self.getColor().opacity(0.95)));
     }
     
     
@@ -71,6 +73,14 @@ struct CardView: View {
     
     private var formattedDueTime: String {
         timeFormatter.string(from: card.dueDate!).uppercased()
+    }
+    
+    private func getColor() -> Color {
+        if let label = card.labels.first(where: { label in label.name.contains("color:") }) {
+            return Color("CardBg_\(label.name.split(separator: ":")[1])");
+        }
+        
+        return Color("CardBg");
     }
     
     private func getDueColor(now: Date) -> Color {
@@ -96,7 +106,7 @@ struct CardView: View {
     }
     
     private var displayedLabels: [Label] {
-        card.labels.filter { label in label.color != nil }
+        card.labels.filter { label in label.color != nil && !label.name.contains("color:") }
     }
     
     private var duration: String? {
@@ -194,13 +204,15 @@ struct CardView: View {
                 .onHover(perform: {hover in
                     self.isHovering = hover
                     withAnimation(.easeInOut(duration: 0.1)) {
+                        // TODO: fix hover with AnyView
+                        
                         if hover {
-                            self.color = Color("CardBg")
+                            self.color = AnyView(self.getColor().brightness(0.1));
                             
                             self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pointingHand.push()
                         } else {
-                            self.color = Color("CardBg").opacity(0.9)
+                            self.color = AnyView(self.getColor().opacity(0.95));
                             
                             self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pop()
@@ -241,6 +253,9 @@ struct CardView: View {
                         case "d":
                             self.popoverState = .dueDate
                             self.showPopover = true
+                        case "c":
+                            self.popoverState = .cardColor
+                            self.showPopover = true
                         default:
                             ()
                         }
@@ -265,6 +280,8 @@ struct CardView: View {
                         ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: $card)
                     case .dueDate:
                         ContextMenuDueDateView(card: $card)
+                    case .cardColor:
+                        ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card)
                     default:
                         EmptyView()
                     }

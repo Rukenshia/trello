@@ -19,12 +19,24 @@ struct ContextMenuManageLabelsView: View {
                 
             }
             ScrollView {
+                Text("applied")
+                    .bold()
+                ForEach(self.$labels.filter{ label in
+                    (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
+                    && self.card.idLabels.contains(label.id)
+                    
+                }, id: \.id) { label in
+                    ContextMenuLabelView(label: label, card: $card, applied: true)
+                }
+                
+                Text("available")
+                    .bold()
                 ForEach(self.$labels.filter{ label in
                     (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
                     && !self.card.idLabels.contains(label.id)
                     
-                }) { label in
-                    ContextMenuLabelView(label: label, card: $card)
+                }, id: \.id) { label in
+                    ContextMenuLabelView(label: label, card: $card, applied: false)
                 }
             }
             .frame(maxHeight: 300)
