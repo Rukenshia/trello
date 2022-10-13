@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
+    
+    @State private var cancellable: AnyCancellable?;
     
     private var timer = Timer.publish(
         every: 5, // second
@@ -48,8 +51,8 @@ struct ContentView: View {
                     ScrollView([.vertical]) {
                         VStack(){
                             HStack(alignment: .top) {
-                                ForEach($trelloApi.board.lists) { list in
-                                    TrelloListView(list: list, listIdx: 0)
+                                ForEach($trelloApi.board.lists) { list in //.filter{ list in !list.name.wrappedValue.contains("✔️") }) { list in
+                                    TrelloListView(list: list)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
@@ -60,10 +63,34 @@ struct ContentView: View {
                 }
             }
             .background(self.backgroundImage)
+//            if let doneList = $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }) {
+//                TrelloListView(list: doneList)
+//                    .fixedSize(horizontal: false, vertical: true)
+//            }
         }.onAppear {
+            self.cancellable = trelloApi.$board.sink { newBoard in
+                if newBoard.id == "" {
+                    return
+                }
+                
+                UserDefaults.standard.set(newBoard.id, forKey: PreferenceKeys.currentBoard)
+            }
+            
             trelloApi.getBoards { boards in
-                if (boards.count > 0) {
-                    trelloApi.getBoard(id: boards[0].id)
+                if let currentBoard = UserDefaults.standard.string(forKey: PreferenceKeys.currentBoard) {
+                    print(currentBoard)
+                    if currentBoard.isEmpty {
+                        if (boards.count > 0) {
+                            trelloApi.getBoard(id: boards[0].id)
+                        }
+                    } else {
+                        print(currentBoard)
+                        trelloApi.getBoard(id: currentBoard)
+                    }
+                } else {
+                    if (boards.count > 0) {
+                        trelloApi.getBoard(id: boards[0].id)
+                    }
                 }
             }
         }

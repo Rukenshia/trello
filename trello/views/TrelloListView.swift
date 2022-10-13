@@ -20,7 +20,6 @@ extension NSTableView {
 struct TrelloListView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var list: List;
-    let listIdx: Int;
     
     @State private var selection: Card? = nil;
     @State private var addCardColor: Color = Color(.clear);
@@ -38,10 +37,11 @@ struct TrelloListView: View {
         VStack() {
             Text(self.list.name)
                 .lineLimit(1)
-                .font(.system(size: 18))
+                .font(.system(size: 16))
                 .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
-            Divider().padding(.bottom, 6)
+                .padding(.top, 8)
+            Divider()
             SwiftUI.List {
                 ForEach(self.$list.cards) { card in
                     CardView(card: card)
@@ -85,12 +85,12 @@ struct TrelloListView: View {
                 .background(self.addCardColor)
                 .cornerRadius(4)
         }
+        .padding(4)
         .sheet(isPresented: $showAddCard) {
             AddCardView(list: self.$list, showAddCard: self.$showAddCard)
         }
-        .padding()
         .background(background)
-        .cornerRadius(16)
+        .cornerRadius(8)
         .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 150)
     }
     

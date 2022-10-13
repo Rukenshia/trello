@@ -211,7 +211,7 @@ struct CardView: View {
                     showDetails = true
                 }
                 .sheet(isPresented: $showDetails) {
-                    CardDetailsView(card: card, isVisible: $showDetails)
+                    CardDetailsView(card: $card, isVisible: $showDetails)
                 }
                 .onReceive(Just(card)) { newCard in
                     self.due = newCard.dueDate

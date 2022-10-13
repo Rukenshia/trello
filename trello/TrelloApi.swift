@@ -84,23 +84,19 @@ class TrelloApi: ObservableObject {
                         var listMap = Dictionary(uniqueKeysWithValues: decodedBoard.lists.map{ ($0.id, $0) })
                         
                         if !listMap.isEmpty {
-                    
-                        
-                        
-                        for card in decodedBoard.cards {
-                            if var list = listMap[card.idList] {
-                                list.cards.append(card);
-                                listMap[card.idList]!.cards.append(card);
+                            for card in decodedBoard.cards {
+                                if var list = listMap[card.idList] {
+                                    list.cards.append(card);
+                                    listMap[card.idList]!.cards.append(card);
+                                }
+                            }
+                            
+                            for var (i, list) in decodedBoard.lists.enumerated() {
+                                list.cards = listMap[list.id]!.cards
+                                decodedBoard.lists[i] = list
                             }
                         }
                         
-                        for var (i, list) in decodedBoard.lists.enumerated() {
-                            list.cards = listMap[list.id]!.cards
-                            decodedBoard.lists[i] = list
-                        }
-                    }
-                        
-                        self.objectWillChange.send()
                         self.board = decodedBoard
                         print("board changed to \(self.board.name)")
                         completion(self.board)
