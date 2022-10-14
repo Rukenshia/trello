@@ -105,6 +105,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(TrelloApi(key: "***REMOVED***", token: "***REMOVED***"))
+            .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
     }
 }
