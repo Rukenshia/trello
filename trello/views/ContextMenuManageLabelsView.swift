@@ -14,29 +14,35 @@ struct ContextMenuManageLabelsView: View {
     @State var filter: String = "";
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             TextField(text: $filter) {
                 
             }
             ScrollView {
                 Text("applied")
                     .bold()
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(self.$labels.filter{ label in
                     (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
                     && self.card.idLabels.contains(label.id)
                     
                 }, id: \.id) { label in
                     ContextMenuLabelView(label: label, card: $card, applied: true)
+                        .padding(.horizontal, 4)
                 }
                 
                 Text("available")
                     .bold()
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(self.$labels.filter{ label in
                     (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
                     && !self.card.idLabels.contains(label.id)
                     
                 }, id: \.id) { label in
                     ContextMenuLabelView(label: label, card: $card, applied: false)
+                        .padding(.horizontal, 4)
                 }
             }
             .frame(maxHeight: 300)

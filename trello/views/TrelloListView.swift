@@ -43,7 +43,7 @@ struct TrelloListView: View {
                 .padding(.top, 8)
             Divider()
             SwiftUI.List {
-                ForEach(self.$list.cards) { card in
+                ForEach(self.$list.cards, id: \.id) { card in
                     CardView(card: card)
                 }
                 .onMove { source, dest in

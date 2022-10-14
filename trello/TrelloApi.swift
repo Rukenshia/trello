@@ -112,8 +112,8 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
-    func addLabelToCard(card: Card, labelId: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
-        let newLabels = card.idLabels + [labelId]
+    func addLabelsToCard(card: Card, labelIds: [String], completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
+        let newLabels = card.idLabels + labelIds
         
         guard let url = URL(string: "https://api.trello.com/1/cards/\(card.id)?idLabels=\(newLabels.joined(separator: ","))&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
@@ -161,8 +161,8 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
-    func removeLabelFromCard(card: Card, labelId: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
-        let newLabels = card.idLabels.filter{ label in labelId != label }
+    func removeLabelsFromCard(card: Card, labelIds: [String], completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
+        let newLabels = card.idLabels.filter{ label in !labelIds.contains(where: { l in l == label }) }
         
         guard let url = URL(string: "https://api.trello.com/1/cards/\(card.id)?idLabels=\(newLabels.joined(separator: ","))&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
@@ -215,7 +215,7 @@ class TrelloApi: ObservableObject {
             fatalError("No done label exists")
         }
         
-        self.addLabelToCard(card: card, labelId: doneLabel.id, completion: completion, after_timeout: after_timeout)
+        self.addLabelsToCard(card: card, labelIds: [doneLabel.id], completion: completion, after_timeout: after_timeout)
     }
     
     func moveCard(card: Card, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {

@@ -3,19 +3,37 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "closure #1 in closure #1 in TrelloApi.getBoard(id:):TrelloApi.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "String(decoding: data, as: UTF8.self)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in TrelloListView.body.getter:TrelloListView.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in ListsViewModel.subscribe(trelloApi:):ContentView.swift">
+         contextName = "closure #4 in SidebarBoardView.body.getter:SidebarBoardView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "v.lists">
+               value = "trelloApi.board.id">
             </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
+         <PersistentStrings>
             <PersistentString
-               value = "v">
+               value = "card.wrappedValue.name">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in TrelloApi.getBoard(id:completion:):TrelloApi.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.board.lists">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -36,24 +54,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "CardView.formattedDueDate.getter:CardView.swift">
-      </ContextState>
-      <ContextState
-         contextName = "ContentView.backgroundImage.getter:ContentView.swift">
+         contextName = "Card.dueDate.getter:Card.swift">
          <PersistentStrings>
             <PersistentString
-               value = "trelloApi.board">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in TrelloApi.getBoard(id:completion:):TrelloApi.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.board.lists">
+               value = "ISO8601DateFormatter().date(from: self.due!)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -69,10 +73,40 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #4 in SidebarBoardView.body.getter:SidebarBoardView.swift">
+         contextName = "ContentView.body.getter:ContentView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "trelloApi.board.id">
+               value = "trelloApi.board">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ListsViewModel.subscribe(trelloApi:):ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "v.lists">
+            </PersistentString>
+            <PersistentString
+               value = "v">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CardView.formattedDueDate.getter:CardView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #5 in CardView.body.getter:CardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "card.due">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ContentView.backgroundImage.getter:ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "trelloApi.board">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -88,12 +122,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ContentView.body.getter:ContentView.swift">
+         contextName = "ContentView.trelloApi.getter:ContentView.swift">
          <PersistentStrings>
             <PersistentString
                value = "trelloApi.board">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #6 in closure #1 in closure #1 in CardView.body.getter:CardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.card.name">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in TrelloApi.getBoards(completion:):TrelloApi.swift">
@@ -110,36 +155,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "Card.dueDate.getter:Card.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "ISO8601DateFormatter().date(from: self.due!)">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in TrelloApi.getBoard(id:):TrelloApi.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "String(decoding: data, as: UTF8.self)">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ContentView.trelloApi.getter:ContentView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "trelloApi.board">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #5 in CardView.body.getter:CardView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "card.due">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "closure #4 in CardColorView.body.getter:CardColorView.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

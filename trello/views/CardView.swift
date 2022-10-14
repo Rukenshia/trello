@@ -63,7 +63,7 @@ struct CardView: View {
         self.dueComplete = card.wrappedValue.dueComplete;
         self.due = card.wrappedValue.dueDate;
         self._dueColor = State(initialValue: self.getDueColor(now: Date.now));
-        self._color = State(initialValue: AnyView(self.getColor().opacity(0.95)));
+        self._color = State(initialValue: AnyView(self.getColor(labels: self.card.labels).opacity(0.95)));
     }
     
     
@@ -75,8 +75,8 @@ struct CardView: View {
         timeFormatter.string(from: card.dueDate!).uppercased()
     }
     
-    private func getColor() -> Color {
-        if let label = card.labels.first(where: { label in label.name.contains("color:") }) {
+    private func getColor(labels: [Label]) -> Color {
+        if let label = labels.first(where: { label in label.name.contains("color:") }) {
             return Color("CardBg_\(label.name.split(separator: ":")[1])");
         }
         
@@ -155,7 +155,6 @@ struct CardView: View {
                         if card.due != nil {
                             if isHovering {
                                 VStack {
-                                    Spacer()
                                     Button(action: {
                                         self.trelloApi.markAsDone(card: card, completion: { newCard in
                                             trelloApi.objectWillChange.send()
@@ -166,18 +165,21 @@ struct CardView: View {
                                             print("after_timeout")
                                         })
                                     }) {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(Color("LabelFg_green"))
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(Color("LabelFg_green"))
+                                                .font(.system(size: 14))
+                                                .cornerRadius(4)
+                                            Spacer()
+                                        }
+                                        .frame(maxWidth: 16, maxHeight: .infinity)
+                                        .padding(4)
+                                        .padding(.horizontal, 16)
+                                        .background(Color("LabelBg_green"))
                                     }
-                                    .font(.system(size: 14))
-                                    .cornerRadius(4)
                                     .buttonStyle(.plain)
-                                    Spacer()
                                 }
-                                .padding(4)
-                                .padding(.horizontal, 16)
-                                .background(Color("LabelBg_green"))
-                                .frame(maxHeight: .infinity)
                             } else {
                                 VStack {
                                     Text(formattedDueDate)
@@ -207,12 +209,12 @@ struct CardView: View {
                         // TODO: fix hover with AnyView
                         
                         if hover {
-                            self.color = AnyView(self.getColor().brightness(0.1));
+                            self.color = AnyView(self.getColor(labels: self.card.labels).brightness(0.1));
                             
                             self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pointingHand.push()
                         } else {
-                            self.color = AnyView(self.getColor().opacity(0.95));
+                            self.color = AnyView(self.getColor(labels: self.card.labels).opacity(0.95));
                             
                             self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pop()
@@ -226,8 +228,22 @@ struct CardView: View {
                     CardDetailsView(card: $card, isVisible: $showDetails)
                 }
                 .onReceive(Just(card)) { newCard in
+                    // TODO: it seems like when the labels change, this check still yields the same results
+                    if self.card.labels != newCard.labels {
+                        print("updating color?")
+                        self.color = AnyView(self.getColor(labels: newCard.labels).opacity(0.95));
+                    }
+                    
+                    if self.card == newCard {
+                        return
+                    }
+                    
                     self.due = newCard.dueDate
                     self.dueComplete = newCard.dueComplete
+                    
+                    // recalculate colors, might have added a CardBg or due change
+                    self.color = AnyView(self.getColor(labels: newCard.labels).opacity(0.95));
+                    self.dueColor = self.getDueColor(now: Date.now)
                 }
                 .onReceive(timer) { newTime in
                     self.dueColor = self.getDueColor(now: newTime)
@@ -281,7 +297,7 @@ struct CardView: View {
                     case .dueDate:
                         ContextMenuDueDateView(card: $card)
                     case .cardColor:
-                        ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card)
+                        ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card, show: $showPopover)
                     default:
                         EmptyView()
                     }
