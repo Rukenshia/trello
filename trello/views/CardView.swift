@@ -251,11 +251,16 @@ struct CardView: View {
                 .onAppear {
                     self.dueColor = self.getDueColor(now: Date.now)
                     
-                    //                    print("ON APPEAR \(card.name)")
-                    //                    let cardName = card.name
                     monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
-                        //                        print("KEYPRESS HANDLER: ", cardName)
                         if !isHovering {
+                            return nsevent
+                        }
+                        
+                        if self.showPopover {
+                            return nsevent
+                        }
+                        
+                        if self.showDetails {
                             return nsevent
                         }
                         
