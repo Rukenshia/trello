@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Sparkle
 
 @main
 struct trelloApp: App {
     @EnvironmentObject var trello: TrelloApi;
     @State var preferences: Preferences = Preferences();
+    
+    private let updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
     
     var body: some Scene {
         WindowGroup {
@@ -19,6 +22,11 @@ struct trelloApp: App {
                     .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
             } else {
                 OnboardingView(preferences: $preferences)
+            }
+        }
+        .commands {
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(updater: updaterController.updater)
             }
         }
     }
