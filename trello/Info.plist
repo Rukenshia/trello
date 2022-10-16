@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SUPublicEDKey</key>
+	<string>XhchSnk+JxOyigi3NJzVPmU4y9N+3+F9cI/y+8Hr8Zg=</string>
+	<key>SUFeedURL</key>
+	<string>https://in.fkn.space/apps/trello/appcast.xml</string>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+</dict>
+</plist>
