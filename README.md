@@ -31,7 +31,7 @@ for trello.
   - [ ] Card details
     - [x] View description as rendered markdown
     - [x] Change due date
-    - [ ] Edit description
+    - [x] Edit description
     - [ ] Comments
     - [ ] Attachments
     - [ ] Activity

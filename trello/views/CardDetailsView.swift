@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
-import MarkdownUI
+import SwiftDown
+import Combine
 
 struct CardDetailsView: View {
+    @EnvironmentObject var trelloApi: TrelloApi;
     
     @Binding var card: Card;
+    
+    @State var editing: Bool = false;
+    @State var desc: String = "";
     
     @Binding var isVisible: Bool;
     
@@ -40,7 +45,46 @@ struct CardDetailsView: View {
                             LabelView(label: label)
                         }
                     }
-                    Markdown(card.desc)
+                    
+                    if self.editing {
+                        SwiftDownEditor(text: $desc)
+                            .insetsSize(4)
+                            .theme(Theme.BuiltIn.defaultDark.theme())
+                            .frame(minWidth: 400, minHeight: 120, maxHeight: .infinity)
+                        
+                        Button(action: {
+                            self.editing = false;
+                            
+                            self.trelloApi.setCardDesc(card: card, desc: self.desc, completion: { newCard in
+                                print("description updated")
+                            })
+                        }) {
+                            Text("Save changes")
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color("CardBg"))
+                                .cornerRadius(4)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        SwiftDownEditor(text: $desc)
+                            .insetsSize(4)
+                            .isEditable(false)
+                            .theme(Theme.BuiltIn.defaultDark.theme())
+                            .frame(minWidth: 400, minHeight: 120, maxHeight: .infinity)
+                        
+                        Button(action: {
+                            self.editing = true;
+                        }) {
+                            Text("Edit")
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color("CardBg"))
+                                .cornerRadius(4)
+                        }
+                        .buttonStyle(.plain)
+                        
+                    }
                 }
                 Spacer()
                 VStack(alignment: .leading) {
@@ -50,6 +94,9 @@ struct CardDetailsView: View {
             }.frame(alignment: .top)
         }
         .padding(16)
+        .onAppear {
+            self.desc = card.desc;
+        }
     }
 }
 

@@ -20,9 +20,9 @@
 		3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */; };
 		3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */; };
 		3D15B19D28F4005D007B95A0 /* ContextMenuDueDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */; };
-		3D15B1A028F40D76007B95A0 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3D15B19F28F40D76007B95A0 /* MarkdownUI */; };
 		3D15B1A228F42366007B95A0 /* AddCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D15B1A128F42366007B95A0 /* AddCardView.swift */; };
 		3D337EA928FB24EE0054DCB3 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D337EA828FB24EE0054DCB3 /* CheckForUpdatesView.swift */; };
+		3D3D8A8328FBF5EC00576809 /* SwiftDown in Frameworks */ = {isa = PBXBuildFile; productRef = 3D3D8A8228FBF5EC00576809 /* SwiftDown */; };
 		3D4632B928E078FC0063B4C4 /* TrelloApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632B828E078FC0063B4C4 /* TrelloApi.swift */; };
 		3D4632BB28E079140063B4C4 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BA28E079140063B4C4 /* Board.swift */; };
 		3D4632BD28E0C0760063B4C4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BC28E0C0760063B4C4 /* Label.swift */; };
@@ -97,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D15B1A028F40D76007B95A0 /* MarkdownUI in Frameworks */,
+				3D3D8A8328FBF5EC00576809 /* SwiftDown in Frameworks */,
 				3D8470B928F996ED009FC33B /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,8 +231,8 @@
 			);
 			name = trello;
 			packageProductDependencies = (
-				3D15B19F28F40D76007B95A0 /* MarkdownUI */,
 				3D8470B828F996ED009FC33B /* Sparkle */,
+				3D3D8A8228FBF5EC00576809 /* SwiftDown */,
 			);
 			productName = trello;
 			productReference = 3D14839A28DEF4870021C6FC /* trello.app */;
@@ -307,8 +307,8 @@
 			);
 			mainGroup = 3D14839128DEF4870021C6FC;
 			packageReferences = (
-				3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */,
 				3D8470B728F996ED009FC33B /* XCRemoteSwiftPackageReference "Sparkle" */,
+				3D3D8A8128FBF5EC00576809 /* XCRemoteSwiftPackageReference "SwiftDown" */,
 			);
 			productRefGroup = 3D14839B28DEF4870021C6FC /* Products */;
 			projectDirPath = "";
@@ -544,7 +544,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -572,7 +572,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -690,12 +690,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */ = {
+		3D3D8A8128FBF5EC00576809 /* XCRemoteSwiftPackageReference "SwiftDown" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gonzalezreal/MarkdownUI";
+			repositoryURL = "https://github.com/qeude/SwiftDown.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		3D8470B728F996ED009FC33B /* XCRemoteSwiftPackageReference "Sparkle" */ = {
@@ -709,10 +709,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3D15B19F28F40D76007B95A0 /* MarkdownUI */ = {
+		3D3D8A8228FBF5EC00576809 /* SwiftDown */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3D15B19E28F40D76007B95A0 /* XCRemoteSwiftPackageReference "MarkdownUI" */;
-			productName = MarkdownUI;
+			package = 3D3D8A8128FBF5EC00576809 /* XCRemoteSwiftPackageReference "SwiftDown" */;
+			productName = SwiftDown;
 		};
 		3D8470B828F996ED009FC33B /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;

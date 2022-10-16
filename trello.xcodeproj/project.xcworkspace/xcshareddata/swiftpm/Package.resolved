@@ -1,39 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "attributedtext",
+      "identity" : "down",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/AttributedText",
+      "location" : "https://github.com/johnxnguyen/Down.git",
       "state" : {
-        "revision" : "2dc2d7864e0fee4b524a5850d7d7cf9a7eeda0fc",
-        "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "combine-schedulers",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/combine-schedulers",
-      "state" : {
-        "revision" : "aa3e575929f2bcc5bad012bd2575eae716cbcdf7",
-        "version" : "0.8.0"
-      }
-    },
-    {
-      "identity" : "markdownui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/MarkdownUI",
-      "state" : {
-        "revision" : "6a33c60ad430772d69ac5278e35474d6b3e5d30a",
-        "version" : "1.1.1"
-      }
-    },
-    {
-      "identity" : "networkimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/NetworkImage",
-      "state" : {
-        "revision" : "c97f83e771c95186af80ef6118f158852a9e54be",
-        "version" : "4.0.1"
+        "revision" : "f34b166be1f1db4aa8f573067e901d72f2a6be57",
+        "version" : "0.11.0"
       }
     },
     {
@@ -46,21 +19,12 @@
       }
     },
     {
-      "identity" : "swiftcommonmark",
+      "identity" : "swiftdown",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gonzalezreal/SwiftCommonMark",
+      "location" : "https://github.com/qeude/SwiftDown.git",
       "state" : {
-        "revision" : "ed252beaddecce28ea6363f800c773d6169011b8",
-        "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "xctest-dynamic-overlay",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
-      "state" : {
-        "revision" : "30314f1ece684dd60679d598a9b89107557b67d9",
-        "version" : "0.4.1"
+        "branch" : "main",
+        "revision" : "53bcb94de74fb4a48939e8b1e35f124f0db5ce70"
       }
     }
   ],
