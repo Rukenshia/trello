@@ -146,9 +146,23 @@ struct CardView: View {
                                 }
                             }
                             
-                            Text(card.desc)
-                                .lineLimit(1)
-                                .foregroundColor(.secondary)
+                            
+                            HStack {
+                                if card.badges.checkItems > 0 {
+                                    HStack(spacing: 1) {
+                                        Image(systemName: "checklist")
+                                        Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .padding(.horizontal, 4)
+                                    .padding(.vertical, 2)
+                                    .background(Color("CardBg"))
+                                    .cornerRadius(4)
+                                }
+                                Text(card.desc)
+                                    .lineLimit(1)
+                                    .foregroundColor(.secondary)
+                            }
                         }.padding()
                         Spacer()
                         

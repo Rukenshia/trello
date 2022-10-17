@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct Badges: Codable, Hashable {
+    var checkItems: Int;
+    var checkItemsChecked: Int;
+}
+
 struct Card: Identifiable, Codable, Hashable {
     
     var id: String;
@@ -17,6 +22,7 @@ struct Card: Identifiable, Codable, Hashable {
     var desc: String = "";
     var due: String?;
     var dueComplete: Bool = false;
+    var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0);
     
     var dueDate: Date? {
         if self.due == nil {
