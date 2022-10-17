@@ -13,6 +13,7 @@ struct CardDetailsView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     
     @Binding var card: Card;
+    @State var checklists: [Checklist] = [];
     
     @State var editing: Bool = false;
     @State var desc: String = "";
@@ -40,10 +41,19 @@ struct CardDetailsView: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
                     Divider()
-                    HStack {
-                        ForEach(card.labels) { label in
-                            LabelView(label: label)
+                    if card.labels.count > 0 {
+                        HStack {
+                            ForEach(card.labels) { label in
+                                LabelView(label: label)
+                            }
                         }
+                    }
+                    
+                    HStack {
+                        Image(systemName: "note.text")
+                        Text("Description")
+                            .font(.title2)
+                        Spacer()
                     }
                     
                     if self.editing {
@@ -85,18 +95,38 @@ struct CardDetailsView: View {
                         .buttonStyle(.plain)
                         
                     }
+                    
+                    if checklists.count > 0 {
+                        Divider()
+                        HStack {
+                            Image(systemName: "checklist")
+                            Text("Checklists")
+                                .font(.title2)
+                            Spacer()
+                        }
+                        .padding(4)
+                        ForEach(self.$checklists) { checklist in
+                            ChecklistView(checklist: checklist)
+                                .padding(.horizontal, 4)
+                        }
+                        .padding(.bottom, 8)
+                    }
                 }
                 Spacer()
                 VStack(alignment: .leading) {
                     ContextMenuDueDateView(card: $card)
                         .frame(maxWidth: 180)
                 }
-            }.frame(alignment: .top)
+            }
         }
-        .padding(16)
         .onAppear {
             self.desc = card.desc;
+            
+            trelloApi.getCardChecklists(id: card.id, completion: { checklists in
+                self.checklists = checklists;
+            })
         }
+        .padding(24)
     }
 }
 

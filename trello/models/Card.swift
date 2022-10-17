@@ -8,6 +8,7 @@
 import Foundation
 
 struct Card: Identifiable, Codable, Hashable {
+    
     var id: String;
     var idList: String = ""; // TODO: remove default
     var labels: [Label] = [];

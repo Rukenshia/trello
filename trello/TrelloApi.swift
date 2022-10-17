@@ -63,7 +63,7 @@ class TrelloApi: ObservableObject {
     }
     
     func getBoard(id: String, completion: @escaping (Board) -> Void = { board in }) {
-        guard let url = URL(string: "https://api.trello.com/1/boards/\(id)?labels=all&cards=open&lists=open&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+        guard let url = URL(string: "https://api.trello.com/1/boards/\(id)?labels=all&cards=open&lists=open&checklists=all&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
         let urlRequest = URLRequest(url: url)
         
@@ -100,6 +100,38 @@ class TrelloApi: ObservableObject {
                         self.board = decodedBoard
                         print("board changed to \(self.board.name)")
                         completion(self.board)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+            } else {
+                print("Status code: ", response.statusCode)
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
+    func getCardChecklists(id: String, completion: @escaping ([Checklist]) -> Void = { checklists in }) {
+        guard let url = URL(string: "https://api.trello.com/1/cards/\(id)/checklists?key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+        
+        let urlRequest = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        var decodedChecklists = try JSONDecoder().decode([Checklist].self, from: data)
+                        
+                        completion(decodedChecklists)
                     } catch let error {
                         print("Error decoding: ", error)
                     }

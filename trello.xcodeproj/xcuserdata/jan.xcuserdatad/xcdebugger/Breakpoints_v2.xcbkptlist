@@ -37,8 +37,8 @@
             filePath = "trello/TrelloApi.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "removeLabelsFromCard(card:labelIds:completion:after_timeout:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -89,6 +89,54 @@
             endingLineNumber = "241"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EF69790B-546C-4A03-BF6D-984441D59AE3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "trello/views/ChecklistView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "EF69790B-546C-4A03-BF6D-984441D59AE3 - 62ba7cc7c28877e6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Divider, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;SwiftUI.Binding&lt;Swift.Array&lt;trello.CheckItem&gt;&gt;, Swift.String, SwiftUI.TupleView&lt;(SwiftUI.Image, SwiftUI.Text)&gt;&gt;&gt;)&gt; in trello.ChecklistView.body.getter : some"
+                  moduleName = "trello"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jan/src/priv/trello/trello/trello/views/ChecklistView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "18"
+                  endingLineNumber = "18"
+                  offsetFromSymbolStart = "836">
+               </Location>
+               <Location
+                  uuid = "EF69790B-546C-4A03-BF6D-984441D59AE3 - 4d78239d18540bf6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SwiftUI.Binding&lt;trello.CheckItem&gt;) -&gt; SwiftUI.TupleView&lt;(SwiftUI.Image, SwiftUI.Text)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, SwiftUI.Divider, SwiftUI.List&lt;Swift.Never, SwiftUI.ForEach&lt;SwiftUI.Binding&lt;Swift.Array&lt;trello.CheckItem&gt;&gt;, Swift.String, SwiftUI.TupleView&lt;(SwiftUI.Image, SwiftUI.Text)&gt;&gt;&gt;)&gt; in trello.ChecklistView.body.getter : some"
+                  moduleName = "trello"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jan/src/priv/trello/trello/trello/views/ChecklistView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19"
+                  offsetFromSymbolStart = "220">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
