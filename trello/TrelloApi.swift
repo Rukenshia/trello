@@ -144,6 +144,49 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
+    func updateCheckItem(cardId: String, checkItem: CheckItem, completion: @escaping (CheckItem) -> Void) {
+        var url = URLComponents(string: "https://api.trello.com/1/cards/\(cardId)/checkItem/\(checkItem.id)")!
+
+        url.queryItems = [
+            URLQueryItem(name: "key", value: self.key),
+            URLQueryItem(name: "token", value: self.token),
+            URLQueryItem(name: "name", value: checkItem.name),
+            URLQueryItem(name: "state", value: checkItem.state.rawValue),
+            URLQueryItem(name: "idChecklist", value: checkItem.idChecklist),
+
+        ]
+        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        var urlRequest = URLRequest(url: url.url!)
+        urlRequest.httpMethod = "PUT"
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let newCheckItem = try JSONDecoder().decode(CheckItem.self, from: data)
+                        
+                        completion(newCheckItem)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+            } else {
+                print("status code \(response.statusCode)")
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
     func addLabelsToCard(card: Card, labelIds: [String], completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
         let newLabels = card.idLabels + labelIds
         

@@ -35,6 +35,7 @@
 		3D9E4CFF28F30FAA0065F47A /* ContextMenuLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */; };
 		3D9E4D0128F314750065F47A /* ContextMenuManageLabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */; };
 		3DBBC13928FD975C008780AB /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBC13828FD975C008780AB /* ChecklistView.swift */; };
+		3DBBC13B28FD9C7C008780AB /* ChecklistItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */; };
 		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
 		3DD5EAAC28F68D4B00D2F682 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */; };
 		3DDB37BA28F20B9E0095886A /* SidebarBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */; };
@@ -90,6 +91,7 @@
 		3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuLabelView.swift; sourceTree = "<group>"; };
 		3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuManageLabelsView.swift; sourceTree = "<group>"; };
 		3DBBC13828FD975C008780AB /* ChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
+		3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemView.swift; sourceTree = "<group>"; };
 		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBoardView.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				3D0302E128F893B200213D3E /* OnboardingView.swift */,
 				3D337EA828FB24EE0054DCB3 /* CheckForUpdatesView.swift */,
 				3DBBC13828FD975C008780AB /* ChecklistView.swift */,
+				3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				3D15B19D28F4005D007B95A0 /* ContextMenuDueDateView.swift in Sources */,
 				3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */,
 				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
+				3DBBC13B28FD9C7C008780AB /* ChecklistItemView.swift in Sources */,
 				3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */,
 				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
 				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,
@@ -552,7 +556,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -580,7 +584,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

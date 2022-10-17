@@ -16,11 +16,8 @@ struct ChecklistView: View {
                 .font(.title3)
             Divider()
             ForEach($checklist.checkItems) { checkItem in
-                HStack {
-                    Image(systemName: checkItem.wrappedValue.state == CheckItemState.complete ? "checkmark.circle" : "circle")
-                    Text(checkItem.wrappedValue.name)
-                    Spacer()
-                }
+                ChecklistItemView(item: checkItem, cardId: $checklist.idCard)
+                    .padding(.vertical, 1)
             }
         }
         .padding(8)
