@@ -57,6 +57,7 @@ struct TrelloListView: View {
                     self.list.cards.remove(atOffsets: offsets)
                 }
                 .onInsert(of: [String(describing: Card.self)], perform: onInsert)
+                .deleteDisabled(true)
             }
             .listStyle(.plain)
             // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
