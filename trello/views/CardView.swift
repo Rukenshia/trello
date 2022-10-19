@@ -291,6 +291,15 @@ struct CardView: View {
                         case "c":
                             self.popoverState = .cardColor
                             self.showPopover = true
+                        case "D":
+                            self.trelloApi.markAsDone(card: card, completion: { newCard in
+                                trelloApi.objectWillChange.send()
+                                card.idLabels = newCard.idLabels
+                                card = newCard
+                                print(newCard)
+                            }, after_timeout: {
+                                print("after_timeout")
+                            })
                         default:
                             ()
                         }
