@@ -21,7 +21,7 @@ struct ContentView: View {
     
     var backgroundImage: some View {
         var url = "https://trello-backgrounds.s3.amazonaws.com/54d4b4fc032569bd9870ac0a/original/04b4f28b09473079050638ab87426857/chrome_theme_bg_explorer.jpg";
-
+        
         if trelloApi.board.prefs.backgroundImage != nil {
             url = trelloApi.board.prefs.backgroundImage!
         }
@@ -51,9 +51,11 @@ struct ContentView: View {
                     ScrollView([.vertical]) {
                         VStack(){
                             HStack(alignment: .top) {
-                                ForEach($trelloApi.board.lists) { list in //.filter{ list in !list.name.wrappedValue.contains("✔️") }) { list in
-                                    TrelloListView(list: list)
-                                        .fixedSize(horizontal: false, vertical: true)
+                                ForEach(trelloApi.board.lists.indices, id: \.self) { index in
+                                    Safe($trelloApi.board.lists, index: index) { list in
+                                        TrelloListView(list: list)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                    }
                                 }
                             }
                             .padding()
@@ -63,10 +65,10 @@ struct ContentView: View {
                 }
             }
             .background(self.backgroundImage)
-//            if let doneList = $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }) {
-//                TrelloListView(list: doneList)
-//                    .fixedSize(horizontal: false, vertical: true)
-//            }
+            //            if let doneList = $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }) {
+            //                TrelloListView(list: doneList)
+            //                    .fixedSize(horizontal: false, vertical: true)
+            //            }
         }.onAppear {
             self.cancellable = trelloApi.$board.sink { newBoard in
                 if newBoard.id == "" {

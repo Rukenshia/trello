@@ -42,21 +42,21 @@ struct TrelloListView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.top, 8)
             Divider()
-            SwiftUI.List {
-                ForEach(self.$list.cards, id: \.id) { card in
+            SwiftUI.List(self.list.cards.indices, id: \.self) { index in
+                Safe(self.$list.cards, index: index) { card in
                     CardView(card: card)
                 }
-                .onMove { source, dest in
-                    if dest < 0 {
-                        return
-                    }
-                    
-                    self.list.cards.move(fromOffsets: source, toOffset: dest)
-                }
-                .onDelete { offsets in
-                    self.list.cards.remove(atOffsets: offsets)
-                }
-                .onInsert(of: [String(describing: Card.self)], perform: onInsert)
+//                .onMove { source, dest in
+//                    if dest < 0 {
+//                        return
+//                    }
+//                    
+//                    self.list.cards.move(fromOffsets: source, toOffset: dest)
+//                }
+//                .onDelete { offsets in
+//                    self.list.cards.remove(atOffsets: offsets)
+//                }
+//                .onInsert(of: [String(describing: Card.self)], perform: onInsert)
                 .deleteDisabled(true)
             }
             .listStyle(.plain)
@@ -81,10 +81,10 @@ struct TrelloListView: View {
                 self.addCardColor = Color(.clear);
                 return;
             }
-                .buttonStyle(.plain)
-                .padding(4)
-                .background(self.addCardColor)
-                .cornerRadius(4)
+            .buttonStyle(.plain)
+            .padding(4)
+            .background(self.addCardColor)
+            .cornerRadius(4)
         }
         .padding(4)
         .sheet(isPresented: $showAddCard) {
