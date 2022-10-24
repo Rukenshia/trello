@@ -16,11 +16,11 @@ struct Safe<T: RandomAccessCollection & MutableCollection, C: View>: View {
 
    init(_ binding: Binding<T>, index: T.Index, @ViewBuilder content: @escaping (BoundElement) -> C) {
       self.content = content
-      self.binding = .init(get: { binding.wrappedValue[index] },
+       self.binding = .init(get: { binding.wrappedValue[index] },
                            set: { binding.wrappedValue[index] = $0 })
    }
    
    var body: some View {
-      content(binding)
+       content(binding)
    }
 }

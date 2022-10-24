@@ -5,6 +5,7 @@
 //  Created by Jan Christophersen on 24.09.22.
 //
 
+import Combine
 import SwiftUI
 
 extension NSTableView {
@@ -20,6 +21,8 @@ extension NSTableView {
 struct TrelloListView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var list: List;
+    
+    @State private var cards: [Card] = [];
     
     @State private var selection: Card? = nil;
     @State private var addCardColor: Color = Color(.clear);
@@ -42,28 +45,31 @@ struct TrelloListView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.top, 8)
             Divider()
-            SwiftUI.List(self.list.cards.indices, id: \.self) { index in
-                Safe(self.$list.cards, index: index) { card in
-                    CardView(card: card)
+            ScrollViewReader { reader in
+                SwiftUI.List {
+                    ForEach(self.$list.cards) { card in
+                        CardView(card: card)
+                    }
+                    .onMove { source, dest in
+                        if dest < 0 {
+                            return
+                        }
+                        
+                        self.list.cards.move(fromOffsets: source, toOffset: dest)
+                    }
+                    .onDelete { offsets in
+                        self.list.cards.remove(atOffsets: offsets)
+                    }
+                    .onInsert(of: [String(describing: Card.self)], perform: onInsert)
+                    .deleteDisabled(true)
+                    .coordinateSpace(name: "cards")
                 }
-//                .onMove { source, dest in
-//                    if dest < 0 {
-//                        return
-//                    }
-//                    
-//                    self.list.cards.move(fromOffsets: source, toOffset: dest)
-//                }
-//                .onDelete { offsets in
-//                    self.list.cards.remove(atOffsets: offsets)
-//                }
-//                .onInsert(of: [String(describing: Card.self)], perform: onInsert)
-                .deleteDisabled(true)
+                .listStyle(.plain)
+                // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
+                //       the number of cards is too high, I'd like to limit it at some point. When minHeight
+                //       is not set, the list has a height of 0 and nothing works
+                .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 82, maxHeight: .infinity)
             }
-            .listStyle(.plain)
-            // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
-            //       the number of cards is too high, I'd like to limit it at some point. When minHeight
-            //       is not set, the list has a height of 0 and nothing works
-            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 108, maxHeight: .infinity) // 76
             Button(action: {
                 self.showAddCard = true
             }) {

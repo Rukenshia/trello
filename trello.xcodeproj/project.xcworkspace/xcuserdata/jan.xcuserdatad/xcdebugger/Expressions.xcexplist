@@ -22,6 +22,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #5 in closure #1 in closure #1 in CardView.body.getter:CardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.card">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
          <PersistentStrings>
             <PersistentString
@@ -95,18 +103,18 @@
          contextName = "CardView.formattedDueDate.getter:CardView.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #5 in CardView.body.getter:CardView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "card.due">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "ContentView.backgroundImage.getter:ContentView.swift">
          <PersistentStrings>
             <PersistentString
                value = "trelloApi.board">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #5 in CardView.body.getter:CardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "card.due">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -139,6 +147,9 @@
       </ContextState>
       <ContextState
          contextName = "closure #1 in closure #1 in TrelloListView.body.getter:TrelloListView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in Safe.init(_:index:content:):Safe.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in TrelloApi.getBoards(completion:):TrelloApi.swift">

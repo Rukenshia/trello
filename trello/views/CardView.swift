@@ -22,87 +22,63 @@ struct CardView: View {
     
     @Binding var card: Card;
     
-    @State private var color: AnyView;
-    @State private var showDetails: Bool;
+    @State private var showDetails: Bool = false;
     
-    @State private var due: Date?;
-    @State private var dueComplete: Bool = false;
-    @State private var dueColor: Color;
-    
-    @State private var isHovering: Bool;
+    @State private var isHovering: Bool = false;
     
     @State private var monitor: Any?;
     @State private var showPopover: Bool = false;
     @State private var popoverState: PopoverState = .none;
     
-    private let dateFormatter: DateFormatter;
-    private let timeFormatter: DateFormatter;
-    
-    private let timer: Publishers.Autoconnect<Timer.TimerPublisher>;
-    
-    init(card: Binding<Card>) {
-        self._isHovering = State(initialValue: false);
-        self._card = card
-        self._color = State(initialValue: AnyView(Color("CardBg").opacity(0.9)))
-        self._showDetails = State(initialValue: false)
-        
-        self.dateFormatter = DateFormatter()
-        self.dateFormatter.dateFormat = "MMM dd"
-        
-        self.timeFormatter = DateFormatter()
-        self.timeFormatter.dateFormat = "HH:mm"
-        
-        self._dueColor = State(initialValue: .clear)
-        
-        self.timer = Timer.publish(
-            every: 5, // second
-            on: .main,
-            in: .common
-        ).autoconnect();
-        
-        self.dueComplete = card.wrappedValue.dueComplete;
-        self.due = card.wrappedValue.dueDate;
-        self._dueColor = State(initialValue: self.getDueColor(now: Date.now));
-        self._color = State(initialValue: AnyView(self.getColor(labels: self.card.labels).opacity(0.95)));
-    }
-    
-    
     private var formattedDueDate: String {
-        dateFormatter.string(from: card.dueDate!).uppercased()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd"
+        
+        return formatter.string(from: card.dueDate!).uppercased()
     }
     
     private var formattedDueTime: String {
-        timeFormatter.string(from: card.dueDate!).uppercased()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        
+        return formatter.string(from: card.dueDate!).uppercased()
     }
     
-    private func getColor(labels: [Label]) -> Color {
-        if let label = labels.first(where: { label in label.name.contains("color:") }) {
-            return Color("CardBg_\(label.name.split(separator: ":")[1])");
+    private var color: AnyView {
+        var cardBg: Color = Color("CardBg")
+        
+        if let label = self.card.labels.first(where: { label in label.name.contains("color:") }) {
+            cardBg = Color("CardBg_\(label.name.split(separator: ":")[1])");
         }
         
-        return Color("CardBg");
+        if isHovering {
+            return AnyView(cardBg.brightness(0.1))
+        }
+        
+        return AnyView(cardBg.opacity(0.95))
     }
     
-    private func getDueColor(now: Date) -> Color {
-        guard let due = self.due else {
-            return Color.clear;
-        }
-        
-        if self.dueComplete {
-            return isHovering ? Color("CardDueCompleteBg") : Color("CardDueCompleteBg").opacity(0.85);
-        }
-        
-        if now > due {
-            return isHovering ? Color("CardOverdueBg") : Color("CardOverdueBg").opacity(0.85);
-        }
-        
-        let diff = Calendar.current.dateComponents([.day], from: now, to: due);
-        
-        if diff.day! > 0 {
-            return Color.clear;
-        }
-        
-        return isHovering ? Color("CardDueSoonBg") : Color("CardDueSoonBg").opacity(0.85);
+    private var dueColor: Color {
+            guard let dueStr = self.card.due else {
+                return Color.clear;
+            }
+        let due = TrelloApi.DateFormatter.date(from: dueStr);
+            
+            if self.card.dueComplete {
+                return isHovering ? Color("CardDueCompleteBg") : Color("CardDueCompleteBg").opacity(0.85);
+            }
+            
+        if Date.now > due! {
+                return isHovering ? Color("CardOverdueBg") : Color("CardOverdueBg").opacity(0.85);
+            }
+            
+        let diff = Calendar.current.dateComponents([.day], from: Date.now, to: due!);
+            
+            if diff.day! > 0 {
+                return Color.clear;
+            }
+            
+            return isHovering ? Color("CardDueSoonBg") : Color("CardDueSoonBg").opacity(0.85);
     }
     
     private var displayedLabels: [Label] {
@@ -220,17 +196,9 @@ struct CardView: View {
                 .onHover(perform: {hover in
                     self.isHovering = hover
                     withAnimation(.easeInOut(duration: 0.1)) {
-                        // TODO: fix hover with AnyView
-                        
                         if hover {
-                            self.color = AnyView(self.getColor(labels: self.card.labels).brightness(0.1));
-                            
-                            self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pointingHand.push()
                         } else {
-                            self.color = AnyView(self.getColor(labels: self.card.labels).opacity(0.95));
-                            
-                            self.dueColor = self.getDueColor(now: Date.now)
                             NSCursor.pop()
                         }
                     }
@@ -241,30 +209,7 @@ struct CardView: View {
                 .sheet(isPresented: $showDetails) {
                     CardDetailsView(card: $card, isVisible: $showDetails)
                 }
-                .onReceive(Just(card)) { newCard in
-                    // TODO: it seems like when the labels change, this check still yields the same results
-                    if self.card.labels != newCard.labels {
-                        print("updating color?")
-                        self.color = AnyView(self.getColor(labels: newCard.labels).opacity(0.95));
-                    }
-                    
-                    if self.card == newCard {
-                        return
-                    }
-                    
-                    self.due = newCard.dueDate
-                    self.dueComplete = newCard.dueComplete
-                    
-                    // recalculate colors, might have added a CardBg or due change
-                    self.color = AnyView(self.getColor(labels: newCard.labels).opacity(0.95));
-                    self.dueColor = self.getDueColor(now: Date.now)
-                }
-                .onReceive(timer) { newTime in
-                    self.dueColor = self.getDueColor(now: newTime)
-                }
                 .onAppear {
-                    self.dueColor = self.getDueColor(now: Date.now)
-                    
                     monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
                         if !isHovering {
                             return nsevent
@@ -330,32 +275,6 @@ struct CardView: View {
                         EmptyView()
                     }
                 }
-                
-                
-                //            if isHovering {
-                //                HStack {
-                //                    Spacer()
-                //                    VStack {
-                //                        Spacer()
-                //                        Button(action: {
-                //                            print("DONE STUFF")
-                //                        }) {
-                //                            Image(systemName: "checkmark")
-                //                                .foregroundColor(Color("LabelFg_green"))
-                //                            Text("done")
-                //                        }
-                //                        .font(.system(size: 14))
-                //                        .cornerRadius(4)
-                //                        .buttonStyle(.plain)
-                //                        Spacer()
-                //                    }
-                //                    .frame(alignment: .trailing)
-                //                    .padding(8)
-                //                    .background(Color.black.opacity(0.5))
-                //                    .frame(maxWidth: .infinity)
-                //                }
-                //                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                //            }
             }
             .cornerRadius(4)
         }
