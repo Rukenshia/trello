@@ -152,7 +152,7 @@ struct CardView: View {
                                     HStack {
                                         Spacer()
                                         Image(systemName: "checkmark")
-                                            .foregroundColor(Color("LabelFg_green"))
+                                            .foregroundColor(Color("TwGreen200"))
                                             .font(.system(size: 14))
                                             .cornerRadius(4)
                                         Spacer()
@@ -160,7 +160,8 @@ struct CardView: View {
                                     .frame(maxWidth: 16, maxHeight: .infinity)
                                     .padding(4)
                                     .padding(.horizontal, 16)
-                                    .background(Color("LabelBg_green"))
+                                    .frame(width: 64)
+                                    .background(Color("TwGreen900"))
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -180,6 +181,7 @@ struct CardView: View {
                             .padding(4)
                             .padding(.horizontal, 6)
                             .frame(maxHeight: .infinity)
+                            .frame(width: 64)
                             .background(dueColor)
                         }
                     }

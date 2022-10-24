@@ -8,12 +8,49 @@
 import SwiftUI
 
 struct ChecklistView: View {
+    @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var checklist: Checklist;
+    
+    @State var color: Color = Color("CardBg").opacity(0.8);
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(checklist.name)
-                .font(.title3)
+            HStack {
+                Text(checklist.name)
+                    .font(.title3)
+                Spacer()
+                Button(action: {
+                    for var item in self.checklist.checkItems {
+                        item.state = .complete
+                        trelloApi.updateCheckItem(cardId: self.checklist.idCard, checkItem: item) { checkItem in
+                            if let index = self.checklist.checkItems.firstIndex(where: { ci in ci.id == checkItem.id }) {
+                                self.checklist.checkItems[index] = checkItem
+                            }
+                        }
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("Mark all as done")
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(self.color)
+                    .cornerRadius(4)
+                }
+                .buttonStyle(.plain)
+                .onHover { hover in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        self.color = hover ? Color("CardBg") : Color("CardBg").opacity(0.8);
+                        
+                        if (hover) {
+                            NSCursor.pointingHand.push()
+                        } else {
+                            NSCursor.pop()
+                        }
+                    }
+                }
+            }
             Divider()
             ForEach($checklist.checkItems) { checkItem in
                 ChecklistItemView(item: checkItem, cardId: $checklist.idCard)

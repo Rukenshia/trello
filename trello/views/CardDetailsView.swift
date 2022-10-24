@@ -57,10 +57,11 @@ struct CardDetailsView: View {
                     }
                     
                     if self.editing {
-                        SwiftDownEditor(text: $desc)
-                            .insetsSize(4)
-                            .theme(Theme.BuiltIn.defaultDark.theme())
-                            .frame(minWidth: 400, minHeight: 120, maxHeight: .infinity)
+                            SwiftDownEditor(text: $desc)
+                                .insetsSize(4)
+                                .theme(Theme.BuiltIn.defaultDark.theme())
+                                .frame(minWidth: 500, maxHeight: .infinity)
+                                .frame(height: CGFloat(self.card.desc.components(separatedBy: "\n").count) * 24.0)
                         
                         Button(action: {
                             self.editing = false;
@@ -81,7 +82,8 @@ struct CardDetailsView: View {
                             .insetsSize(4)
                             .isEditable(false)
                             .theme(Theme.BuiltIn.defaultDark.theme())
-                            .frame(minWidth: 400, minHeight: 120, maxHeight: .infinity)
+                            .frame(minWidth: 500, maxHeight: .infinity)
+                            .frame(height: CGFloat(self.card.desc.components(separatedBy: "\n").count) * 24.0)
                         
                         Button(action: {
                             self.editing = true;
@@ -127,7 +129,7 @@ struct CardDetailsView: View {
             })
         }
         .padding(24)
-        .padding(.vertical, 36)
+        .padding(.vertical, self.checklists.count > 0 ? 16 : 0)
     }
 }
 
