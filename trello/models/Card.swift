@@ -32,3 +32,13 @@ struct Card: Identifiable, Codable, Hashable {
         return TrelloApi.DateFormatter.date(from: self.due!)
     }
 }
+
+final class DraggableCard: NSObject, Codable {
+    var id: String;
+    var idList: String;
+    
+    init(id: String, idList: String) {
+        self.id = id
+        self.idList = idList
+    }
+}

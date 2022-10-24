@@ -35,6 +35,7 @@
 		3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */; };
 		3D9E4CFF28F30FAA0065F47A /* ContextMenuLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */; };
 		3D9E4D0128F314750065F47A /* ContextMenuManageLabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */; };
+		3DAC601E2906E57C009255CE /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAC601D2906E57C009255CE /* CardDropDelegate.swift */; };
 		3DBBC13928FD975C008780AB /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBC13828FD975C008780AB /* ChecklistView.swift */; };
 		3DBBC13B28FD9C7C008780AB /* ChecklistItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */; };
 		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
@@ -92,6 +93,7 @@
 		3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuMoveListView.swift; sourceTree = "<group>"; };
 		3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuLabelView.swift; sourceTree = "<group>"; };
 		3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuManageLabelsView.swift; sourceTree = "<group>"; };
+		3DAC601D2906E57C009255CE /* CardDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDropDelegate.swift; sourceTree = "<group>"; };
 		3DBBC13828FD975C008780AB /* ChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
 		3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemView.swift; sourceTree = "<group>"; };
 		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				3D1483A328DEF4890021C6FC /* Preview Content */,
 				3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */,
 				3D8084002902C71F0097371C /* Safe.swift */,
+				3DAC601D2906E57C009255CE /* CardDropDelegate.swift */,
 			);
 			path = trello;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				3D9E4CFF28F30FAA0065F47A /* ContextMenuLabelView.swift in Sources */,
 				3D4632BB28E079140063B4C4 /* Board.swift in Sources */,
 				3D337EA928FB24EE0054DCB3 /* CheckForUpdatesView.swift in Sources */,
+				3DAC601E2906E57C009255CE /* CardDropDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,7 +564,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -588,7 +592,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.5;
+				MARKETING_VERSION = 0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trello;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

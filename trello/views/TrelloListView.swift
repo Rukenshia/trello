@@ -45,31 +45,36 @@ struct TrelloListView: View {
                 .multilineTextAlignment(.leading)
                 .padding(.top, 8)
             Divider()
-            ScrollViewReader { reader in
-                SwiftUI.List {
-                    ForEach(self.$list.cards) { card in
+            SwiftUI.List {
+                ForEach(self.$list.cards) { card in
+                    HStack {
+                        Circle().fill(Color("CardBg")).frame(width: 8, height: 8).opacity(1)
                         CardView(card: card)
+                            .onDrag {
+                                NSItemProvider(object: card.wrappedValue.id as NSString)
+                            }
                     }
-                    .onMove { source, dest in
-                        if dest < 0 {
-                            return
-                        }
-                        
-                        self.list.cards.move(fromOffsets: source, toOffset: dest)
-                    }
-                    .onDelete { offsets in
-                        self.list.cards.remove(atOffsets: offsets)
-                    }
-                    .onInsert(of: [String(describing: Card.self)], perform: onInsert)
-                    .deleteDisabled(true)
-                    .coordinateSpace(name: "cards")
                 }
-                .listStyle(.plain)
-                // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
-                //       the number of cards is too high, I'd like to limit it at some point. When minHeight
-                //       is not set, the list has a height of 0 and nothing works
-                .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 82, maxHeight: .infinity)
+                .onMove { source, dest in
+                    if dest < 0 {
+                        return
+                    }
+                    
+                    self.list.cards.move(fromOffsets: source, toOffset: dest)
+                }
+                .onDelete { offsets in
+                    self.list.cards.remove(atOffsets: offsets)
+                }
+                .onInsert(of: [String(describing: Card.self)], perform: onInsert)
+                .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+                .deleteDisabled(true)
+                .coordinateSpace(name: "cards")
             }
+            .listStyle(.plain)
+            // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
+            //       the number of cards is too high, I'd like to limit it at some point. When minHeight
+            //       is not set, the list has a height of 0 and nothing works
+            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 82, maxHeight: .infinity)
             Button(action: {
                 self.showAddCard = true
             }) {
@@ -101,17 +106,8 @@ struct TrelloListView: View {
         .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 150)
     }
     
-    private func onInsert(at offset: Int, itemProvider: [NSItemProvider]) {
-        //        for provider in itemProvider {
-        //            if provider.canLoadObject(ofClass: Card.self) {
-        //                _ = provider.loadObject(ofClass: Card.self) { card, error in
-        //                    DispatchQueue.main.async {
-        //                        self.list.cards.insert(card!, at: offset)
-        //                    }
-        //                }
-        //            }
-        //        }
-        print("onInsert")
+    private func onInsert(at offset: Int, itemProviders: [NSItemProvider]) {
+        
     }
 }
 

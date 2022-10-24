@@ -80,13 +80,11 @@ struct ContentView: View {
             
             trelloApi.getBoards { boards in
                 if let currentBoard = UserDefaults.standard.string(forKey: PreferenceKeys.currentBoard) {
-                    print(currentBoard)
                     if currentBoard.isEmpty {
                         if (boards.count > 0) {
                             trelloApi.getBoard(id: boards[0].id)
                         }
                     } else {
-                        print(currentBoard)
                         trelloApi.getBoard(id: currentBoard)
                     }
                 } else {

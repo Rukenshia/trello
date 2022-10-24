@@ -37,8 +37,8 @@
             filePath = "trello/TrelloApi.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "removeLabelsFromCard(card:labelIds:completion:after_timeout:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -98,7 +98,6 @@ class TrelloApi: ObservableObject {
                         }
                         
                         self.board = decodedBoard
-                        print("board changed to \(self.board.name)")
                         completion(self.board)
                     } catch let error {
                         print("Error decoding: ", error)
@@ -293,8 +292,8 @@ class TrelloApi: ObservableObject {
         self.addLabelsToCard(card: card, labelIds: [doneLabel.id], completion: completion, after_timeout: after_timeout)
     }
     
-    func moveCard(card: Card, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
-        guard let url = URL(string: "https://api.trello.com/1/cards/\(card.id)?idList=\(destination)&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+    func moveCard(cardId: String, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
+        guard let url = URL(string: "https://api.trello.com/1/cards/\(cardId)?idList=\(destination)&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "PUT"
@@ -313,10 +312,15 @@ class TrelloApi: ObservableObject {
                     do {
                         let newCard = try JSONDecoder().decode(Card.self, from: data)
                         
-                        // Remove from old list and add to new locally
-                        if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
-                            self.board.lists[oldList].cards.remove(at: self.board.lists[oldList].cards.firstIndex(of: card)!)
+                        // find old card
+                        if let card = self.board.cards.first(where: { card in card.id == cardId }) {
+                            
+                            // Remove from old list and add to new locally
+                            if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
+                                self.board.lists[oldList].cards.remove(at: self.board.lists[oldList].cards.firstIndex(of: card)!)
+                            }
                         }
+
                         if let newList = self.board.lists.firstIndex(where: { list in list.id == destination }) {
                             self.board.lists[newList].cards.append(newCard)
                         }
@@ -335,6 +339,8 @@ class TrelloApi: ObservableObject {
                     ) {
                         after_timeout()
                     }
+            } else {
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
             }
         }
         
