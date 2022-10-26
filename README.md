@@ -14,7 +14,7 @@ for trello.
 - [ ] Lists
   - [x] View lists
   - [x] View cards in a list
-  - [ ] Reorder cards in a list
+  - [x] Reorder cards in a list
   - [ ] Change list name
   - [ ] Change list order
   - [ ] Add list to board
