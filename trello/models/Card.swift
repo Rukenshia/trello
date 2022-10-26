@@ -23,6 +23,7 @@ struct Card: Identifiable, Codable, Hashable {
     var due: String?;
     var dueComplete: Bool = false;
     var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0);
+    var pos: Float = 0.0;
     
     var dueDate: Date? {
         if self.due == nil {

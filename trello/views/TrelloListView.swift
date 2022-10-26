@@ -22,8 +22,6 @@ struct TrelloListView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var list: List;
     
-    @State private var cards: [Card] = [];
-    
     @State private var selection: Card? = nil;
     @State private var addCardColor: Color = Color(.clear);
     @State private var showAddCard: Bool = false;
@@ -59,6 +57,23 @@ struct TrelloListView: View {
                     if dest < 0 {
                         return
                     }
+                    
+                    for sourceIdx in source {
+                        var newPos: Float = 0.0
+                        if dest == self.list.cards.count {
+                            newPos = self.list.cards[self.list.cards.count - 1].pos + 1024
+                        } else if dest == 0 {
+                            newPos = self.list.cards[0].pos - 1024
+                        } else {
+                            newPos = (self.list.cards[dest - 1].pos + self.list.cards[dest].pos) / 2
+                        }
+                        
+                        self.list.cards[sourceIdx].pos = newPos
+                        trelloApi.setCardPos(card: self.list.cards[sourceIdx], pos: newPos) { newCard in
+                            
+                        }
+                    }
+                    
                     
                     self.list.cards.move(fromOffsets: source, toOffset: dest)
                 }
