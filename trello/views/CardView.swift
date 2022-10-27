@@ -94,181 +94,179 @@ struct CardView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(card.name)
-                            .bold()
-                            .font(.system(size: 14))
-                            .multilineTextAlignment(.leading)
+        VStack(alignment: .leading) {
+            HStack {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(card.name)
+                        .bold()
+                        .font(.system(size: 14))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
+                        .foregroundColor(.white)
+                    
+                    HStack{
+                        if displayedLabels.count > 0 {
+                            ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
+                                LabelView(label: label)
+                            }
+                            if card.labels.count > 2 {
+                                Text("+\(card.labels.count - 2)")
+                                    .font(.system(size: 10))
+                            }
+                        }
+                    }
+                    
+                    
+                    HStack {
+                        if card.badges.checkItems > 0 {
+                            HStack(spacing: 1) {
+                                Image(systemName: "checklist")
+                                Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(Color("CardBg"))
+                            .cornerRadius(4)
+                        }
+                        Text(card.desc)
                             .lineLimit(1)
-                            .foregroundColor(.white)
-                        
-                        HStack{
-                            if displayedLabels.count > 0 {
-                                ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
-                                    LabelView(label: label)
-                                }
-                                if card.labels.count > 2 {
-                                    Text("+\(card.labels.count - 2)")
-                                        .font(.system(size: 10))
-                                }
-                            }
-                        }
-                        
-                        
-                        HStack {
-                            if card.badges.checkItems > 0 {
-                                HStack(spacing: 1) {
-                                    Image(systemName: "checklist")
-                                    Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 2)
-                                .background(Color("CardBg"))
-                                .cornerRadius(4)
-                            }
-                            Text(card.desc)
-                                .lineLimit(1)
-                                .foregroundColor(.secondary)
-                        }
-                    }.padding()
-                    Spacer()
-                    
-                    if card.due != nil {
-                        if isHovering {
-                            VStack {
-                                Button(action: {
-                                    self.trelloApi.markAsDone(card: card, completion: { newCard in
-                                        trelloApi.objectWillChange.send()
-                                        card.idLabels = newCard.idLabels
-                                        card = newCard
-                                    }, after_timeout: {
-                                        print("after_timeout")
-                                    })
-                                }) {
-                                    HStack {
-                                        Spacer()
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(Color("TwGreen200"))
-                                            .font(.system(size: 14))
-                                            .cornerRadius(4)
-                                        Spacer()
-                                    }
-                                    .frame(maxWidth: 16, maxHeight: .infinity)
-                                    .padding(4)
-                                    .padding(.horizontal, 16)
-                                    .frame(width: 64)
-                                    .background(Color("TwGreen900"))
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        } else {
-                            VStack {
-                                Text(formattedDueDate)
-                                Text(formattedDueTime)
-                                if let duration {
-                                    HStack(spacing: 0) {
-                                        Image(systemName: "clock")
-                                        Text(duration)
-                                    }
-                                    .padding(.top, 2)
-                                }
-                            }
-                            .font(.system(size: 10, weight: .bold))
-                            .padding(4)
-                            .padding(.horizontal, 6)
-                            .frame(maxHeight: .infinity)
-                            .frame(width: 64)
-                            .background(dueColor)
-                        }
+                            .foregroundColor(.secondary)
                     }
-                }
-            }
-            .frame(alignment: .leading)
-            .background(self.color)
-            .onHover(perform: {hover in
-                self.isHovering = hover
-                withAnimation(.easeInOut(duration: 0.1)) {
-                    if hover {
-                        NSCursor.pointingHand.push()
+                }.padding()
+                Spacer()
+                
+                if card.due != nil {
+                    if isHovering {
+                        VStack {
+                            Button(action: {
+                                self.trelloApi.markAsDone(card: card, completion: { newCard in
+                                    trelloApi.objectWillChange.send()
+                                    card.idLabels = newCard.idLabels
+                                    card = newCard
+                                }, after_timeout: {
+                                    print("after_timeout")
+                                })
+                            }) {
+                                HStack {
+                                    Spacer()
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(Color("TwGreen200"))
+                                        .font(.system(size: 14))
+                                        .cornerRadius(4)
+                                    Spacer()
+                                }
+                                .frame(maxWidth: 16, maxHeight: .infinity)
+                                .padding(4)
+                                .padding(.horizontal, 16)
+                                .frame(width: 64)
+                                .background(Color("TwGreen900"))
+                            }
+                            .buttonStyle(.plain)
+                        }
                     } else {
-                        NSCursor.pop()
+                        VStack {
+                            Text(formattedDueDate)
+                            Text(formattedDueTime)
+                            if let duration {
+                                HStack(spacing: 0) {
+                                    Image(systemName: "clock")
+                                    Text(duration)
+                                }
+                                .padding(.top, 2)
+                            }
+                        }
+                        .font(.system(size: 10, weight: .bold))
+                        .padding(4)
+                        .padding(.horizontal, 6)
+                        .frame(maxHeight: .infinity)
+                        .frame(width: 64)
+                        .background(dueColor)
                     }
                 }
-            })
-            .onTapGesture {
-                showDetails = true
             }
-            .sheet(isPresented: $showDetails) {
-                CardDetailsView(card: $card, isVisible: $showDetails)
+        }
+        .frame(alignment: .leading)
+        .background(self.color)
+        .onHover(perform: {hover in
+            self.isHovering = hover
+            withAnimation(.easeInOut(duration: 0.1)) {
+                if hover {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
             }
-            .onAppear {
-                monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
-                    if !isHovering {
-                        return nsevent
-                    }
-                    
-                    if self.showPopover {
-                        return nsevent
-                    }
-                    
-                    if self.showDetails {
-                        return nsevent
-                    }
-                    
-                    switch (nsevent.characters) {
-                    case "m":
-                        self.popoverState = .moveToList
-                        self.showPopover = true
-                    case "l":
-                        self.popoverState = .manageLabels
-                        self.showPopover = true
-                    case "d":
-                        self.popoverState = .dueDate
-                        self.showPopover = true
-                    case "c":
-                        self.popoverState = .cardColor
-                        self.showPopover = true
-                    case "D":
-                        self.trelloApi.markAsDone(card: card, completion: { newCard in
-                            trelloApi.objectWillChange.send()
-                            card.idLabels = newCard.idLabels
-                            card = newCard
-                        }, after_timeout: {
-                            print("after_timeout")
-                        })
-                    default:
-                        ()
-                    }
-                    
+        })
+        .onTapGesture {
+            showDetails = true
+        }
+        .sheet(isPresented: $showDetails) {
+            CardDetailsView(card: $card, isVisible: $showDetails)
+        }
+        .onAppear {
+            monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
+                if !isHovering {
                     return nsevent
                 }
-            }
-            .onDisappear {
-                if let monitor = self.monitor {
-                    NSEvent.removeMonitor(monitor)
+                
+                if self.showPopover {
+                    return nsevent
                 }
-            }
-            .popover(isPresented: self.$showPopover, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
-                switch (self.popoverState) {
-                case .moveToList:
-                    VStack(spacing: 8) {
-                        ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
-                            ContextMenuMoveListView(list: list, card: $card)
-                        }
-                    }.padding(8)
-                case .manageLabels:
-                    ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: $card)
-                case .dueDate:
-                    ContextMenuDueDateView(card: $card)
-                case .cardColor:
-                    ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card, show: $showPopover)
+                
+                if self.showDetails {
+                    return nsevent
+                }
+                
+                switch (nsevent.characters) {
+                case "m":
+                    self.popoverState = .moveToList
+                    self.showPopover = true
+                case "l":
+                    self.popoverState = .manageLabels
+                    self.showPopover = true
+                case "d":
+                    self.popoverState = .dueDate
+                    self.showPopover = true
+                case "c":
+                    self.popoverState = .cardColor
+                    self.showPopover = true
+                case "D":
+                    self.trelloApi.markAsDone(card: card, completion: { newCard in
+                        trelloApi.objectWillChange.send()
+                        card.idLabels = newCard.idLabels
+                        card = newCard
+                    }, after_timeout: {
+                        print("after_timeout")
+                    })
                 default:
-                    EmptyView()
+                    ()
                 }
+                
+                return nsevent
+            }
+        }
+        .onDisappear {
+            if let monitor = self.monitor {
+                NSEvent.removeMonitor(monitor)
+            }
+        }
+        .popover(isPresented: self.$showPopover, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
+            switch (self.popoverState) {
+            case .moveToList:
+                VStack(spacing: 8) {
+                    ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
+                        ContextMenuMoveListView(list: list, card: $card)
+                    }
+                }.padding(8)
+            case .manageLabels:
+                ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: $card)
+            case .dueDate:
+                ContextMenuDueDateView(card: $card)
+            case .cardColor:
+                ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card, show: $showPopover)
+            default:
+                EmptyView()
             }
         }
         .cornerRadius(4)

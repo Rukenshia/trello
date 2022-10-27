@@ -24,6 +24,7 @@ struct Card: Identifiable, Codable, Hashable {
     var dueComplete: Bool = false;
     var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0);
     var pos: Float = 0.0;
+    var dateLastActivity: String = "1991-08-10T00:00:00Z";
     
     var dueDate: Date? {
         if self.due == nil {

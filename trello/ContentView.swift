@@ -44,31 +44,22 @@ struct ContentView: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top, spacing: 0) {
             SidebarView()
-            VStack {
-                ScrollView([.horizontal]) {
-                    ScrollView([.vertical]) {
-                        VStack(){
+            VStack(alignment: .leading) {
+                    ScrollView([.horizontal]) {
                             HStack(alignment: .top) {
-                                ForEach(trelloApi.board.lists.indices, id: \.self) { index in
-                                    Safe($trelloApi.board.lists, index: index) { list in
-                                        TrelloListView(list: list)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                    }
+                                ForEach(self.$trelloApi.board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
+                                    TrelloListView(list: list)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
                             .padding()
                             .frame(maxHeight: .infinity, alignment: .top)
-                        }
+                            .background(self.backgroundImage)
                     }
-                }
             }
-            .background(self.backgroundImage)
-            //            if let doneList = $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }) {
-            //                TrelloListView(list: doneList)
-            //                    .fixedSize(horizontal: false, vertical: true)
-            //            }
+            RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }))
         }.onAppear {
             self.cancellable = trelloApi.$board.sink { newBoard in
                 if newBoard.id == "" {
