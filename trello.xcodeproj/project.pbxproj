@@ -30,7 +30,6 @@
 		3D4632BF28E0C21A0063B4C4 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4632BE28E0C21A0063B4C4 /* LabelView.swift */; };
 		3D495DD428F8AA9A00B9D6AC /* ContextMenuCardColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495DD328F8AA9A00B9D6AC /* ContextMenuCardColorView.swift */; };
 		3D495DD628F934B300B9D6AC /* CardColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D495DD528F934B300B9D6AC /* CardColorView.swift */; };
-		3D8084012902C71F0097371C /* Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8084002902C71F0097371C /* Safe.swift */; };
 		3D8470B928F996ED009FC33B /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 3D8470B828F996ED009FC33B /* Sparkle */; };
 		3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */; };
 		3D9E4CFF28F30FAA0065F47A /* ContextMenuLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */; };
@@ -92,7 +91,6 @@
 		3D4632BE28E0C21A0063B4C4 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
 		3D495DD328F8AA9A00B9D6AC /* ContextMenuCardColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuCardColorView.swift; sourceTree = "<group>"; };
 		3D495DD528F934B300B9D6AC /* CardColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardColorView.swift; sourceTree = "<group>"; };
-		3D8084002902C71F0097371C /* Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Safe.swift; sourceTree = "<group>"; };
 		3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuMoveListView.swift; sourceTree = "<group>"; };
 		3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuLabelView.swift; sourceTree = "<group>"; };
 		3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuManageLabelsView.swift; sourceTree = "<group>"; };
@@ -158,19 +156,15 @@
 		3D14839C28DEF4870021C6FC /* trello */ = {
 			isa = PBXGroup;
 			children = (
-				3DC8FB91290AC9A900F63100 /* extensions */,
 				3D337EAA28FB25E80054DCB3 /* Info.plist */,
-				3D1483C928DEF7030021C6FC /* models */,
-				3D1483C828DEF6730021C6FC /* views */,
-				3D4632B828E078FC0063B4C4 /* TrelloApi.swift */,
-				3D14839D28DEF4870021C6FC /* trelloApp.swift */,
-				3D14839F28DEF4870021C6FC /* ContentView.swift */,
-				3D1483A128DEF4890021C6FC /* Assets.xcassets */,
 				3D1483A628DEF4890021C6FC /* trello.entitlements */,
+				3D1483A128DEF4890021C6FC /* Assets.xcassets */,
+				3D14839D28DEF4870021C6FC /* trelloApp.swift */,
+				3DCFDDB2290ACA8200039C2F /* api */,
+				3DC8FB91290AC9A900F63100 /* extensions */,
+				3D1483C928DEF7030021C6FC /* models */,
 				3D1483A328DEF4890021C6FC /* Preview Content */,
-				3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */,
-				3D8084002902C71F0097371C /* Safe.swift */,
-				3DAC601D2906E57C009255CE /* CardDropDelegate.swift */,
+				3D1483C828DEF6730021C6FC /* views */,
 			);
 			path = trello;
 			sourceTree = "<group>";
@@ -203,25 +197,13 @@
 		3D1483C828DEF6730021C6FC /* views */ = {
 			isa = PBXGroup;
 			children = (
-				3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */,
-				3DD56A4428DF0488001FFD8D /* CardView.swift */,
-				3D495DD528F934B300B9D6AC /* CardColorView.swift */,
-				3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */,
-				3D4632BE28E0C21A0063B4C4 /* LabelView.swift */,
-				3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */,
-				3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */,
-				3D495DD328F8AA9A00B9D6AC /* ContextMenuCardColorView.swift */,
-				3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */,
-				3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */,
-				3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */,
-				3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */,
-				3D15B1A128F42366007B95A0 /* AddCardView.swift */,
-				3D0302E128F893B200213D3E /* OnboardingView.swift */,
-				3D337EA828FB24EE0054DCB3 /* CheckForUpdatesView.swift */,
-				3DBBC13828FD975C008780AB /* ChecklistView.swift */,
-				3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */,
-				3DC268D2290A643F003F964F /* DoneListView.swift */,
-				3DC8FB8F290AC17700F63100 /* RightSidebarView.swift */,
+				3D14839F28DEF4870021C6FC /* ContentView.swift */,
+				3DCFDDB0290ACA3400039C2F /* board */,
+				3DCFDDAC290ACA0300039C2F /* card */,
+				3DCFDDAB290AC9F600039C2F /* list */,
+				3DCFDDAF290ACA2800039C2F /* settings */,
+				3DCFDDB1290ACA4F00039C2F /* sidebar */,
+				3DCFDDAE290ACA1E00039C2F /* updater */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -229,6 +211,7 @@
 		3D1483C928DEF7030021C6FC /* models */ = {
 			isa = PBXGroup;
 			children = (
+				3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */,
 				3D1483CA28DEF70E0021C6FC /* Card.swift */,
 				3D1483CC28DEF7A20021C6FC /* List.swift */,
 				3D4632BA28E079140063B4C4 /* Board.swift */,
@@ -242,8 +225,86 @@
 			isa = PBXGroup;
 			children = (
 				3DC8FB92290AC9C300F63100 /* IconButton.swift */,
+				3DAC601D2906E57C009255CE /* CardDropDelegate.swift */,
 			);
 			path = extensions;
+			sourceTree = "<group>";
+		};
+		3DCFDDAB290AC9F600039C2F /* list */ = {
+			isa = PBXGroup;
+			children = (
+				3D1483CE28DEF7D80021C6FC /* TrelloListView.swift */,
+				3DC268D2290A643F003F964F /* DoneListView.swift */,
+			);
+			path = list;
+			sourceTree = "<group>";
+		};
+		3DCFDDAC290ACA0300039C2F /* card */ = {
+			isa = PBXGroup;
+			children = (
+				3DCFDDAD290ACA0F00039C2F /* context-menu */,
+				3DD56A4428DF0488001FFD8D /* CardView.swift */,
+				3D495DD528F934B300B9D6AC /* CardColorView.swift */,
+				3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */,
+				3D4632BE28E0C21A0063B4C4 /* LabelView.swift */,
+				3DBBC13828FD975C008780AB /* ChecklistView.swift */,
+				3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */,
+			);
+			path = card;
+			sourceTree = "<group>";
+		};
+		3DCFDDAD290ACA0F00039C2F /* context-menu */ = {
+			isa = PBXGroup;
+			children = (
+				3D9E4CFC28F2C2070065F47A /* ContextMenuMoveListView.swift */,
+				3D495DD328F8AA9A00B9D6AC /* ContextMenuCardColorView.swift */,
+				3D9E4CFE28F30FAA0065F47A /* ContextMenuLabelView.swift */,
+				3D9E4D0028F314750065F47A /* ContextMenuManageLabelsView.swift */,
+				3D15B19C28F4005D007B95A0 /* ContextMenuDueDateView.swift */,
+			);
+			path = "context-menu";
+			sourceTree = "<group>";
+		};
+		3DCFDDAE290ACA1E00039C2F /* updater */ = {
+			isa = PBXGroup;
+			children = (
+				3D337EA828FB24EE0054DCB3 /* CheckForUpdatesView.swift */,
+			);
+			path = updater;
+			sourceTree = "<group>";
+		};
+		3DCFDDAF290ACA2800039C2F /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				3D0302E128F893B200213D3E /* OnboardingView.swift */,
+			);
+			path = settings;
+			sourceTree = "<group>";
+		};
+		3DCFDDB0290ACA3400039C2F /* board */ = {
+			isa = PBXGroup;
+			children = (
+				3D15B1A128F42366007B95A0 /* AddCardView.swift */,
+			);
+			path = board;
+			sourceTree = "<group>";
+		};
+		3DCFDDB1290ACA4F00039C2F /* sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				3D15B19A28F3F6D9007B95A0 /* SidebarView.swift */,
+				3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */,
+				3DC8FB8F290AC17700F63100 /* RightSidebarView.swift */,
+			);
+			path = sidebar;
+			sourceTree = "<group>";
+		};
+		3DCFDDB2290ACA8200039C2F /* api */ = {
+			isa = PBXGroup;
+			children = (
+				3D4632B828E078FC0063B4C4 /* TrelloApi.swift */,
+			);
+			path = api;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -396,7 +457,6 @@
 				3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */,
 				3D495DD628F934B300B9D6AC /* CardColorView.swift in Sources */,
 				3DC268D3290A643F003F964F /* DoneListView.swift in Sources */,
-				3D8084012902C71F0097371C /* Safe.swift in Sources */,
 				3D15B1A228F42366007B95A0 /* AddCardView.swift in Sources */,
 				3D9E4CFD28F2C2070065F47A /* ContextMenuMoveListView.swift in Sources */,
 				3DBBC13928FD975C008780AB /* ChecklistView.swift in Sources */,
