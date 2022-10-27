@@ -40,6 +40,7 @@
 		3DBBC13B28FD9C7C008780AB /* ChecklistItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */; };
 		3DC268D3290A643F003F964F /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC268D2290A643F003F964F /* DoneListView.swift */; };
 		3DC8FB90290AC17700F63100 /* RightSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC8FB8F290AC17700F63100 /* RightSidebarView.swift */; };
+		3DC8FB93290AC9C300F63100 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC8FB92290AC9C300F63100 /* IconButton.swift */; };
 		3DD56A4528DF0488001FFD8D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD56A4428DF0488001FFD8D /* CardView.swift */; };
 		3DD5EAAC28F68D4B00D2F682 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */; };
 		3DDB37BA28F20B9E0095886A /* SidebarBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */; };
@@ -100,6 +101,7 @@
 		3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemView.swift; sourceTree = "<group>"; };
 		3DC268D2290A643F003F964F /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		3DC8FB8F290AC17700F63100 /* RightSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightSidebarView.swift; sourceTree = "<group>"; };
+		3DC8FB92290AC9C300F63100 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
 		3DD56A4428DF0488001FFD8D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		3DD5EAAB28F68D4B00D2F682 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBoardView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		3D14839C28DEF4870021C6FC /* trello */ = {
 			isa = PBXGroup;
 			children = (
+				3DC8FB91290AC9A900F63100 /* extensions */,
 				3D337EAA28FB25E80054DCB3 /* Info.plist */,
 				3D1483C928DEF7030021C6FC /* models */,
 				3D1483C828DEF6730021C6FC /* views */,
@@ -233,6 +236,14 @@
 				3D2FC3E728FD7FDB00DF7B96 /* Checklist.swift */,
 			);
 			path = models;
+			sourceTree = "<group>";
+		};
+		3DC8FB91290AC9A900F63100 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3DC8FB92290AC9C300F63100 /* IconButton.swift */,
+			);
+			path = extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -378,6 +389,7 @@
 				3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */,
 				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
 				3DBBC13B28FD9C7C008780AB /* ChecklistItemView.swift in Sources */,
+				3DC8FB93290AC9C300F63100 /* IconButton.swift in Sources */,
 				3D1483CB28DEF70E0021C6FC /* Card.swift in Sources */,
 				3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */,
 				3D1483CF28DEF7D80021C6FC /* TrelloListView.swift in Sources */,
@@ -561,7 +573,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -589,7 +601,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -614,7 +626,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -632,7 +644,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -649,7 +661,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
@@ -665,7 +677,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
