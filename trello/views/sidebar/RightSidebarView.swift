@@ -30,14 +30,16 @@ struct RightSidebarView: View {
         HStack {
             VStack {
                 if let dl = doneList {
-                Button(action: {
-                    self.showDoneList = true
-                }) { }
-                .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
-                .popover(isPresented: self.$showDoneList) {
-                    DoneListView(list: dl)
-                        .frame(minWidth: 300, maxWidth: 300)
-                }
+                    Button(action: {
+                        self.showDoneList = true
+                    }) { }
+                        .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
+                        .popover(isPresented: self.$showDoneList, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
+                            DoneListView(list: dl)
+                                .frame(minWidth: 300, maxWidth: 300)
+                                .background(Color("TwZinc900")
+                                    .scaleEffect(1.5))
+                        }
                 }
                 Spacer()
             }

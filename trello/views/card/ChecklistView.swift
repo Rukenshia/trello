@@ -11,8 +11,6 @@ struct ChecklistView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var checklist: Checklist;
     
-    @State var color: Color = Color("CardBg").opacity(0.8);
-    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -29,27 +27,8 @@ struct ChecklistView: View {
                         }
                     }
                 }) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("Mark all as done")
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(self.color)
-                    .cornerRadius(4)
                 }
-                .buttonStyle(.plain)
-                .onHover { hover in
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        self.color = hover ? Color("CardBg") : Color("CardBg").opacity(0.8);
-                        
-                        if (hover) {
-                            NSCursor.pointingHand.push()
-                        } else {
-                            NSCursor.pop()
-                        }
-                    }
-                }
+                .buttonStyle(FlatButton(icon: "checkmark.circle.fill", text: "Mark all as done"))
             }
             Divider()
             ForEach($checklist.checkItems) { checkItem in

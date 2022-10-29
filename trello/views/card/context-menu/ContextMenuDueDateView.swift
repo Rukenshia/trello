@@ -25,7 +25,6 @@ struct ContextMenuDueDateView: View {
                 Text("Save")
             }
         }
-        .padding(8)
         .onAppear {
             if let due = self.card.dueDate {
                 self.date = due

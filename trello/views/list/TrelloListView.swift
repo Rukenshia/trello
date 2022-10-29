@@ -27,11 +27,7 @@ struct TrelloListView: View {
     @State private var showAddCard: Bool = false;
     
     var background: Color {
-        if self.list.cards.first(where: { card in card.name == "📍 HOY" }) == nil {
-            return Color("SecondaryBg").opacity(0.95)
-        }
-        
-        return Color("ListTodayBg").opacity(0.95)
+        return Color("TwZinc900").opacity(0.95)
     }
     
     var body: some View {
@@ -46,7 +42,7 @@ struct TrelloListView: View {
             SwiftUI.List {
                 ForEach(self.$list.cards) { card in
                     HStack {
-                        Circle().fill(Color("CardBg")).frame(width: 8, height: 8).opacity(1)
+                        Circle().fill(Color("TwZinc700")).frame(width: 8, height: 8).opacity(1)
                         CardView(card: card)
                             .onDrag {
                                 NSItemProvider(object: card.wrappedValue.id as NSString)
@@ -89,7 +85,7 @@ struct TrelloListView: View {
             // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
             //       the number of cards is too high, I'd like to limit it at some point. When minHeight
             //       is not set, the list has a height of 0 and nothing works
-            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 82, maxHeight: .infinity)
+            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 86, maxHeight: .infinity)
             Button(action: {
                 self.showAddCard = true
             }) {
@@ -100,7 +96,7 @@ struct TrelloListView: View {
             }
             .onHover { hover in
                 if hover {
-                    self.addCardColor = Color("CardBg");
+                    self.addCardColor = Color("TwZinc700");
                     return;
                 }
                 
@@ -117,8 +113,8 @@ struct TrelloListView: View {
             AddCardView(list: self.$list, showAddCard: self.$showAddCard)
         }
         .background(background)
-        .cornerRadius(8)
-        .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 150)
+        .cornerRadius(4)
+        .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 180)
     }
     
     private func onInsert(at offset: Int, itemProviders: [NSItemProvider]) {

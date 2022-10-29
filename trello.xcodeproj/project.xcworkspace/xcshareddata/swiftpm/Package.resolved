@@ -1,12 +1,39 @@
 {
   "pins" : [
     {
-      "identity" : "down",
+      "identity" : "attributedtext",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/johnxnguyen/Down.git",
+      "location" : "https://github.com/gonzalezreal/AttributedText",
       "state" : {
-        "revision" : "f34b166be1f1db4aa8f573067e901d72f2a6be57",
-        "version" : "0.11.0"
+        "revision" : "0e811cb14de367bbd58a94d12259687e5ee08bea",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "combine-schedulers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/combine-schedulers",
+      "state" : {
+        "revision" : "882ac01eb7ef9e36d4467eb4b1151e74fcef85ab",
+        "version" : "0.9.1"
+      }
+    },
+    {
+      "identity" : "markdownui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/MarkdownUI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3c80d50712dcecf38ceb8d327969e644d5c37de6"
+      }
+    },
+    {
+      "identity" : "networkimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/gonzalezreal/NetworkImage",
+      "state" : {
+        "revision" : "c97f83e771c95186af80ef6118f158852a9e54be",
+        "version" : "4.0.1"
       }
     },
     {
@@ -19,12 +46,21 @@
       }
     },
     {
-      "identity" : "swiftdown",
+      "identity" : "swiftcommonmark",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/qeude/SwiftDown.git",
+      "location" : "https://github.com/gonzalezreal/SwiftCommonMark",
       "state" : {
-        "branch" : "main",
-        "revision" : "53bcb94de74fb4a48939e8b1e35f124f0db5ce70"
+        "revision" : "ed252beaddecce28ea6363f800c773d6169011b8",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "xctest-dynamic-overlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
+      "state" : {
+        "revision" : "16e6409ee82e1b81390bdffbf217b9c08ab32784",
+        "version" : "0.5.0"
       }
     }
   ],

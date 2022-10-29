@@ -8,7 +8,7 @@
 import Foundation
 
 struct BoardPrefs: Codable {
-    var backgroundImage: String? = "https://trello-backgrounds.s3.amazonaws.com/54d4b4fc032569bd9870ac0a/original/04b4f28b09473079050638ab87426857/chrome_theme_bg_explorer.jpg";
+    var backgroundImage: String? = nil
 }
 
 struct BasicBoard: Identifiable, Codable {

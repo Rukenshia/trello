@@ -128,7 +128,7 @@ class TrelloApi: ObservableObject {
                 guard let data = data else { return }
                 DispatchQueue.main.async {
                     do {
-                        var decodedChecklists = try JSONDecoder().decode([Checklist].self, from: data)
+                        let decodedChecklists = try JSONDecoder().decode([Checklist].self, from: data)
                         
                         completion(decodedChecklists)
                     } catch let error {

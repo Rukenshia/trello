@@ -16,7 +16,7 @@ struct IconButton: ButtonStyle {
         Image(systemName: self.icon)
             .font(.system(size: 24))
             .padding(4)
-            .background(self.hovering ? Color("CardBg") : Color("CardBg").opacity(0.8))
+            .background(self.hovering ? Color("TwZinc700") : Color("TwZinc700").opacity(0.5))
             .foregroundColor(.white)
             .cornerRadius(8)
             .scaleEffect(configuration.isPressed ? 1.2 : 1)

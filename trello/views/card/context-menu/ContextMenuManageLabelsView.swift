@@ -20,8 +20,7 @@ struct ContextMenuManageLabelsView: View {
             }
             ScrollView {
                 Text("applied")
-                    .bold()
-                    .foregroundColor(.secondary)
+                    .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(self.$labels.filter{ label in
                     (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))
@@ -33,8 +32,7 @@ struct ContextMenuManageLabelsView: View {
                 }
                 
                 Text("available")
-                    .bold()
-                    .foregroundColor(.secondary)
+                    .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ForEach(self.$labels.filter{ label in
                     (self.filter.isEmpty || label.name.wrappedValue.contains(self.filter))

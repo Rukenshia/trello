@@ -33,7 +33,7 @@ struct ContextMenuMoveListView: View {
         }
         .onHover { hovering in
             if hovering {
-                self.color = Color("CardBg");
+                self.color = Color("TwZinc700");
                 return;
             }
             

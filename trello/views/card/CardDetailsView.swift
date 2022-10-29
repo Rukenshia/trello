@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import SwiftDown
 import Combine
+import MarkdownUI
 
 struct CardDetailsView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
@@ -21,105 +21,116 @@ struct CardDetailsView: View {
     @Binding var isVisible: Bool;
     
     var body: some View {
-        
-        VStack {
-            HStack {
-                Text(card.name)
-                    .font(.title)
-                Spacer()
-                Button(action: {
-                    isVisible = false;
-                }) {
+        ScrollView {
+                VStack {
                     HStack {
-                        Image(systemName: "xmark.circle.fill")
-                            .imageScale(.large)
-                    }
-                }
-                .keyboardShortcut(.cancelAction)
-                .buttonStyle(PlainButtonStyle())
-            }
-            HStack(alignment: .top) {
-                VStack(alignment: .leading) {
-                    Divider()
-                    if card.labels.count > 0 {
-                        HStack {
-                            ForEach(card.labels) { label in
-                                LabelView(label: label)
+                        Text(card.name)
+                            .font(.title)
+                        Spacer()
+                        Button(action: {
+                            isVisible = false;
+                        }) {
+                            HStack {
+                                Image(systemName: "xmark.circle.fill")
+                                    .imageScale(.large)
                             }
                         }
+                        .keyboardShortcut(.cancelAction)
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    
-                    HStack {
-                        Image(systemName: "note.text")
-                        Text("Description")
-                            .font(.title2)
-                        Spacer()
-                    }
-                    
-                    if self.editing {
-                            SwiftDownEditor(text: $desc)
-                                .insetsSize(4)
-                                .theme(Theme.BuiltIn.defaultDark.theme())
-                                .frame(minWidth: 500, maxHeight: .infinity)
-                                .frame(height: CGFloat(self.card.desc.components(separatedBy: "\n").count) * 24.0)
-                        
-                        Button(action: {
-                            self.editing = false;
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            Divider()
+                            if card.labels.count > 0 {
+                                HStack {
+                                    ForEach(card.labels) { label in
+                                        LabelView(label: label)
+                                    }
+                                }
+                            }
                             
-                            self.trelloApi.setCardDesc(card: card, desc: self.desc, completion: { newCard in
-                                print("description updated")
-                            })
-                        }) {
-                            Text("Save changes")
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color("CardBg"))
-                                .cornerRadius(4)
-                        }
-                        .buttonStyle(.plain)
-                    } else {
-                        SwiftDownEditor(text: $desc)
-                            .insetsSize(4)
-                            .isEditable(false)
-                            .theme(Theme.BuiltIn.defaultDark.theme())
-                            .frame(minWidth: 500, maxHeight: .infinity)
-                            .frame(height: CGFloat(self.card.desc.components(separatedBy: "\n").count) * 24.0)
-                        
-                        Button(action: {
-                            self.editing = true;
-                        }) {
-                            Text("Edit")
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color("CardBg"))
-                                .cornerRadius(4)
-                        }
-                        .buttonStyle(.plain)
-                        
-                    }
-                    
-                    if checklists.count > 0 {
-                        Divider()
-                        HStack {
-                            Image(systemName: "checklist")
-                            Text("Checklists")
-                                .font(.title2)
+                            HStack {
+                                Image(systemName: "note.text")
+                                Text("Description")
+                                    .font(.title2)
+                                Spacer()
+                            }
+                            
+                            if self.editing {
+                                TextEditor(text: $desc)
+                                
+                                Button(action: {
+                                    self.editing = false;
+                                    
+                                    self.trelloApi.setCardDesc(card: card, desc: self.desc, completion: { newCard in
+                                        print("description updated")
+                                    })
+                                }) {
+                                    Text("Save changes")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(Color("TwZinc700"))
+                                        .cornerRadius(4)
+                                }
+                                .buttonStyle(.plain)
+                            } else {
+                                Markdown(self.desc)
+                                
+                                Button(action: {
+                                    self.editing = true;
+                                }) {
+                                    Text("Edit")
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(Color("TwZinc700"))
+                                        .cornerRadius(4)
+                                }
+                                .buttonStyle(.plain)
+                                
+                            }
+                            
+                            if checklists.count > 0 {
+                                Divider()
+                                HStack {
+                                    Image(systemName: "checklist")
+                                    Text("Checklists")
+                                        .font(.title2)
+                                    Spacer()
+                                }
+                                .padding(4)
+                                ForEach(self.$checklists) { checklist in
+                                    ChecklistView(checklist: checklist)
+                                        .padding(.horizontal, 4)
+                                }
+                                .padding(.bottom, 8)
+                            }
                             Spacer()
                         }
-                        .padding(4)
-                        ForEach(self.$checklists) { checklist in
-                            ChecklistView(checklist: checklist)
-                                .padding(.horizontal, 4)
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Image(systemName: "alarm")
+                                Text("Due date")
+                                    .font(.title2)
+                            }
+                            ContextMenuDueDateView(card: $card)
+                                .frame(maxWidth: 180)
+                                .padding(4)
+                            
+                            HStack {
+                                Image(systemName: "hand.tap")
+                                Text("Actions")
+                                    .font(.title2)
+                            }
+                            
+                            
+                            Button(action: {
+                                
+                            }) { }
+                                .buttonStyle(FlatButton(icon: "text.badge.checkmark", text: "Add Checklist"))
                         }
-                        .padding(.bottom, 8)
                     }
                 }
-                Spacer()
-                VStack(alignment: .leading) {
-                    ContextMenuDueDateView(card: $card)
-                        .frame(maxWidth: 180)
-                }
-            }
         }
         .onAppear {
             self.desc = card.desc;
@@ -130,6 +141,7 @@ struct CardDetailsView: View {
         }
         .padding(24)
         .padding(.vertical, self.checklists.count > 0 ? 16 : 0)
+        .frame(idealWidth: (NSApp.keyWindow?.contentView?.bounds.width ?? 500) - 120, idealHeight: (NSApp.keyWindow?.contentView?.bounds.height ?? 500) - 120)
     }
 }
 

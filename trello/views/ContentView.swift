@@ -19,47 +19,13 @@ struct ContentView: View {
         in: .common
     ).autoconnect();
     
-    var backgroundImage: some View {
-        var url = "https://trello-backgrounds.s3.amazonaws.com/54d4b4fc032569bd9870ac0a/original/04b4f28b09473079050638ab87426857/chrome_theme_bg_explorer.jpg";
-        
-        if trelloApi.board.prefs.backgroundImage != nil {
-            url = trelloApi.board.prefs.backgroundImage!
-        }
-        
-        // TODO: the old background image stays around until the new one is loaded, maybe there's a way
-        //       to force the placeholder in the meantime?
-        return AsyncImage(url: URL(string: url)) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-            case .success(let image):
-                image.resizable()
-                    .aspectRatio(contentMode: .fill)
-            case .failure:
-                Image(systemName: "photo")
-            @unknown default:
-                EmptyView()
-            }
-        }
-    }
-    
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
             SidebarView()
-            VStack(alignment: .leading) {
-                    ScrollView([.horizontal]) {
-                            HStack(alignment: .top) {
-                                ForEach(self.$trelloApi.board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
-                                    TrelloListView(list: list)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                            }
-                            .padding()
-                            .frame(maxHeight: .infinity, alignment: .top)
-                            .background(self.backgroundImage)
-                    }
-            }
-            RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }))
+            
+            BoardView(board: $trelloApi.board)
+            
+            RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") })).frame(maxWidth: 48)
         }.onAppear {
             self.cancellable = trelloApi.$board.sink { newBoard in
                 if newBoard.id == "" {

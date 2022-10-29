@@ -59,9 +59,11 @@ struct DoneListView: View {
             ForEach(bucketKeys, id: \.self) { key in
                 if self.buckets[key]!.count > 0 {
                     Text(key)
+                        .font(.headline)
                     ForEach(self.buckets[key]!) { card in
                         HStack {
                             Text(card.name)
+                                .foregroundColor(Color.secondary)
                         }
                         .padding(4)
                     }

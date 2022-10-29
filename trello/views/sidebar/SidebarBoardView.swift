@@ -18,6 +18,7 @@ struct SidebarBoardView: View {
     
     var body: some View {
         Button(action: {
+            print(">>>>")
             trelloApi.getBoard(id: board.id)
         }) {
             HStack {
@@ -36,12 +37,12 @@ struct SidebarBoardView: View {
                 
                 withAnimation(.easeInOut(duration: 0.05)) {
                     if self.currentBoard.id == self.board.id {
-                        self.color = Color("CardBg")
+                        self.color = Color("TwZinc700")
                         return
                     }
                     
                     if hover {
-                        self.color = Color("CardBg")
+                        self.color = Color("TwZinc800")
                     } else {
                         self.color = Color(.clear)
                     }
@@ -51,12 +52,12 @@ struct SidebarBoardView: View {
         .buttonStyle(.plain)
         .onAppear {
             if self.currentBoard.id == self.board.id {
-                self.color = Color("CardBg")
+                self.color = Color("TwZinc700")
             }
         }
         .onReceive(Just(currentBoard)) { newBoard in
             if newBoard.id == self.board.id {
-                self.color = Color("CardBg")
+                self.color = Color("TwZinc700")
             } else {
                 if !self.isHovering {
                     self.color = Color(.clear)
