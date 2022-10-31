@@ -14,6 +14,8 @@ struct CardDetailsView: View {
     
     @Binding var card: Card;
     @State var checklists: [Checklist] = [];
+    @State var showChecklistForm: Bool = false;
+    @State var checklistName: String = "";
     
     @State var editing: Bool = false;
     @State var desc: String = "";
@@ -125,9 +127,26 @@ struct CardDetailsView: View {
                             
                             
                             Button(action: {
-                                
+                                self.showChecklistForm = true
                             }) { }
                                 .buttonStyle(FlatButton(icon: "text.badge.checkmark", text: "Add Checklist"))
+                                .popover(isPresented: $showChecklistForm, arrowEdge: .bottom) {
+                                    VStack {
+                                        TextField("Name", text: self.$checklistName)
+                                        Button(action: {
+                                            self.trelloApi.createChecklist(name: self.checklistName, cardId: self.card.id) { checklist in
+                                                self.checklists.append(checklist)
+                                                self.checklistName = ""
+                                                self.showChecklistForm = false
+                                            }
+                                        }) {
+                                            
+                                        }
+                                        .buttonStyle(FlatButton(text: "Create"))
+                                    }
+                                    .padding(8)
+                                    .frame(width: 200)
+                                }
                         }
                     }
                 }

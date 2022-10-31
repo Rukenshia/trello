@@ -11,6 +11,8 @@ struct ChecklistView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var checklist: Checklist;
     
+    @State var newChecklistItemName: String = "";
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -35,6 +37,18 @@ struct ChecklistView: View {
                 ChecklistItemView(item: checkItem, cardId: $checklist.idCard)
                     .padding(.vertical, 1)
             }
+            HStack {
+                Image(systemName: "circle")
+                    .foregroundColor(.secondary)
+                TextField("Type and press return to add a new checklist item", text: self.$newChecklistItemName, onCommit: {
+                    self.trelloApi.addCheckItem(checklistId: self.checklist.id, name: self.newChecklistItemName) { checkItem in
+                        self.checklist.checkItems.append(checkItem)
+                        self.newChecklistItemName = ""
+                    }
+                })
+                    .textFieldStyle(.plain)
+                
+            }.padding(.top, 2)
         }
         .padding(8)
     }

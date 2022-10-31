@@ -31,18 +31,28 @@ struct TrelloListView: View {
     }
     
     var body: some View {
-        VStack() {
-            Text(self.list.name)
-                .lineLimit(1)
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
-                .padding(.top, 8)
+        VStack(spacing: 4) {
+            HStack {
+                Text(self.list.name)
+                    .bold()
+                    .lineLimit(1)
+                    .font(.title3)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.leading)
+                    .padding(.horizontal, 8)
+                Spacer()
+//                Button(action: {
+//
+//                }) {
+//
+//                }
+//                .buttonStyle(IconButton(icon: "gearshape", size: 12))
+            }
             Divider()
             SwiftUI.List {
                 ForEach(self.$list.cards) { card in
                     HStack {
-                        Circle().fill(Color("TwZinc700")).frame(width: 8, height: 8).opacity(1)
+                        Image(systemName: "list.bullet")
                         CardView(card: card)
                             .onDrag {
                                 NSItemProvider(object: card.wrappedValue.id as NSString)
@@ -108,7 +118,7 @@ struct TrelloListView: View {
             .background(self.addCardColor)
             .cornerRadius(4)
         }
-        .padding(4)
+        .padding(8)
         .sheet(isPresented: $showAddCard) {
             AddCardView(list: self.$list, showAddCard: self.$showAddCard)
         }
@@ -122,18 +132,18 @@ struct TrelloListView: View {
     }
 }
 
-//struct TrelloListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrelloListView(listIdx: 0, list: List(id: UUID().uuidString, name: "lunes", cards: []), list: ListViewModel(cards: [
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "A very long card name to test how wrapping behaves", due: TrelloApi.DateFormatter.string(from: Date.now)),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-//        ]))
-//        .frame(width: 300)
-//    }
-//}
+struct TrelloListView_Previews: PreviewProvider {
+    static var previews: some View {
+        TrelloListView(list: .constant(List(id: "list", name: "list", cards: [
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "A very long card name to test how wrapping behaves", due: TrelloApi.DateFormatter.string(from: Date.now)),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+            Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
+        ])))
+        .environmentObject(TrelloApi(key: "", token: ""))
+    }
+}

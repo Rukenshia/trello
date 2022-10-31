@@ -12,7 +12,7 @@ struct Checklist: Identifiable, Codable, Hashable {
     var idCard: String;
     var name: String;
     var checkItems: [CheckItem] = [];
-    
+    var pos: CGFloat = 0.0;
 }
 
 struct CheckItem: Identifiable, Codable, Hashable {

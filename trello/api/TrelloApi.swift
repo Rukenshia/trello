@@ -549,4 +549,110 @@ class TrelloApi: ObservableObject {
         
         dataTask.resume()
     }
+    
+    func createChecklist(name: String, cardId: String, completion: @escaping (Checklist) -> Void, after_timeout: @escaping () -> Void = {}) {
+        var url = URLComponents(string: "https://api.trello.com/1/checklists")!
+
+        url.queryItems = [
+            URLQueryItem(name: "key", value: self.key),
+            URLQueryItem(name: "token", value: self.token),
+            URLQueryItem(name: "idCard", value: cardId),
+            URLQueryItem(name: "name", value: name),
+            URLQueryItem(name: "pos", value: "bottom"),
+        ]
+
+        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        var urlRequest = URLRequest(url: url.url!)
+        urlRequest.httpMethod = "POST"
+        
+        print(url.url!)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let checklist = try JSONDecoder().decode(Checklist.self, from: data)
+                        
+                        completion(checklist)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            } else {
+                print("status code \(response.statusCode)")
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
+    func addCheckItem(checklistId: String, name: String, completion: @escaping (CheckItem) -> Void, after_timeout: @escaping () -> Void = {}) {
+        var url = URLComponents(string: "https://api.trello.com/1/checklists/\(checklistId)/checkItems")!
+
+        url.queryItems = [
+            URLQueryItem(name: "key", value: self.key),
+            URLQueryItem(name: "token", value: self.token),
+            URLQueryItem(name: "name", value: name),
+        ]
+
+        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        var urlRequest = URLRequest(url: url.url!)
+        urlRequest.httpMethod = "POST"
+        
+        print(url.url!)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let checkItem = try JSONDecoder().decode(CheckItem.self, from: data)
+                        
+                        completion(checkItem)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            } else {
+                print("status code \(response.statusCode)")
+            }
+        }
+        
+        dataTask.resume()
+    }
 }

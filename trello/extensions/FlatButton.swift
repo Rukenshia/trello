@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct FlatButton: ButtonStyle {
-    var icon: String
+    var icon: String?
     var text: String
     
     @State var color: Color = Color("TwZinc700").opacity(0.8)
     
     func makeBody(configuration: Configuration) -> some View {
         HStack {
-            Image(systemName: self.icon)
+            if let icon = self.icon {
+                Image(systemName: icon)
+            }
             Text(self.text)
         }
         .padding(.horizontal, 12)

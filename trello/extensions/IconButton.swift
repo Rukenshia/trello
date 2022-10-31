@@ -9,12 +9,13 @@ import SwiftUI
 
 struct IconButton: ButtonStyle {
     var icon: String
+    var size: CGFloat = 24
     
     @State var hovering: Bool = false
     
     func makeBody(configuration: Configuration) -> some View {
         Image(systemName: self.icon)
-            .font(.system(size: 24))
+            .font(.system(size: self.size))
             .padding(4)
             .background(self.hovering ? Color("TwZinc700") : Color("TwZinc700").opacity(0.5))
             .foregroundColor(.white)
