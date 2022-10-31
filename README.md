@@ -1,5 +1,7 @@
 # trello app
 
+![image of the app](docs/app.png)
+
 This is a pet project of mine to learn more about Swift and SwiftUI. It's a native macOS app
 for trello.
 
