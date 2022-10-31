@@ -708,4 +708,46 @@ class TrelloApi: ObservableObject {
         
         dataTask.resume()
     }
+    
+    func deleteChecklist(checklistId: String, completion: @escaping () -> Void, after_timeout: @escaping () -> Void = {}) {
+        var url = URLComponents(string: "https://api.trello.com/1/checklists/\(checklistId)")!
+
+        url.queryItems = [
+            URLQueryItem(name: "key", value: self.key),
+            URLQueryItem(name: "token", value: self.token),
+        ]
+
+        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        var urlRequest = URLRequest(url: url.url!)
+        urlRequest.httpMethod = "DELETE"
+        
+        print(url.url!)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                completion()
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            } else {
+                print("status code \(response.statusCode)")
+            }
+        }
+        
+        dataTask.resume()
+    }
 }

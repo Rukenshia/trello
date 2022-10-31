@@ -126,7 +126,9 @@ struct CardDetailsView: View {
                             }
                             .padding(4)
                             ForEach(self.$checklists) { checklist in
-                                ChecklistView(checklist: checklist)
+                                ChecklistView(checklist: checklist, onDelete: {
+                                    self.checklists = self.checklists.filter{ c in c.id != checklist.id }
+                                })
                                     .padding(.horizontal, 4)
                             }
                             .padding(.bottom, 8)

@@ -10,6 +10,7 @@ import SwiftUI
 struct ChecklistView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     @Binding var checklist: Checklist;
+    var onDelete: () -> Void = {};
     
     @State var newChecklistItemName: String = "";
     
@@ -31,6 +32,13 @@ struct ChecklistView: View {
                 }) {
                 }
                 .buttonStyle(FlatButton(icon: "checkmark.circle.fill", text: "Mark all as done"))
+                Button(action: {
+                    self.trelloApi.deleteChecklist(checklistId: self.checklist.id) {
+                        self.onDelete()
+                    }
+                }) {
+                }
+                .buttonStyle(FlatButton(icon: "trash"))
             }
             Divider()
             ForEach($checklist.checkItems) { checkItem in

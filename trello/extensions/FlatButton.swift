@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FlatButton: ButtonStyle {
     var icon: String?
-    var text: String
+    var text: String?
     
     @State var color: Color = Color("TwZinc700").opacity(0.8)
     
@@ -18,7 +18,9 @@ struct FlatButton: ButtonStyle {
             if let icon = self.icon {
                 Image(systemName: icon)
             }
-            Text(self.text)
+            if let text = self.text {
+                Text(text)
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
