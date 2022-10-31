@@ -19,7 +19,7 @@ for trello.
   - [x] Reorder cards in a list
   - [x] Change list name
   - [ ] Change list order
-  - [ ] Add list to board
+  - [x] Add list to board
   - [ ] Delete/archive list
 - [ ] Cards
   - [x] View card info

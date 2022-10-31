@@ -8,19 +8,11 @@
 import SwiftUI
 
 struct RightSidebarView: View {
+    @EnvironmentObject var trelloApi: TrelloApi
     var doneList: Binding<List>?;
     
-    @State var showDoneList: Bool = false
-    
-    var buttonCount: Int {
-        var i = 0
-        
-        if doneList != nil {
-            i += 1
-        }
-        
-        return i
-    }
+    @State private var showDoneList: Bool = false
+    @State private var showCreateMenu: Bool = false
     
     init(doneList: Binding<List>? = nil) {
         self.doneList = doneList
@@ -29,6 +21,23 @@ struct RightSidebarView: View {
     var body: some View {
         HStack {
             VStack {
+                Button(action: {
+                    self.showCreateMenu = true
+                }) { }
+                    .buttonStyle(IconButton(icon: "plus"))
+                    .popover(isPresented: self.$showCreateMenu, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
+                        VStack {
+                            Button("List", action: {
+                                self.trelloApi.createList(boardId: self.trelloApi.board.id, name: "New list") { _ in
+                                    
+                                }
+                            })
+                            .buttonStyle(.plain)
+                            .font(.title3)
+                        }
+                        .padding(16)
+                    }
+                
                 if let dl = doneList {
                     Button(action: {
                         self.showDoneList = true
@@ -43,7 +52,7 @@ struct RightSidebarView: View {
                 }
                 Spacer()
             }
-        }.padding(self.buttonCount > 0 ? 8 : 0)
+        }.padding(8)
     }
 }
 
