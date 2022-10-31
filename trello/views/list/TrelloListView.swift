@@ -33,13 +33,7 @@ struct TrelloListView: View {
     var body: some View {
         VStack(spacing: 4) {
             HStack {
-                Text(self.list.name)
-                    .bold()
-                    .lineLimit(1)
-                    .font(.title3)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.leading)
-                    .padding(.horizontal, 8)
+                TrelloListNameView(list: self.$list)
                 Spacer()
 //                Button(action: {
 //

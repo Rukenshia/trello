@@ -17,10 +17,6 @@ struct CardDetailsView: View {
     @State var showChecklistForm: Bool = false;
     @State var checklistName: String = "";
     
-    @FocusState private var focusedField: String?
-    @State var editingTitle: Bool = false
-    @State var newTitle: String = ""
-    
     @State var editing: Bool = false;
     @State var desc: String = "";
     
@@ -30,30 +26,8 @@ struct CardDetailsView: View {
         ScrollView {
             VStack {
                 HStack {
-                    HStack {
-                        if self.editingTitle {
-                            Button(action: self.updateTitle) {
-                                
-                            }
-                            .buttonStyle(IconButton(icon: "checkmark", size: 16))
-                            TextField("Card name", text: $newTitle, onCommit: self.updateTitle)
-                                .textFieldStyle(.plain)
-                                .focused($focusedField, equals: "name")
-                        } else {
-                            Button(action: {
-                                self.editingTitle = true
-                                self.focusedField = "name"
-                                self.newTitle = card.name
-                            }) {
-                                
-                            }
-                            .buttonStyle(IconButton(icon: "square.and.pencil", size: 16))
-                            Text(card.name)
-                        }
-                        Spacer()
-                    }
-                    .font(.title)
-                    Spacer()
+                    CardNameView(card: self.$card)
+                    
                     Button(action: {
                         isVisible = false;
                     }) {
@@ -65,6 +39,7 @@ struct CardDetailsView: View {
                     .keyboardShortcut(.cancelAction)
                     .buttonStyle(PlainButtonStyle())
                 }
+                
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         Divider()
@@ -188,14 +163,6 @@ struct CardDetailsView: View {
         .padding(24)
         .padding(.vertical, self.checklists.count > 0 ? 16 : 0)
         .frame(idealWidth: (NSApp.keyWindow?.contentView?.bounds.width ?? 500) - 120, idealHeight: (NSApp.keyWindow?.contentView?.bounds.height ?? 500) - 120)
-    }
-    
-    private func updateTitle() {
-        self.editingTitle = false
-        
-        self.trelloApi.setCardName(card: self.card, name: self.newTitle) { newCard in
-            
-        }
     }
 }
 
