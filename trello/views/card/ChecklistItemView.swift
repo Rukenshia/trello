@@ -10,8 +10,9 @@ import SwiftUI
 struct ChecklistItemView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
     
-    @Binding var item: CheckItem;
     @Binding var cardId: String;
+    @Binding var checklistId: String;
+    @Binding var item: CheckItem;
     
     @State var color: Color = Color.secondary;
     
@@ -39,7 +40,12 @@ struct ChecklistItemView: View {
                     self.color = Color.secondary
                 }
             }
-            Text(item.name)
+                
+            TextField("Checklist item name", text: self.$item.name, onCommit: {
+                self.trelloApi.setCheckItemName(cardId: self.cardId, checklistId: self.checklistId, checkItemId: self.item.id, name: self.item.name) { _ in
+                }
+            })
+                .textFieldStyle(.plain)
                 .foregroundColor(item.state == .complete ? .secondary : .primary)
             Spacer()
         }
@@ -48,6 +54,6 @@ struct ChecklistItemView: View {
 
 struct ChecklistItemView_Previews: PreviewProvider {
     static var previews: some View {
-        ChecklistItemView(item: .constant(CheckItem(id: "id", idChecklist: "idc", name: "checklist item", state: .complete)), cardId: .constant("cardId"))
+        ChecklistItemView(cardId: .constant(""), checklistId: .constant(""), item: .constant(CheckItem(id: "id", idChecklist: "idc", name: "checklist item", state: .complete)))
     }
 }

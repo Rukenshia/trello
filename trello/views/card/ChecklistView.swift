@@ -42,7 +42,7 @@ struct ChecklistView: View {
             }
             Divider()
             ForEach($checklist.checkItems) { checkItem in
-                ChecklistItemView(item: checkItem, cardId: $checklist.idCard)
+                ChecklistItemView(cardId: $checklist.idCard, checklistId: self.$checklist.id, item: checkItem)
                     .padding(.vertical, 1)
             }
             HStack {
