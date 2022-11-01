@@ -9,6 +9,7 @@ import SwiftUI
 
 struct IconButton: ButtonStyle {
     var icon: String
+    var iconColor: Color = .white
     var size: CGFloat = 24
     var color: Color = Color("TwZinc700").opacity(0.5)
     var hoverColor: Color = Color("TwZinc700")
@@ -21,7 +22,7 @@ struct IconButton: ButtonStyle {
             .font(.system(size: self.size))
             .padding(self.padding)
             .background(self.hovering ? self.hoverColor : self.color)
-            .foregroundColor(.white)
+            .foregroundColor(self.iconColor)
             .cornerRadius(8)
             .scaleEffect(configuration.isPressed ? 1.2 : 1)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)

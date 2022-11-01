@@ -13,6 +13,7 @@ struct RightSidebarView: View {
     
     @State private var showDoneList: Bool = false
     @State private var showCreateMenu: Bool = false
+    @State private var showErrors: Bool = false
     
     init(doneList: Binding<List>? = nil) {
         self.doneList = doneList
@@ -51,6 +52,21 @@ struct RightSidebarView: View {
                         }
                 }
                 Spacer()
+                
+                Button(action: {
+                    self.showErrors = true
+                }) {
+                    
+                }
+                .buttonStyle(
+                    IconButton(icon: "exclamationmark.triangle", iconColor: self.trelloApi.errors > 0 ? .red : .secondary)
+                )
+                .symbolRenderingMode(.hierarchical)
+                .popover(isPresented: self.$showErrors, arrowEdge: .top) {
+                    VStack {
+                        Text("\(self.trelloApi.errors) api errors during current session, check if you have the app open multiple times")
+                    }.padding()
+                }
             }
         }.padding(8)
     }
@@ -59,5 +75,6 @@ struct RightSidebarView: View {
 struct RightSidebarView_Previews: PreviewProvider {
     static var previews: some View {
         RightSidebarView(doneList: nil)
+            .environmentObject(TrelloApi(key: "", token: ""))
     }
 }

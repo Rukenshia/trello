@@ -15,6 +15,8 @@ class TrelloApi: ObservableObject {
     @Published var board: Board;
     @Published var boards: [BasicBoard];
     
+    @Published var errors: Int = 0;
+    
     init(key: String, token: String) {
         self.key = key
         self.token = token
@@ -27,6 +29,12 @@ class TrelloApi: ObservableObject {
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         
         return formatter
+    }
+    
+    private func addError() {
+        DispatchQueue.main.async {
+            self.errors += 1
+        }
     }
     
     func getBoards(completion: @escaping ([BasicBoard]) -> Void = { boards in }) {
@@ -56,6 +64,7 @@ class TrelloApi: ObservableObject {
                 }
             } else {
                 print("Status code: ", response.statusCode)
+                self.addError()
             }
         }
         
@@ -105,6 +114,7 @@ class TrelloApi: ObservableObject {
                 }
             } else {
                 print("Status code: ", response.statusCode)
+                self.addError()
             }
         }
         
@@ -137,6 +147,7 @@ class TrelloApi: ObservableObject {
                 }
             } else {
                 print("Status code: ", response.statusCode)
+                self.addError()
             }
         }
         
@@ -145,14 +156,14 @@ class TrelloApi: ObservableObject {
     
     func updateCheckItem(cardId: String, checkItem: CheckItem, completion: @escaping (CheckItem) -> Void) {
         var url = URLComponents(string: "https://api.trello.com/1/cards/\(cardId)/checkItem/\(checkItem.id)")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "name", value: checkItem.name),
             URLQueryItem(name: "state", value: checkItem.state.rawValue),
             URLQueryItem(name: "idChecklist", value: checkItem.idChecklist),
-
+            
         ]
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
@@ -180,6 +191,7 @@ class TrelloApi: ObservableObject {
                 }
             } else {
                 print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -229,6 +241,7 @@ class TrelloApi: ObservableObject {
                     }
             } else {
                 print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -278,6 +291,7 @@ class TrelloApi: ObservableObject {
                     }
             } else {
                 print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -294,7 +308,7 @@ class TrelloApi: ObservableObject {
     
     func createList(boardId: String, name: String, completion: @escaping (List) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/lists")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
@@ -302,7 +316,7 @@ class TrelloApi: ObservableObject {
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "pos", value: "bottom")
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -341,6 +355,7 @@ class TrelloApi: ObservableObject {
                     }
             } else {
                 print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -349,13 +364,13 @@ class TrelloApi: ObservableObject {
     
     func archiveList(listId: String, completion: @escaping () -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/lists/\(listId)/closed")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "value", value: "true")
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -387,6 +402,7 @@ class TrelloApi: ObservableObject {
                     }
             } else {
                 print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -395,13 +411,13 @@ class TrelloApi: ObservableObject {
     
     func setListName(list: List, name: String, completion: @escaping (List) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/lists/\(list.id)")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "name", value: name),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -439,6 +455,9 @@ class TrelloApi: ObservableObject {
                     ) {
                         after_timeout()
                     }
+            } else {
+                print("status code \(response.statusCode)")
+                self.addError()
             }
         }
         
@@ -473,7 +492,7 @@ class TrelloApi: ObservableObject {
                                 self.board.lists[oldList].cards.remove(at: self.board.lists[oldList].cards.firstIndex(of: card)!)
                             }
                         }
-
+                        
                         if let newList = self.board.lists.firstIndex(where: { list in list.id == destination }) {
                             self.board.lists[newList].cards.append(newCard)
                         }
@@ -494,6 +513,7 @@ class TrelloApi: ObservableObject {
                     }
             } else {
                 print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -539,6 +559,9 @@ class TrelloApi: ObservableObject {
                     ) {
                         after_timeout()
                     }
+            } else {
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -547,13 +570,13 @@ class TrelloApi: ObservableObject {
     
     func setCardDesc(card: Card, desc: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/cards/\(card.id)")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "desc", value: desc),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -592,6 +615,9 @@ class TrelloApi: ObservableObject {
                     ) {
                         after_timeout()
                     }
+            } else {
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -600,13 +626,13 @@ class TrelloApi: ObservableObject {
     
     func setCardName(card: Card, name: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/cards/\(card.id)")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "name", value: name),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -645,6 +671,9 @@ class TrelloApi: ObservableObject {
                     ) {
                         after_timeout()
                     }
+            } else {
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -691,7 +720,8 @@ class TrelloApi: ObservableObject {
                         after_timeout()
                     }
             } else {
-                print("could not set card pos \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -700,7 +730,7 @@ class TrelloApi: ObservableObject {
     
     func createCard(list: List, name: String, description : String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/cards")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
@@ -708,7 +738,7 @@ class TrelloApi: ObservableObject {
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "desc", value: description),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -749,7 +779,8 @@ class TrelloApi: ObservableObject {
                         after_timeout()
                     }
             } else {
-                print("status code \(response.statusCode)")
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -758,7 +789,7 @@ class TrelloApi: ObservableObject {
     
     func createChecklist(name: String, cardId: String, completion: @escaping (Checklist) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/checklists")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
@@ -766,7 +797,7 @@ class TrelloApi: ObservableObject {
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "pos", value: "bottom"),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -803,7 +834,8 @@ class TrelloApi: ObservableObject {
                         after_timeout()
                     }
             } else {
-                print("status code \(response.statusCode)")
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -812,13 +844,13 @@ class TrelloApi: ObservableObject {
     
     func addCheckItem(checklistId: String, name: String, completion: @escaping (CheckItem) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/checklists/\(checklistId)/checkItems")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
             URLQueryItem(name: "name", value: name),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -855,7 +887,8 @@ class TrelloApi: ObservableObject {
                         after_timeout()
                     }
             } else {
-                print("status code \(response.statusCode)")
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
@@ -864,12 +897,12 @@ class TrelloApi: ObservableObject {
     
     func deleteChecklist(checklistId: String, completion: @escaping () -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/checklists/\(checklistId)")!
-
+        
         url.queryItems = [
             URLQueryItem(name: "key", value: self.key),
             URLQueryItem(name: "token", value: self.token),
         ]
-
+        
         url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var urlRequest = URLRequest(url: url.url!)
@@ -897,7 +930,8 @@ class TrelloApi: ObservableObject {
                         after_timeout()
                     }
             } else {
-                print("status code \(response.statusCode)")
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
             }
         }
         
