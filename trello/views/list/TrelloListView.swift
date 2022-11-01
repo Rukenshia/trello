@@ -32,6 +32,13 @@ struct TrelloListView: View {
         return Color("TwZinc900").opacity(0.95)
     }
     
+    // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
+    //       the number of cards is too high, I'd like to limit it at some point. When minHeight
+    //       is not set, the list has a height of 0 and nothing works
+    var listHeight: CGFloat {
+        min((NSApp.keyWindow?.contentView?.bounds.height ?? .infinity) - 160, self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 86)
+    }
+    
     var body: some View {
         VStack(spacing: 4) {
             HStack {
@@ -96,10 +103,7 @@ struct TrelloListView: View {
                 .coordinateSpace(name: "cards")
             }
             .listStyle(.plain)
-            // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
-            //       the number of cards is too high, I'd like to limit it at some point. When minHeight
-            //       is not set, the list has a height of 0 and nothing works
-            .frame(minHeight: self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 86, maxHeight: .infinity)
+            .frame(minHeight: self.listHeight)
             Button(action: {
                 self.showAddCard = true
             }) {
