@@ -51,12 +51,7 @@ struct TrelloListView: View {
                 }
                 .buttonStyle(IconButton(icon: "ellipsis", size: 12, color: .clear, hoverColor: .clear))
                 .popover(isPresented: self.$showMenu, arrowEdge: .bottom) {
-                    VStack {
-                        Button(action: {
-                            self.trelloApi.archiveList(listId: self.list.id) {}
-                        }) { }
-                            .buttonStyle(FlatButton(icon: "trash", text: "Delete"))
-                    }.padding(8)
+                    TrelloListMenuView(list: self.$list)
                 }
             }
             Divider()

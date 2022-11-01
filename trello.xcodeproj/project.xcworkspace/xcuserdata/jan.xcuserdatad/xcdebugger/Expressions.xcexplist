@@ -138,6 +138,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #4 in closure #3 in closure #1 in TrelloListMenuView.body.getter:TrelloListMenuView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.trelloApi.board.lists.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #6 in closure #1 in closure #1 in CardView.body.getter:CardView.swift">
          <PersistentStrings>
             <PersistentString

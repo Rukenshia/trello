@@ -464,6 +464,53 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
+    func moveList(listId: String, pos: String, completion: @escaping (List) -> Void, after_timeout: @escaping () -> Void = {}) {
+        guard let url = URL(string: "https://api.trello.com/1/lists/\(listId)?pos=\(pos)&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "PUT"
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                guard let data = data else { return }
+                DispatchQueue.main.async {
+                    do {
+                        let newList = try JSONDecoder().decode(List.self, from: data)
+                        
+                        if let listIdx = self.board.lists.firstIndex(where: {l in l.id == listId}) {
+                            self.board.lists[listIdx].pos = newList.pos
+                        }
+                        
+                        completion(newList)
+                    } catch let error {
+                        print("Error decoding: ", error)
+                    }
+                }
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            } else {
+                print("status code \(response.statusCode) \(String(decoding: data!, as: UTF8.self))")
+                self.addError()
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
     func moveCard(cardId: String, destination: String, completion: @escaping (Card) -> Void, after_timeout: @escaping () -> Void = {}) {
         guard let url = URL(string: "https://api.trello.com/1/cards/\(cardId)?idList=\(destination)&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
         
