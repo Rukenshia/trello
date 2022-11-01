@@ -59,38 +59,7 @@ struct CardDetailsView: View {
                             Spacer()
                         }
                         
-                        if self.editing {
-                            TextEditor(text: $desc)
-                            
-                            Button(action: {
-                                self.editing = false;
-                                
-                                self.trelloApi.setCardDesc(card: card, desc: self.desc, completion: { newCard in
-                                    print("description updated")
-                                })
-                            }) {
-                                Text("Save changes")
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color("TwZinc700"))
-                                    .cornerRadius(4)
-                            }
-                            .buttonStyle(.plain)
-                        } else {
-                            Markdown(self.desc)
-                            
-                            Button(action: {
-                                self.editing = true;
-                            }) {
-                                Text("Edit")
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color("TwZinc700"))
-                                    .cornerRadius(4)
-                            }
-                            .buttonStyle(.plain)
-                            
-                        }
+                        CardDetailsDescriptionView(card: self.$card)
                         
                         if checklists.count > 0 {
                             Divider()

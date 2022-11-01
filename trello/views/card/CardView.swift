@@ -53,8 +53,7 @@ struct CardView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(card.name)
-                        .bold()
-                        .font(.system(size: 13.5))
+                        .font(.system(size: 13.25, weight: .medium))
                         .multilineTextAlignment(.leading)
                         .lineLimit(2)
                         .foregroundColor(.white)

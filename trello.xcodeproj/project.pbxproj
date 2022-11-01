@@ -51,6 +51,7 @@
 		3DDB37BA28F20B9E0095886A /* SidebarBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */; };
 		3DE8B42E290C833500102E3E /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8B42D290C833500102E3E /* BoardView.swift */; };
 		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
+		3DF2C2DF291120AC00ABF690 /* CardDetailsDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +117,7 @@
 		3DDB37B928F20B9E0095886A /* SidebarBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBoardView.swift; sourceTree = "<group>"; };
 		3DE8B42D290C833500102E3E /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
+		3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsDescriptionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +277,7 @@
 				3DBBC13A28FD9C7C008780AB /* ChecklistItemView.swift */,
 				3D7D03A2290D41AD00C767C2 /* CardDueView.swift */,
 				3DA027222910675000D38CC8 /* CardNameView.swift */,
+				3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */,
 			);
 			path = card;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				3D9E4CFF28F30FAA0065F47A /* ContextMenuLabelView.swift in Sources */,
 				3DA027232910675000D38CC8 /* CardNameView.swift in Sources */,
 				3D4632BB28E079140063B4C4 /* Board.swift in Sources */,
+				3DF2C2DF291120AC00ABF690 /* CardDetailsDescriptionView.swift in Sources */,
 				3D337EA928FB24EE0054DCB3 /* CheckForUpdatesView.swift in Sources */,
 				3DAC601E2906E57C009255CE /* CardDropDelegate.swift in Sources */,
 				3D7D03A3290D41AD00C767C2 /* CardDueView.swift in Sources */,
@@ -671,7 +675,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -699,7 +703,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -724,7 +728,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -742,7 +746,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -759,7 +763,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
@@ -775,7 +779,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 37;
+				CURRENT_PROJECT_VERSION = 39;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
