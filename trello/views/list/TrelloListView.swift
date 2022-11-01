@@ -62,8 +62,9 @@ struct TrelloListView: View {
             Divider()
             SwiftUI.List {
                 ForEach(self.$list.cards) { card in
-                    HStack {
-                        Image(systemName: "list.bullet")
+                    HStack(spacing: 2) {
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 6))
                         CardView(card: card)
                             .onDrag {
                                 NSItemProvider(object: card.wrappedValue.id as NSString)
@@ -132,7 +133,7 @@ struct TrelloListView: View {
         }
         .background(background)
         .cornerRadius(4)
-        .frame(minWidth: self.list.cards.count > 0 ? 300 : 150, minHeight: 180)
+        .frame(minWidth: self.list.cards.count > 0 ? 340 : 150, minHeight: 180)
     }
     
     private func onInsert(at offset: Int, itemProviders: [NSItemProvider]) {

@@ -51,18 +51,19 @@ struct CardView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(card.name)
                         .bold()
-                        .font(.system(size: 14))
+                        .font(.system(size: 13.5))
                         .multilineTextAlignment(.leading)
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .foregroundColor(.white)
                     
-                    HStack{
-                        if displayedLabels.count > 0 {
+                    if displayedLabels.count > 0 {
+                        HStack {
                             ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
                                 LabelView(label: label)
+                                    .font(.system(size: 10))
                             }
                             if card.labels.count > 2 {
                                 Text("+\(card.labels.count - 2)")
@@ -87,8 +88,9 @@ struct CardView: View {
                         Text(card.desc)
                             .lineLimit(1)
                             .foregroundColor(.secondary)
+                            .font(.system(size: 10))
                     }
-                }.padding()
+                }.padding(8)
                 Spacer()
                 
                 if card.due != nil {
