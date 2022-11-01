@@ -347,6 +347,52 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
+    func archiveList(listId: String, completion: @escaping () -> Void, after_timeout: @escaping () -> Void = {}) {
+        var url = URLComponents(string: "https://api.trello.com/1/lists/\(listId)/closed")!
+
+        url.queryItems = [
+            URLQueryItem(name: "key", value: self.key),
+            URLQueryItem(name: "token", value: self.token),
+            URLQueryItem(name: "value", value: "true")
+        ]
+
+        url.percentEncodedQuery = url.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        var urlRequest = URLRequest(url: url.url!)
+        urlRequest.httpMethod = "PUT"
+        
+        print(url.url!)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Request error: ", error)
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            
+            if response.statusCode == 200 {
+                DispatchQueue.main.async {
+                    self.board.lists = self.board.lists.filter{ l in l.id != listId }
+                    completion()
+                }
+                
+                DispatchQueue.main
+                    .schedule(
+                        after: .init(.now() + 5),
+                        tolerance: .seconds(1),
+                        options: nil
+                    ) {
+                        after_timeout()
+                    }
+            } else {
+                print("status code \(response.statusCode)")
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
     func setListName(list: List, name: String, completion: @escaping (List) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/lists/\(list.id)")!
 

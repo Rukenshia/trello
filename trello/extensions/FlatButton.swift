@@ -21,6 +21,7 @@ struct FlatButton: ButtonStyle {
             if let text = self.text {
                 Text(text)
             }
+            configuration.label
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)

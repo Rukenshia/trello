@@ -17,6 +17,8 @@ struct CardDetailsView: View {
     @State var showChecklistForm: Bool = false;
     @State var checklistName: String = "";
     
+    @State var showManageLabels: Bool = false;
+    
     @State var editing: Bool = false;
     @State var desc: String = "";
     
@@ -42,7 +44,6 @@ struct CardDetailsView: View {
                 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        Divider()
                         if card.labels.count > 0 {
                             HStack {
                                 ForEach(card.labels) { label in
@@ -130,7 +131,7 @@ struct CardDetailsView: View {
                         
                         Button(action: {
                             self.showChecklistForm = true
-                        }) { }
+                        }) { Spacer() }
                             .buttonStyle(FlatButton(icon: "text.badge.checkmark", text: "Add Checklist"))
                             .popover(isPresented: $showChecklistForm, arrowEdge: .bottom) {
                                 VStack {
@@ -149,7 +150,17 @@ struct CardDetailsView: View {
                                 .padding(8)
                                 .frame(width: 200)
                             }
+                        
+                        Button(action: {
+                            self.showManageLabels = true
+                        }) { Spacer() }
+                            .buttonStyle(FlatButton(icon: "tag", text: "Labels"))
+                            .popover(isPresented: $showManageLabels, arrowEdge: .bottom) {
+                                ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: self.$card)
+                                    .frame(idealWidth: 180)
+                            }
                     }
+                    .frame(maxWidth: 200)
                 }
             }
         }
@@ -162,7 +173,7 @@ struct CardDetailsView: View {
         }
         .padding(24)
         .padding(.vertical, self.checklists.count > 0 ? 16 : 0)
-        .frame(idealWidth: (NSApp.keyWindow?.contentView?.bounds.width ?? 500) - 120, idealHeight: (NSApp.keyWindow?.contentView?.bounds.height ?? 500) - 120)
+        .frame(idealWidth: 800, idealHeight: (NSApp.keyWindow?.contentView?.bounds.height ?? 500) - 120)
     }
 }
 

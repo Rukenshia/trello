@@ -26,6 +26,8 @@ struct TrelloListView: View {
     @State private var addCardColor: Color = Color(.clear);
     @State private var showAddCard: Bool = false;
     
+    @State private var showMenu: Bool = false
+    
     var background: Color {
         return Color("TwZinc900").opacity(0.95)
     }
@@ -35,12 +37,20 @@ struct TrelloListView: View {
             HStack {
                 TrelloListNameView(list: self.$list)
                 Spacer()
-//                Button(action: {
-//
-//                }) {
-//
-//                }
-//                .buttonStyle(IconButton(icon: "gearshape", size: 12))
+                Button(action: {
+                    self.showMenu = true
+                }) {
+
+                }
+                .buttonStyle(IconButton(icon: "ellipsis", size: 12, color: .clear, hoverColor: .clear))
+                .popover(isPresented: self.$showMenu, arrowEdge: .bottom) {
+                    VStack {
+                        Button(action: {
+                            self.trelloApi.archiveList(listId: self.list.id) {}
+                        }) { }
+                            .buttonStyle(FlatButton(icon: "trash", text: "Delete"))
+                    }.padding(8)
+                }
             }
             Divider()
             SwiftUI.List {

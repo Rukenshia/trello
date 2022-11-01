@@ -20,7 +20,7 @@ for trello.
   - [x] Change list name
   - [ ] Change list order
   - [x] Add list to board
-  - [ ] Delete/archive list
+  - [x] Delete/archive list
 - [ ] Cards
   - [x] View card info
   - [x] Show card due date
