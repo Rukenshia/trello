@@ -65,6 +65,10 @@ struct RightSidebarView: View {
                 .popover(isPresented: self.$showErrors, arrowEdge: .top) {
                     VStack {
                         Text("\(self.trelloApi.errors) api errors during current session, check if you have the app open multiple times")
+                        Divider()
+                        ForEach(self.trelloApi.errorMessages, id: \.self) { message in
+                            Text(message)
+                        }
                     }.padding()
                 }
             }

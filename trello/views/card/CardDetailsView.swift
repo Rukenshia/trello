@@ -128,6 +128,12 @@ struct CardDetailsView: View {
                                 ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: self.$card)
                                     .frame(idealWidth: 180)
                             }
+                        
+                        Button(action: {
+                            self.trelloApi.createCard(listId: self.card.idList, sourceCardId: self.card.id) { _ in }
+                            self.isVisible = false
+                        }) { Spacer() }
+                            .buttonStyle(FlatButton(icon: "doc.on.doc", text: "Copy"))
                     }
                     .frame(maxWidth: 200)
                 }

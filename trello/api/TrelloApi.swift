@@ -7,21 +7,36 @@
 
 import Foundation
 import Combine
+import Alamofire
 
 class TrelloApi: ObservableObject {
-    let key: String;
-    let token: String;
+    let key: String
+    let token: String
     
-    @Published var board: Board;
-    @Published var boards: [BasicBoard];
+    @Published var board: Board
+    @Published var boards: [BasicBoard]
     
-    @Published var errors: Int = 0;
+    private var session: Session
+    
+    @Published var errors: Int = 0
+    @Published var errorMessages: [String] = []
+    
+    private var auth: Parameters {
+        [
+            "key": self.key,
+            "token": self.token,
+        ]
+    }
     
     init(key: String, token: String) {
         self.key = key
         self.token = token
         self.board = Board(id: "", name: "", prefs: BoardPrefs())
         self.boards = []
+        
+        let authAdapter = TrelloApiAuthAdapter(key: self.key, token: self.token)
+        
+        self.session = Session(interceptor: Interceptor(adapter: authAdapter, retrier: authAdapter))
     }
     
     static var DateFormatter: ISO8601DateFormatter {
@@ -31,9 +46,13 @@ class TrelloApi: ObservableObject {
         return formatter
     }
     
-    private func addError() {
+    private func addError(_ error: AFError? = nil) {
         DispatchQueue.main.async {
             self.errors += 1
+            
+            if let error = error {
+                self.errorMessages.append(error.localizedDescription)
+            }
         }
     }
     
@@ -72,53 +91,43 @@ class TrelloApi: ObservableObject {
     }
     
     func getBoard(id: String, completion: @escaping (Board) -> Void = { board in }) {
-        guard let url = URL(string: "https://api.trello.com/1/boards/\(id)?labels=all&cards=open&lists=open&checklists=all&key=\(key)&token=\(token)") else { fatalError("Missing URL") }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
-                print("Request error: ", error)
+        self.session.request(
+            "https://api.trello.com/1/boards/\(id)",
+            parameters: [
+                "labels": "all",
+                "cards": "open",
+                "lists": "open",
+                "checklists": "all",
+            ],
+            encoding: URLEncoding.queryString
+        )
+        .responseDecodable(of: Board.self) { response in
+            if case let .failure(error) = response.result {
+                self.addError(error)
                 return
             }
             
-            guard let response = response as? HTTPURLResponse else { return }
+            var board = response.value!
             
-            if response.statusCode == 200 {
-                guard let data = data else { return }
-                DispatchQueue.main.async {
-                    do {
-                        var decodedBoard = try JSONDecoder().decode(Board.self, from: data)
-                        
-                        var listMap = Dictionary(uniqueKeysWithValues: decodedBoard.lists.map{ ($0.id, $0) })
-                        
-                        if !listMap.isEmpty {
-                            for card in decodedBoard.cards {
-                                if var list = listMap[card.idList] {
-                                    list.cards.append(card);
-                                    listMap[card.idList]!.cards.append(card);
-                                }
-                            }
-                            
-                            for var (i, list) in decodedBoard.lists.enumerated() {
-                                list.cards = listMap[list.id]!.cards
-                                decodedBoard.lists[i] = list
-                            }
-                        }
-                        
-                        self.board = decodedBoard
-                        completion(self.board)
-                    } catch let error {
-                        print("Error decoding: ", error)
+            var listMap = Dictionary(uniqueKeysWithValues: board.lists.map{ ($0.id, $0) })
+            
+            if !listMap.isEmpty {
+                for card in board.cards {
+                    if var list = listMap[card.idList] {
+                        list.cards.append(card);
+                        listMap[card.idList]!.cards.append(card);
                     }
                 }
-            } else {
-                print("Status code: ", response.statusCode)
-                self.addError()
+                
+                for var (i, list) in board.lists.enumerated() {
+                    list.cards = listMap[list.id]!.cards
+                    board.lists[i] = list
+                }
+                
+                self.board = board
+                completion(self.board)
             }
         }
-        
-        dataTask.resume()
     }
     
     func getCardChecklists(id: String, completion: @escaping ([Checklist]) -> Void = { checklists in }) {
@@ -834,6 +843,32 @@ class TrelloApi: ObservableObject {
         dataTask.resume()
     }
     
+    func createCard(listId: String, sourceCardId: String, completion: @escaping (Card) -> Void) {
+        self.session.request(
+            "https://api.trello.com/1/cards",
+            method: .post,
+            parameters: [
+                "idCardSource": sourceCardId,
+                "idList": listId,
+            ],
+            encoding: URLEncoding.queryString
+        )
+        .responseDecodable(of: Card.self) { response in
+            if case let .failure(error) = response.result {
+                self.addError(error)
+                return
+            }
+            
+            var card = response.value!
+            
+            let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+            
+            self.board.lists[listIdx].cards.append(card)
+            
+            completion(card)
+        }
+    }
+    
     func createChecklist(name: String, cardId: String, completion: @escaping (Checklist) -> Void, after_timeout: @escaping () -> Void = {}) {
         var url = URLComponents(string: "https://api.trello.com/1/checklists")!
         
@@ -1036,5 +1071,44 @@ class TrelloApi: ObservableObject {
         }
         
         dataTask.resume()
+    }
+}
+
+class TrelloApiAuthAdapter: RequestAdapter, RequestRetrier {
+    let key: String
+    let token: String
+    
+    init(key: String, token: String) {
+        self.key = key
+        self.token = token
+    }
+    
+    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        var urlRequest = urlRequest
+        urlRequest.headers.add(name: "x", value: "y")
+        if let url = urlRequest.url {
+            guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+                completion(.success(urlRequest))
+                return
+            }
+            
+            var queryItems = components.queryItems ?? []
+            
+            queryItems.append(
+                URLQueryItem(name: "key", value: self.key))
+            queryItems.append(
+                URLQueryItem(name: "token", value: self.token)
+            )
+            
+            components.queryItems = queryItems
+            
+            urlRequest.url = components.url!
+        }
+        
+        completion(.success(urlRequest))
+    }
+    
+    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        completion(.doNotRetry)
     }
 }

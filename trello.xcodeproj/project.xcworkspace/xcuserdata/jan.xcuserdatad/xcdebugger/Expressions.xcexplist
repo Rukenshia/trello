@@ -160,6 +160,14 @@
          contextName = "closure #1 in Safe.init(_:index:content:):Safe.swift">
       </ContextState>
       <ContextState
+         contextName = "TrelloApiAuthAdapter.adapt(_:for:completion:):TrelloApi.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "urlRequest.url!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in TrelloApi.getBoards(completion:):TrelloApi.swift">
          <PersistentStrings>
             <PersistentString
