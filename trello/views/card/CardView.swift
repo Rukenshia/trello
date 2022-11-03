@@ -147,8 +147,6 @@ struct CardView: View {
                         trelloApi.objectWillChange.send()
                         card.idLabels = newCard.idLabels
                         card = newCard
-                    }, after_timeout: {
-                        print("after_timeout")
                     })
                 default:
                     ()

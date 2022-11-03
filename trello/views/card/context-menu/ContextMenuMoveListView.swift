@@ -16,9 +16,7 @@ struct ContextMenuMoveListView: View {
     
     var body: some View {
         Button(action: {
-            self.trelloApi.moveCard(cardId: card.id, destination: list.id) { newCard in
-                trelloApi.objectWillChange.send()
-//                self.card = newCard
+            self.trelloApi.updateCard(cardId: card.id, listId: list.id) { newCard in
             }
         }) {
             HStack {

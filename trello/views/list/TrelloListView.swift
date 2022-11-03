@@ -82,7 +82,7 @@ struct TrelloListView: View {
                         }
                         
                         self.list.cards[sourceIdx].pos = newPos
-                        trelloApi.setCardPos(card: self.list.cards[sourceIdx], pos: newPos) { newCard in
+                        trelloApi.updateCard(cardId: self.list.cards[sourceIdx].id, pos: newPos) { newCard in
                             
                         }
                     }

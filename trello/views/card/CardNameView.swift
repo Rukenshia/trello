@@ -47,7 +47,7 @@ struct CardNameView: View {
     private func updateName() {
         self.editing = false
         
-        self.trelloApi.setCardName(card: self.card, name: self.newName) { newCard in
+        self.trelloApi.updateCard(cardId: self.card.id, name: self.newName) { newCard in
             
         }
     }

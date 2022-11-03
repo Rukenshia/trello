@@ -18,7 +18,7 @@ struct ContextMenuDueDateView: View {
             DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
             DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
             Button(action: {
-                self.trelloApi.setCardDue(card: card, due: self.date, completion: { card in
+                self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
                     print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
                 })
             }) {

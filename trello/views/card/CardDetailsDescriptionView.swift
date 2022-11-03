@@ -23,7 +23,7 @@ struct CardDetailsDescriptionView: View {
             Button(action: {
                 self.editing = false;
                 
-                self.trelloApi.setCardDesc(card: card, desc: self.desc, completion: { newCard in
+                self.trelloApi.updateCard(cardId: card.id, desc: self.desc, completion: { newCard in
                     print("description updated")
                 })
             }) {

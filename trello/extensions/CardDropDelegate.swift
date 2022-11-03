@@ -29,7 +29,7 @@ struct CardDropDelegate: DropDelegate {
         }
         
         DispatchQueue.main.async {
-            trelloApi.moveCard(cardId: cardId, destination: list.id) { card in
+            trelloApi.updateCard(cardId: cardId, listId: list.id) { card in
             }
         }
         
