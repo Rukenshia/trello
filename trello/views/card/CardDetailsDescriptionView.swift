@@ -37,7 +37,7 @@ struct CardDetailsDescriptionView: View {
         } else {
             if !self.card.desc.isEmpty {
                 Markdown(self.card.desc)
-                    .colorInvert()
+                    .markdownStyle(MarkdownStyle(foregroundColor: Color("TwStone900")))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 4)
                     .background(Color("TwZinc200"))
