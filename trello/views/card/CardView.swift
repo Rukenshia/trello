@@ -188,7 +188,7 @@ struct CardView: View {
             case .dueDate:
                 ContextMenuDueDateView(card: $card)
             case .cardColor:
-                ContextMenuCardColorView(labels: self.$trelloApi.board.labels, card: $card, show: $showPopover)
+                ContextMenuCardColorView(card: $card, show: $showPopover)
             default:
                 EmptyView()
             }

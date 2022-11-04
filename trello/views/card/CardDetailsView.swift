@@ -10,19 +10,20 @@ import Combine
 import MarkdownUI
 
 struct CardDetailsView: View {
-    @EnvironmentObject var trelloApi: TrelloApi;
+    @EnvironmentObject var trelloApi: TrelloApi
     
-    @Binding var card: Card;
-    @State var checklists: [Checklist] = [];
-    @State var showChecklistForm: Bool = false;
-    @State var checklistName: String = "";
+    @Binding var card: Card
+    @State var checklists: [Checklist] = []
+    @State var showChecklistForm: Bool = false
+    @State var checklistName: String = ""
     
-    @State var showManageLabels: Bool = false;
+    @State var showManageLabels: Bool = false
+    @State var showCardCoverMenu: Bool = false
     
-    @State var editing: Bool = false;
-    @State var desc: String = "";
+    @State var editing: Bool = false
+    @State var desc: String = ""
     
-    @Binding var isVisible: Bool;
+    @Binding var isVisible: Bool
     
     var body: some View {
         ScrollView {
@@ -96,6 +97,14 @@ struct CardDetailsView: View {
                             Text("Actions")
                                 .font(.title2)
                         }
+                        
+                        Button(action: {
+                            self.showCardCoverMenu = true
+                        }) { Spacer() }
+                            .buttonStyle(FlatButton(icon: "rectangle", text: "Cover"))
+                            .popover(isPresented: self.$showCardCoverMenu, arrowEdge: .bottom) {
+                                ContextMenuCardColorView(card: self.$card, show: self.$showCardCoverMenu)
+                            }
                         
                         
                         Button(action: {

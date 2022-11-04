@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContextMenuCardColorView: View {
     @EnvironmentObject var trelloApi: TrelloApi;
-    @Binding var labels: [Label];
     @Binding var card: Card;
     @Binding var show: Bool;
     
@@ -77,6 +76,6 @@ struct ContextMenuCardColorView: View {
 
 struct ContextMenuCardColorView_Previews: PreviewProvider {
     static var previews: some View {
-        ContextMenuCardColorView( labels: .constant([Label(id: "amber", name: "color:amber"), Label(id: "emerald", name: "color:emerald"), Label(id: "slate", name: "color:slate"), Label(id: "pink", name: "color:pink")]), card: .constant(Card(id: "cardid", name: "card")), show: .constant(true))
+        ContextMenuCardColorView(card: .constant(Card(id: "cardid", name: "card")), show: .constant(true))
     }
 }
