@@ -36,6 +36,12 @@ struct CardDetailsDescriptionView: View {
             .buttonStyle(.plain)
         } else {
             Markdown(self.card.desc)
+                .colorInvert()
+                .padding(.horizontal, 6)
+                .padding(.vertical, 4)
+                .background(Color("TwZinc200"))
+                .foregroundColor(Color("TwStone900"))
+                .cornerRadius(4)
             
             Button(action: self.startEditing) {
             }
