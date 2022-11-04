@@ -30,11 +30,15 @@ struct CardView: View {
     @State private var showPopover: Bool = false;
     @State private var popoverState: PopoverState = .none;
     
-    private var color: AnyView {
+    private var background: AnyView {
         var cardBg: Color = Color("TwZinc700")
         
-        if let label = self.card.labels.first(where: { label in label.name.contains("color:") }) {
-            cardBg = Color("CardBg_\(label.name.split(separator: ":")[1])");
+        if let cover = card.cover {
+            if cover.color != nil {
+                if cover.size == .full {
+                    cardBg = cover.displayColor
+                }
+            }
         }
         
         if isHovering {
@@ -49,7 +53,18 @@ struct CardView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
+            if let cover = card.cover {
+                if cover.color != nil {
+                    if cover.size == .normal {
+                        HStack {
+                            Spacer()
+                        }
+                        .frame(height: 32)
+                        .background(cover.displayColor)
+                    }
+                }
+            }
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(card.name)
@@ -98,7 +113,7 @@ struct CardView: View {
             }
         }
         .frame(alignment: .leading)
-        .background(self.color)
+        .background(self.background)
         .onHover(perform: {hover in
             self.isHovering = hover
             withAnimation(.easeInOut(duration: 0.1)) {

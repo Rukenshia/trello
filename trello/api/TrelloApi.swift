@@ -77,6 +77,27 @@ class TrelloApi: ObservableObject {
         }
     }
     
+    internal func request<T: Decodable, T2: Encodable>(_ url: String, method: HTTPMethod = .get, parameters: T2, encoder: ParameterEncoder, result: T.Type = T.self, completionHandler: @escaping (AFDataResponse<T>, T  ) -> Void) {
+        self.session.request(
+            "https://api.trello.com/1\(url)",
+            method: method,
+            parameters: parameters,
+            encoder: encoder
+        )
+        .responseDecodable(of: result) { response in
+            print(String(decoding: response.request!.httpBody!, as: UTF8.self))
+            if case let .failure(error) = response.result {
+                print("API error on '\(url)': \(response)")
+                self.addError(error)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completionHandler(response, response.value!)
+            }
+        }
+    }
+    
     internal func request<T: Decodable>(_ url: String, method: HTTPMethod = .get, parameters: Parameters = [:], result: T.Type = T.self, completionHandler: @escaping (AFDataResponse<T>, T  ) -> Void) {
         self.session.request(
             "https://api.trello.com/1\(url)",

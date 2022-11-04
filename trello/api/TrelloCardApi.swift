@@ -66,6 +66,32 @@ extension TrelloApi {
         }
     }
     
+    func updateCard(cardId: String, cover: CardCover, completion: @escaping (Card) -> Void) {
+        let body: [String: CardCover] = [
+            "cover": cover,
+        ]
+        
+        self.request("/cards/\(cardId)", method: .put, parameters: body, encoder: JSONParameterEncoder.default, result: Card.self) { response, card in
+            let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+            let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+            
+            self.board.lists[listIdx].cards[cardIdx] = card
+            
+            completion(response.value!)
+        }
+    }
+    
+    func removeCardCover(cardId: String, completion: @escaping (Card) -> Void) {
+        self.request("/cards/\(cardId)", method: .put, parameters: ["cover": ""], encoder: JSONParameterEncoder.default, result: Card.self) { response, card in
+            let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+            let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+            
+            self.board.lists[listIdx].cards[cardIdx] = card
+            
+            completion(response.value!)
+        }
+    }
+    
     func updateCard(cardId: String, listId: String? = nil, due: Date? = nil, desc: String? = nil, name: String? = nil, pos: Float? = nil, completion: @escaping (Card) -> Void) {
         var parameters: Parameters = [:]
         
@@ -96,6 +122,11 @@ extension TrelloApi {
                 if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
                     self.board.lists[newList].cards.append(card)
                 }
+            } else {
+                    let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+                    let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+                    
+                    self.board.lists[listIdx].cards[cardIdx] = card
             }
             
             completion(response.value!)

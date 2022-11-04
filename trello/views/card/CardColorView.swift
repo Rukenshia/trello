@@ -8,22 +8,17 @@
 import SwiftUI
 
 struct CardColorView: View {
-    @EnvironmentObject var trelloApi: TrelloApi;
-    @Binding var card: Card;
-    @Binding var label: Label;
-    @Binding var labels: [Label];
-    @Binding var show: Bool;
+    @EnvironmentObject var trelloApi: TrelloApi
+    @Binding var card: Card
+    var colorName: CardCoverColor
+    let apply: (CardCoverColor) -> Void
+    @Binding var show: Bool
     
-    @State var color: AnyView = AnyView(Color(.clear));
+    @State var color: AnyView = AnyView(Color(.clear))
     
     var body: some View {
         Button(action: {
-            self.trelloApi.removeLabelsFromCard(card: self.card, labelIds: self.labels.filter({ l in l.name.contains("color:") && l.name != label.name }).map{ l in l.id }, completion: { newCard in
-                    self.trelloApi.addLabelsToCard(card: self.card, labelIds: [label.id], completion: { newCard in
-                        print("label added")
-                        show = false;
-                    })
-                })
+            self.apply(colorName)
         }) {
             Text("click me pretty please")
                 .foregroundColor(.clear)
@@ -37,17 +32,17 @@ struct CardColorView: View {
             if hover {
                 self.color = AnyView(self.color.brightness(0.1))
             } else {
-                self.color = AnyView(Color("CardBg_\(label.name.split(separator: ":")[1])"));
+                self.color = AnyView(CardCover(color: self.colorName, size: .full, brightness: .dark).displayColor);
             }
         }
         .onAppear {
-            self.color = AnyView(Color("CardBg_\(label.name.split(separator: ":")[1])"));
+            self.color = AnyView(CardCover(color: self.colorName, size: .full, brightness: .dark).displayColor);
         }
     }
 }
 
 struct CardColorView_Previews: PreviewProvider {
     static var previews: some View {
-        CardColorView(card: .constant(Card(id: "card-id", name: "card-name")), label: .constant(Label(id: "amber", name: "color:amber")), labels: .constant([Label(id: "emerald", name: "color:emerald"), Label(id: "amber", name: "color:amber")]), show: .constant(false))
+        CardColorView(card: .constant(Card(id: "card-id", name: "card-name")), colorName: .red, apply: {_ in }, show: .constant(true))
     }
 }
