@@ -109,6 +109,7 @@ struct CardDetailsView: View {
                         
                         Button(action: {
                             self.showChecklistForm = true
+                            self.checklistName = "Checklist"
                         }) { Spacer() }
                             .buttonStyle(FlatButton(icon: "text.badge.checkmark", text: "Add Checklist"))
                             .popover(isPresented: $showChecklistForm, arrowEdge: .bottom) {
@@ -117,7 +118,7 @@ struct CardDetailsView: View {
                                     Button(action: {
                                         self.trelloApi.createChecklist(name: self.checklistName, cardId: self.card.id) { checklist in
                                             self.checklists.append(checklist)
-                                            self.checklistName = ""
+                                            self.checklistName = "Checklist"
                                             self.showChecklistForm = false
                                         }
                                     }) {
