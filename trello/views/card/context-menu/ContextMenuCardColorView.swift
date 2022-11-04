@@ -50,6 +50,16 @@ struct ContextMenuCardColorView: View {
         }
         .padding(16)
         .padding(.vertical, 24)
+        .onChange(of: size) { newSize in
+            if card.cover?.color != nil {
+                self.updateCover(card.cover!.color)
+            }
+        }
+        .onAppear {
+            if let cover = card.cover {
+                self.size = cover.size
+            }
+        }
     }
     
     private func updateCover(_ color: CardCoverColor?) {
