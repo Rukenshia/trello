@@ -13,6 +13,14 @@ extension TrelloApi {
             fatalError("No done label exists")
         }
         
-        self.addLabelsToCard(card: card, labelIds: [doneLabel.id], completion: completion)
+        self.addLabelsToCard(card: card, labelIds: [doneLabel.id], completion: { card in
+            
+            // Remove the card from the current list so that it doesn't take so long for the UI to update
+            let listIdx = self.board.lists.firstIndex(where: {l in l.id == card.idList})!
+            self.board.lists[listIdx].cards.removeAll(where: { c in c.id == card.id })
+            
+            completion(card)
+        })
+        
     }
 }

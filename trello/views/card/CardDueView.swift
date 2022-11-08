@@ -81,9 +81,6 @@ struct CardDueView: View {
                 VStack {
                     Button(action: {
                         self.trelloApi.markAsDone(card: card, completion: { newCard in
-                            trelloApi.objectWillChange.send()
-                            card.idLabels = newCard.idLabels
-                            card = newCard
                         })
                     }) {
                         HStack {
