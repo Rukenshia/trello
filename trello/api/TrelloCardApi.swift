@@ -107,6 +107,9 @@ extension TrelloApi {
         if let name = name {
             parameters["name"] = name
         }
+        if let pos = pos {
+            parameters["pos"] = pos
+        }
         
         self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
             if let listId = listId {
@@ -130,6 +133,17 @@ extension TrelloApi {
             }
             
             completion(response.value!)
+        }
+    }
+    
+    func removeCardDue(cardId: String, completion: @escaping (Card) -> Void) {
+        self.request("/cards/\(cardId)", method: .put, parameters: ["due": "null"], result: Card.self) { response, card in
+            let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+            let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+            
+            self.board.lists[listIdx].cards[cardIdx].due = nil
+            
+            completion(card)
         }
     }
 }

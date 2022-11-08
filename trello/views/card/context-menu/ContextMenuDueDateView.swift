@@ -17,12 +17,28 @@ struct ContextMenuDueDateView: View {
         VStack {
             DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
             DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
-            Button(action: {
-                self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
-                    print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
-                })
-            }) {
-                Text("Save")
+            HStack {
+                if card.due != nil {
+                    Button(action: {
+                        self.trelloApi.removeCardDue(cardId: card.id, completion: { card in
+                            print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
+                        })
+                    }) {
+                        Text("Remove Due")
+                    }
+                    .buttonStyle(FlatButton(icon: "trash", color: Color("TwZinc700")))
+                }
+                
+                Spacer()
+                
+                Button(action: {
+                    self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
+                        print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
+                    })
+                }) {
+                    Text("Save")
+                }
+                .buttonStyle(FlatButton())
             }
         }
         .onAppear {
@@ -30,6 +46,7 @@ struct ContextMenuDueDateView: View {
                 self.date = due
             }
         }
+        .padding()
     }
 }
 

@@ -89,7 +89,7 @@ struct CardDetailsView: View {
                                 .font(.title2)
                         }
                         ContextMenuDueDateView(card: $card)
-                            .frame(maxWidth: 180)
+                            .frame(maxWidth: 280)
                             .padding(4)
                         
                         HStack {
@@ -145,7 +145,7 @@ struct CardDetailsView: View {
                         }) { Spacer() }
                             .buttonStyle(FlatButton(icon: "doc.on.doc", text: "Copy"))
                     }
-                    .frame(maxWidth: 200)
+                    .frame(maxWidth: 260)
                 }
             }
         }
