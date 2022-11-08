@@ -16,9 +16,31 @@ struct CardDetailsDescriptionView: View {
     @State private var editing: Bool = false
     @State private var hovering: Bool = false
     
+    @State private var monitor: Any?
+    
     var body: some View {
         if self.editing {
             TextEditor(text: $desc)
+                .onAppear {
+                    monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
+                        if nsevent.modifierFlags.contains(.command) {
+                            if nsevent.keyCode == 36 {
+                                self.editing = false
+                                
+                                self.trelloApi.updateCard(cardId: card.id, desc: self.desc, completion: { newCard in
+                                    print("description updated")
+                                })
+                            }
+                        }
+                        
+                        return nsevent
+                    }
+                }
+                .onDisappear {
+                    if let monitor = self.monitor {
+                        NSEvent.removeMonitor(monitor)
+                    }
+                }
             
             Button(action: {
                 self.editing = false;

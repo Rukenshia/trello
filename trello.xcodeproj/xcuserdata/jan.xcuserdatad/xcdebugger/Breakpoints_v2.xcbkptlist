@@ -133,8 +133,8 @@
             filePath = "trello/views/card/CardDetailsDescriptionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "startEditing()"
             landmarkType = "7">
          </BreakpointContent>
