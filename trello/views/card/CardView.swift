@@ -15,6 +15,7 @@ enum PopoverState {
     case manageLabels;
     case dueDate;
     case cardColor;
+    case editCard;
 }
 
 struct CardView: View {
@@ -157,12 +158,9 @@ struct CardView: View {
                 case "c":
                     self.popoverState = .cardColor
                     self.showPopover = true
-                case "D":
-                    self.trelloApi.markAsDone(card: card, completion: { newCard in
-                        trelloApi.objectWillChange.send()
-                        card.idLabels = newCard.idLabels
-                        card = newCard
-                    })
+                case "e":
+                    self.popoverState = .editCard
+                    self.showPopover = true
                 default:
                     ()
                 }
@@ -189,6 +187,10 @@ struct CardView: View {
                 ContextMenuDueDateView(card: $card)
             case .cardColor:
                 ContextMenuCardColorView(card: $card, show: $showPopover)
+            case .editCard:
+                ContextMenuEditCardView(card: $card, show: $showPopover)
+                    .padding(8)
+                    .frame(minWidth: 240)
             default:
                 EmptyView()
             }

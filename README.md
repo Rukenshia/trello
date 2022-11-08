@@ -30,6 +30,7 @@ for trello.
     - [x] Press "d" to change due date
     - [x] Press "c" to change card color
     - [x] Press "l" to manage labels
+    - [x] Press "e" to quick edit a card
   - [ ] Card details
     - [x] View description as rendered markdown
     - [x] Change due date
