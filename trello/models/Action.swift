@@ -9,6 +9,7 @@ import Foundation
 
 enum ActionType: String, Codable {
   case commentCard = "commentCard"
+  case copyCommentCard = "copyCommentCard"
 }
 
 struct ActionDataCommentCard: Codable {

@@ -148,14 +148,40 @@ extension TrelloApi {
   }
   
   func getCardComments(id: String, completion: @escaping ([ActionCommentCard]) -> Void = { checklists in }) {
-    self.request("/cards/\(id)/actions", parameters: ["filter": "commentCard"], result: [ActionCommentCard].self) { response, actions in
+    let actions: [ActionCommentCard] = []
+    
+    self.getCardCommentsPaginated(id: id, page: 0, actions: actions) { actions in
       completion(actions)
+    }
+  }
+  
+  func getCardCommentsPaginated(id: String, page: Int, actions: [ActionCommentCard], completion: @escaping ([ActionCommentCard]) -> Void = { checklists in }) {
+    self.request("/cards/\(id)/actions", parameters: ["filter": "commentCard,copyCommentCard", "page": page], result: [ActionCommentCard].self) { response, pageActions in
+      
+      // 50 per page -> we need to paginate again
+      if pageActions.count == 50 {
+        self.getCardCommentsPaginated(id: id, page: page + 1, actions: actions + pageActions, completion: completion)
+        return
+      }
+      completion(actions + pageActions)
     }
   }
   
   func addCardComment(id: String, text: String, completion: @escaping (ActionCommentCard) -> Void) {
     self.request("/cards/\(id)/actions/comments", method: .post, parameters: ["text": text], result: ActionCommentCard.self) { response, action in
       completion(action)
+    }
+  }
+  
+  func updateCardComment(cardId: String, commentId: String, text: String, completion: @escaping (ActionCommentCard) -> Void) {
+    self.request("/cards/\(cardId)/actions/\(commentId)/comments", method: .put, parameters: ["text": text], result: ActionCommentCard.self) { response, action in
+      completion(action)
+    }
+  }
+  
+  func deleteCardComment(cardId: String, commentId: String, completion: @escaping () -> Void) {
+    self.request("/cards/\(cardId)/actions/\(commentId)/comments", method: .delete) { response in
+      completion()
     }
   }
 }

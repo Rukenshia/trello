@@ -99,8 +99,19 @@ struct CardDetailsView: View {
               
               if comments.count > 0 {
                 ForEach(self.$comments) { comment in
-                  CommentView(comment: comment)
-                    .padding(.horizontal, 4)
+                  CommentView(comment: comment, onSave: { text in
+                    self.trelloApi.updateCardComment(cardId: card.id, commentId: comment.id, text: text) { newComment in
+                      if let idx = self.comments.firstIndex(where: { c in c.id == comment.id }) {
+                        self.comments[idx].data.text = text
+                      }
+                    }
+                  }, onDelete: {
+                    self.trelloApi.deleteCardComment(cardId: card.id, commentId: comment.id) {
+                      self.comments.removeAll(where: { c in c.id == comment.id })
+                    }
+                  }
+                  )
+                  .padding(.horizontal, 4)
                 }
               }
             }

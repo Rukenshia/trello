@@ -11,6 +11,12 @@ import MarkdownUI
 struct CommentView: View {
   @Binding var comment: ActionCommentCard
   
+  let onSave: (String) -> Void
+  let onDelete: () -> Void
+  
+  @State private var editing: Bool = false
+  @State private var newText: String = ""
+  
   var avatar: AnyView {
     return AnyView(AsyncImage(url: URL(string: "\(self.comment.memberCreator.avatarUrl)/50.png")) { phase in
       switch phase {
@@ -42,21 +48,58 @@ struct CommentView: View {
             .clipShape(Circle())
         }
         .padding(6)
-        HStack {
-          Markdown(comment.data.text)
-          Spacer()
+        
+        VStack(spacing: 0) {
+          HStack {
+            if self.editing {
+              VStack {
+                TextEditor(text: $newText)
+                  .frame(height: 80)
+                  .onAppear {
+                    newText = comment.data.text
+                  }
+                HStack {
+                  Spacer()
+                  Button(action: {
+                    self.onSave(newText)
+                    self.editing = false
+                  }) {}
+                    .buttonStyle(FlatButton(text: "Save"))
+                }
+              }
+            } else {
+              Markdown(comment.data.text)
+            }
+            Spacer()
+          }
+          .padding()
+          .overlay(
+            RoundedRectangle(cornerRadius: 8)
+              .stroke(Color("TwZinc600"), lineWidth: 1)
+          )
+          
+          HStack {
+            Button(action: {
+              self.editing = true
+            }) {
+              Text("Edit")
+                .font(.system(size: 10))
+            }
+            .buttonStyle(.borderless)
+            
+            Button(action: self.onDelete) {
+              Text("Delete")
+                .font(.system(size: 10))
+            }
+            .buttonStyle(.borderless)
+            
+            Spacer()
+            Text(TrelloApi.DateFormatter.date(from: comment.date)!.formatted())
+              .font(.footnote)
+              .foregroundColor(Color("TwZinc300"))
+          }
+          .padding(4)
         }
-        .padding()
-        .overlay(
-          RoundedRectangle(cornerRadius: 8)
-            .stroke(Color("TwZinc600"), lineWidth: 1)
-        )
-      }
-      HStack {
-        Spacer()
-        Text(TrelloApi.DateFormatter.date(from: comment.date)!.formatted())
-          .font(.footnote)
-          .foregroundColor(Color("TwZinc300"))
       }
     }
   }
@@ -64,6 +107,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
   static var previews: some View {
-    CommentView(comment: .constant(ActionCommentCard(id: "id", idMemberCreator: "member-id", type: .commentCard, data: ActionDataCommentCard(text: "comment text"), memberCreator: Member(id: "member-id", username: "member-username", avatarUrl: "https://trello-members.s3.amazonaws.com/5e4919458e3371666e3be20c/f30eb004ca0926ea216e7dc32e00ead1", fullName: "member full name", initials: "MF"), date: TrelloApi.DateFormatter.string(from: Date.now))))
+    CommentView(comment: .constant(ActionCommentCard(id: "id", idMemberCreator: "member-id", type: .commentCard, data: ActionDataCommentCard(text: "comment text"), memberCreator: Member(id: "member-id", username: "member-username", avatarUrl: "https://trello-members.s3.amazonaws.com/5e4919458e3371666e3be20c/f30eb004ca0926ea216e7dc32e00ead1", fullName: "member full name", initials: "MF"), date: TrelloApi.DateFormatter.string(from: Date.now))), onSave: { _ in }, onDelete: {})
   }
 }
