@@ -111,6 +111,17 @@ struct CardView: View {
                         .background(Color("TwZinc700"))
                         .cornerRadius(4)
                       }
+                      if card.badges.attachments > 0 {
+                        HStack(spacing: 1) {
+                          Image(systemName: "paperclip")
+                          Text("\(card.badges.attachments)")
+                            .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
+                        .background(Color("TwZinc700"))
+                        .cornerRadius(4)
+                      }
                         Text(card.desc)
                             .lineLimit(1)
                             .foregroundColor(.secondary)

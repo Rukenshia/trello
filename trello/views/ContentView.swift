@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var cancellable: AnyCancellable?;
     
     private var timer = Timer.publish(
-        every: 5, // second
+        every: 10, // second
         on: .main,
         in: .common
     ).autoconnect();

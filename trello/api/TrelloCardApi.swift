@@ -184,4 +184,31 @@ extension TrelloApi {
       completion()
     }
   }
+  
+  func getCardAttachments(id: String, completion: @escaping ([Attachment]) -> Void) {
+    self.request("/cards/\(id)/attachments", result: [Attachment].self) { response, attachments in
+      completion(attachments)
+    }
+  }
+  
+  func downloadAttachment(url: String, completion: @escaping (Data) -> Void) {
+    self.session.request(
+      url,
+      method: .get,
+      headers: [
+        "Authorization": "OAuth oauth_consumer_key=\"\(self.key)\", oauth_token=\"\(self.token)\""
+      ]
+    )
+    .response { response in
+      if case let .failure(error) = response.result {
+        print("API error on '\(url)' \(response.response?.statusCode ?? 0): \(response)")
+        self.addError(error)
+        return
+      }
+      
+      DispatchQueue.main.async {
+        completion(response.data!)
+      }
+    }
+  }
 }

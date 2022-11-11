@@ -13,6 +13,7 @@ struct Badges: Codable, Hashable {
   var checkItems: Int;
   var checkItemsChecked: Int;
   var comments: Int;
+  var attachments: Int;
 }
 
 struct Card: Identifiable, Codable, Hashable {
@@ -24,7 +25,7 @@ struct Card: Identifiable, Codable, Hashable {
   var desc: String = "";
   var due: String?;
   var dueComplete: Bool = false;
-  var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0, comments: 0);
+  var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0, comments: 0, attachments: 0);
   var pos: Float = 0.0;
   var dateLastActivity: String = "1991-08-10T00:00:00Z";
   var cover: CardCover?

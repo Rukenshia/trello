@@ -16,7 +16,7 @@ class TrelloApi: ObservableObject {
   @Published var board: Board
   @Published var boards: [BasicBoard]
   
-  private var session: Session
+  internal var session: Session
   
   @Published var errors: Int = 0
   @Published var errorMessages: [String] = []
