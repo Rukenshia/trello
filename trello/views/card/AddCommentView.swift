@@ -28,6 +28,7 @@ struct AddCommentView: View {
         Spacer()
         Button(action: {
           self.addComment(self.text)
+          self.text = ""
         }) {
           
         }
