@@ -13,12 +13,21 @@ struct AttachmentView: View {
   var body: some View {
     HStack {
       VStack {
-        switch(attachment.mimeType) {
-        case "image/png":
-          AttachmentImageView(attachment: $attachment)
-            .frame(width: 64, height: 64)
-        default:
-          EmptyView()
+        if let mimeType = attachment.mimeType {
+          switch(mimeType) {
+          case "image/png":
+            AttachmentImageView(attachment: $attachment)
+              .frame(width: 64, height: 64)
+          default:
+            EmptyView()
+          }
+        } else {
+          if attachment.url.contains(".png") {
+            AttachmentImageView(attachment: $attachment)
+              .frame(width: 64, height: 64)
+          } else {
+            EmptyView()
+          }
         }
       }
       .background(Color("TwZinc700"))

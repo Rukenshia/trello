@@ -23,7 +23,7 @@ struct Attachment: Identifiable, Codable {
   var edgeColor: String?
   var idMember: String
   var isUpload: Bool
-  var mimeType: String
+  var mimeType: String?
   var name: String
   var pos: Float
   var previews: [Preview]
