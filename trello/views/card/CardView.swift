@@ -89,17 +89,28 @@ struct CardView: View {
                     
                     
                     HStack {
-                        if card.badges.checkItems > 0 {
-                            HStack(spacing: 1) {
-                                Image(systemName: "checklist")
-                                Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 4)
-                            .padding(.vertical, 2)
-                            .background(Color("TwZinc700"))
-                            .cornerRadius(4)
+                      if card.badges.checkItems > 0 {
+                        HStack(spacing: 1) {
+                          Image(systemName: "checklist")
+                          Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+                            .foregroundColor(.secondary)
                         }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
+                        .background(Color("TwZinc700"))
+                        .cornerRadius(4)
+                      }
+                      if card.badges.comments > 0 {
+                        HStack(spacing: 1) {
+                          Image(systemName: "message")
+                          Text("\(card.badges.comments)")
+                            .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
+                        .background(Color("TwZinc700"))
+                        .cornerRadius(4)
+                      }
                         Text(card.desc)
                             .lineLimit(1)
                             .foregroundColor(.secondary)

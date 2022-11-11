@@ -197,8 +197,8 @@
             filePath = "trello/models/Card.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "displayColor"
             landmarkType = "24">
          </BreakpointContent>
@@ -214,8 +214,8 @@
             filePath = "trello/models/Card.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
             landmarkName = "displayColor"
             landmarkType = "24">
          </BreakpointContent>
@@ -230,8 +230,8 @@
             filePath = "trello/models/Card.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "displayColor"
             landmarkType = "24">
          </BreakpointContent>
