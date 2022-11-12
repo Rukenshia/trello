@@ -252,5 +252,22 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4BD83C1C-DBA6-48D4-8CCC-AA097DBBF288"
+            shouldBeEnabled = "No"
+            condition = "label.name == &quot;In Process&quot;"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "trello/views/board/ManageBoardLabelsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

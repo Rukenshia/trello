@@ -18,7 +18,6 @@ struct SidebarBoardView: View {
     
     var body: some View {
         Button(action: {
-            print(">>>>")
             trelloApi.getBoard(id: board.id)
         }) {
             HStack {
