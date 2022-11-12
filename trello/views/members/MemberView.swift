@@ -12,20 +12,7 @@ struct MemberView: View {
   
   var body: some View {
     HStack {
-      AsyncImage(url: URL(string: "\(member.avatarUrl)/50.png")) { phase in
-        switch phase {
-        case .empty:
-          ProgressView()
-        case .success(let image):
-          image.resizable()
-            .scaledToFit()
-        case .failure:
-          Image(systemName: "person")
-            .foregroundColor(.red)
-        @unknown default:
-          EmptyView()
-        }
-      }
+      MemberAvatarView(url: member.avatarUrl)
       .frame(width: 32, height: 32)
       Text(member.fullName)
         .lineLimit(1)

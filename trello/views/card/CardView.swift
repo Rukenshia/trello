@@ -119,6 +119,8 @@ struct CardView: View {
               .foregroundColor(.secondary)
               .font(.system(size: 10))
           }
+          
+          CardMembersView(members: trelloApi.board.members.filter({ m in card.idMembers.contains(m.id) }))
         }.padding(8)
         Spacer()
         

@@ -10,29 +10,30 @@ import SwiftUI
 import CodableWrappers
 
 struct Badges: Codable, Hashable {
-  var checkItems: Int;
-  var checkItemsChecked: Int;
-  var comments: Int;
-  var attachments: Int;
+  var checkItems: Int
+  var checkItemsChecked: Int
+  var comments: Int
+  var attachments: Int
 }
 
 struct Card: Identifiable, Codable, Hashable {
-  var id: String;
-  var idList: String = ""; // TODO: remove default
-  var labels: [Label] = [];
-  var idLabels: [String] = [];
-  var name: String;
-  var desc: String = "";
-  var due: String?;
-  var dueComplete: Bool = false;
-  var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0, comments: 0, attachments: 0);
-  var pos: Float = 0.0;
-  var dateLastActivity: String = "1991-08-10T00:00:00Z";
+  var id: String
+  var idList: String = "" // TODO: remove default
+  var labels: [Label] = []
+  var idLabels: [String] = []
+  var idMembers: [String] = []
+  var name: String
+  var desc: String = ""
+  var due: String?
+  var dueComplete: Bool = false
+  var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0, comments: 0, attachments: 0)
+  var pos: Float = 0.0
+  var dateLastActivity: String = "1991-08-10T00:00:00Z"
   var cover: CardCover?
   
   var dueDate: Date? {
     if self.due == nil {
-      return nil;
+      return nil
     }
     
     return TrelloApi.DateFormatter.date(from: self.due!)
@@ -98,8 +99,8 @@ enum CardCoverBrightness: String, Codable {
 }
 
 final class DraggableCard: NSObject, Codable {
-  var id: String;
-  var idList: String;
+  var id: String
+  var idList: String
   
   init(id: String, idList: String) {
     self.id = id
