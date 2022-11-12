@@ -191,6 +191,12 @@ extension TrelloApi {
     }
   }
   
+  func getCardAttachment(cardId: String, attachmentId: String, completion: @escaping (Attachment) -> Void) {
+    self.request("/cards/\(cardId)/attachments/\(attachmentId)", result: Attachment.self) { response, attachment in
+      completion(attachment)
+    }
+  }
+  
   func downloadAttachment(url: String, completion: @escaping (Data) -> Void) {
     self.session.request(
       url,

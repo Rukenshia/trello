@@ -44,6 +44,7 @@ struct CardCover: Codable, Hashable {
   var color: CardCoverColor?
   var size: CardCoverSize
   var brightness: CardCoverBrightness
+  var idAttachment: String?
   
   var displayColor: Color {
     switch self.color {

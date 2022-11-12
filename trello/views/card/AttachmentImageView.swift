@@ -12,24 +12,38 @@ struct AttachmentImageView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @Binding var attachment: Attachment
   
-  @State private var image: Image? = nil
+  @State private var image: AnyView? = nil
   
   var body: some View {
     VStack {
       if let image = self.image {
         image
-          .resizable()
-          .scaledToFill()
       } else {
         EmptyView()
       }
     }
     .task {
       if attachment.isUpload {
-        self.trelloApi.downloadAttachment(url: attachment.previews[5].url) { data in
+        self.trelloApi.downloadAttachment(url: attachment.previews.last!.url) { data in
           guard let nsImage = NSImage(data: data) else { return }
-          self.image = Image(nsImage: nsImage)
+          self.image = AnyView(Image(nsImage: nsImage)
+            .resizable()
+            .scaledToFit())
         }
+      } else {
+        self.image = AnyView(AsyncImage(url: URL(string: attachment.url)) { phase in
+          switch phase {
+          case .empty:
+            ProgressView()
+          case .success(let image):
+            image.resizable()
+              .scaledToFit()
+          case .failure:
+            EmptyView()
+          @unknown default:
+            EmptyView()
+          }
+        })
       }
     }
   }

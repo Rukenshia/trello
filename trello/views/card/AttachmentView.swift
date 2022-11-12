@@ -15,14 +15,14 @@ struct AttachmentView: View {
       VStack {
         if let mimeType = attachment.mimeType {
           switch(mimeType) {
-          case "image/png":
+          case "image/png", "image/jpeg":
             AttachmentImageView(attachment: $attachment)
               .frame(width: 64, height: 64)
           default:
             EmptyView()
           }
         } else {
-          if attachment.url.contains(".png") {
+          if attachment.url.hasSuffix(".png") || attachment.url.hasSuffix(".jpg") {
             AttachmentImageView(attachment: $attachment)
               .frame(width: 64, height: 64)
           } else {
