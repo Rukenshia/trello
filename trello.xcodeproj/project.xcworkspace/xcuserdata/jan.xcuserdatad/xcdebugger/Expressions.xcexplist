@@ -119,13 +119,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #2 in TrelloApi.markAsDone(card:completion:):TrelloApi.swift">
+         contextName = "closure #1 in closure #1 in AttachmentView.body.getter:AttachmentView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "String(decoding: data, as: UTF8.self)">
-            </PersistentString>
-            <PersistentString
-               value = "newCard.labels">
+               value = "attachment.mimeType">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -146,10 +143,27 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #1 in closure #1 in AttachmentView.body.getter:AttachmentView.swift">
+         contextName = "closure #1 in closure #2 in TrelloApi.markAsDone(card:completion:):TrelloApi.swift">
          <PersistentStrings>
             <PersistentString
-               value = "attachment.mimeType">
+               value = "String(decoding: data, as: UTF8.self)">
+            </PersistentString>
+            <PersistentString
+               value = "newCard.labels">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #2 in OrganizationView.body.getter:OrganizationView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "String(decoding: data, as: UTF8.self)">
+            </PersistentString>
+            <PersistentString
+               value = "logoUrl">
+            </PersistentString>
+            <PersistentString
+               value = "organization.logoUrl">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
