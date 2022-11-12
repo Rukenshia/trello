@@ -15,6 +15,7 @@ struct RightSidebarView: View {
   @State private var showCreateMenu: Bool = false
   @State private var showErrors: Bool = false
   @State private var showManageLabels: Bool = false
+  @State private var showMembers: Bool = false
   
   init(doneList: Binding<List>? = nil) {
     self.doneList = doneList
@@ -60,6 +61,20 @@ struct RightSidebarView: View {
                   .scaleEffect(1.5))
             }
         }
+        
+        Button(action: {
+          self.showMembers = true
+        }) {
+          
+        }
+        .buttonStyle(
+          IconButton(icon: "person")
+        )
+        .symbolRenderingMode(.hierarchical)
+        .popover(isPresented: self.$showMembers, arrowEdge: .bottom) {
+          MembersView(members: self.$trelloApi.board.members)
+        }
+        
         Spacer()
         
         Button(action: {

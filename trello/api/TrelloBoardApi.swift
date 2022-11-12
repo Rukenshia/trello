@@ -24,6 +24,7 @@ extension TrelloApi {
                         "cards": "open",
                         "lists": "open",
                         "checklists": "all",
+                        "members": "all",
                      ],
                      result: Board.self
         ) { response, board in

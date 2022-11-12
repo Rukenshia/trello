@@ -13,4 +13,5 @@ struct Member: Identifiable, Codable {
   var avatarUrl: String
   var fullName: String
   var initials: String
+  var memberType: String?
 }
