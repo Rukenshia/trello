@@ -14,4 +14,16 @@ extension TrelloApi {
       completion(organizations)
     }
   }
+  
+  func addMemberToCard(cardId: String, memberId: String, completion: @escaping () -> Void) {
+    self.request("/cards/\(cardId)/idMembers", method: .post, parameters: ["value": memberId]) { response in
+      completion()
+    }
+  }
+  
+  func removeMemberFromCard(cardId: String, memberId: String, completion: @escaping () -> Void) {
+    self.request("/cards/\(cardId)/idMembers/\(memberId)", method: .delete) { response in
+      completion()
+    }
+  }
 }

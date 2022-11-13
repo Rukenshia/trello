@@ -12,7 +12,7 @@ for trello.
   - [x] Switch active board
   - [x] Show board background image
   - [ ] Board settings
-  - [ ] Manage labels
+  - [x] Manage labels
 - [ ] Lists
   - [x] View lists
   - [x] View cards in a list
@@ -26,6 +26,7 @@ for trello.
   - [x] Show card due date
   - [x] Show card labels
   - [ ] Hover actions
+    - [x] Press "a" to assign members
     - [x] Press "m" to move
     - [x] Press "d" to change due date
     - [x] Press "c" to change card color
@@ -35,6 +36,6 @@ for trello.
     - [x] View description as rendered markdown
     - [x] Change due date
     - [x] Edit description
-    - [ ] Comments
+    - [x] Comments
     - [ ] Attachments
     - [ ] Activity

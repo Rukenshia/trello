@@ -11,7 +11,7 @@ struct MembersView: View {
   @Binding var members: [Member]
   var body: some View {
     VStack(alignment: .leading) {
-      ForEach($members) { member in
+      ForEach(members) { member in
         MemberView(member: member)
       }
     }

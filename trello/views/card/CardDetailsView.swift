@@ -81,16 +81,18 @@ struct CardDetailsView: View {
               .padding(.bottom, 8)
             }
             
-            VStack {
-              Divider()
-              HStack {
-                Image(systemName: "paperclip")
-                Text("Attachments")
-                  .font(.title2)
-                Spacer()
+            if card.badges.attachments > 0 {
+              VStack {
+                Divider()
+                HStack {
+                  Image(systemName: "paperclip")
+                  Text("Attachments")
+                    .font(.title2)
+                  Spacer()
+                }
+                .padding(4)
+                CardAttachmentsView(card: self.$card)
               }
-              .padding(4)
-              CardAttachmentsView(card: self.$card)
             }
             
             VStack {
@@ -133,6 +135,22 @@ struct CardDetailsView: View {
           }
           Spacer()
           VStack(alignment: .leading) {
+            HStack {
+              Image(systemName: "person")
+              Text("Assignee")
+                .font(.title2)
+            }
+            
+            CardDetailsMembersView(members: trelloApi.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: trelloApi.board.members, onAdd: { member in
+              self.trelloApi.addMemberToCard(cardId: card.id, memberId: member.id) {
+                card.idMembers.append(member.id)
+              }
+            }, onRemove: { member in
+              self.trelloApi.removeMemberFromCard(cardId: card.id, memberId: member.id) {
+                card.idMembers.removeAll(where: { m in m == member.id })
+              }
+            })
+            
             HStack {
               Image(systemName: "alarm")
               Text("Due date")

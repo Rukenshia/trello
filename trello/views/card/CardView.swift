@@ -16,6 +16,7 @@ enum PopoverState {
   case dueDate;
   case cardColor;
   case editCard;
+  case manageMembers
 }
 
 struct CardView: View {
@@ -162,6 +163,9 @@ struct CardView: View {
         }
         
         switch (nsevent.characters) {
+        case "a":
+          self.popoverState = .manageMembers
+          self.showPopover = true
         case "m":
           self.popoverState = .moveToList
           self.showPopover = true
@@ -207,6 +211,16 @@ struct CardView: View {
         ContextMenuEditCardView(card: $card, show: $showPopover)
           .padding(8)
           .frame(minWidth: 240)
+      case .manageMembers:
+        ContextMenuManageMembersView(members: trelloApi.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: trelloApi.board.members, onAdd: { member in
+          self.trelloApi.addMemberToCard(cardId: card.id, memberId: member.id) {
+            card.idMembers.append(member.id)
+          }
+        }, onRemove: { member in
+          self.trelloApi.removeMemberFromCard(cardId: card.id, memberId: member.id) {
+            card.idMembers.removeAll(where: { m in m == member.id })
+          }
+        })
       default:
         EmptyView()
       }

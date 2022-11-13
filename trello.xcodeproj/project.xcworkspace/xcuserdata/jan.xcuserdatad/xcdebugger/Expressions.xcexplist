@@ -103,6 +103,46 @@
          contextName = "CardView.formattedDueDate.getter:CardView.swift">
       </ContextState>
       <ContextState
+         contextName = "closure #5 in CardView.body.getter:CardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "card.due">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ContentView.backgroundImage.getter:ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "trelloApi.board">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in AttachmentView.body.getter:AttachmentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "attachment.mimeType">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ContentView.trelloApi.getter:ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "trelloApi.board">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #4 in closure #3 in closure #1 in TrelloListMenuView.body.getter:TrelloListMenuView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.trelloApi.board.lists.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #2 in TrelloApi.markAsDone(card:completion:):TrelloApi.swift">
          <PersistentStrings>
             <PersistentString
@@ -124,46 +164,6 @@
             </PersistentString>
             <PersistentString
                value = "organization.logoUrl">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in AttachmentView.body.getter:AttachmentView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "attachment.mimeType">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #4 in closure #3 in closure #1 in TrelloListMenuView.body.getter:TrelloListMenuView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.trelloApi.board.lists.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ContentView.backgroundImage.getter:ContentView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "trelloApi.board">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #5 in CardView.body.getter:CardView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "card.due">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ContentView.trelloApi.getter:ContentView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "trelloApi.board">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -202,6 +202,14 @@
          <PersistentStrings>
             <PersistentString
                value = "String(decoding: data, as: UTF8.self)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #4 in closure #2 in closure #2 in closure #1 in closure #1 in CardDetailsView.body.getter:CardDetailsView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "card.idMembers.filter{ m in m != member.id }">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

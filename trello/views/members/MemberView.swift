@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MemberView: View {
-  @Binding var member: Member
+  let member: Member
   
   var body: some View {
     HStack {
@@ -22,6 +22,6 @@ struct MemberView: View {
 
 struct MemberView_Previews: PreviewProvider {
   static var previews: some View {
-    MemberView(member: .constant(Member(id: "id", username: "username", avatarUrl: "https://via.placeholder.com/50", fullName: "full name", initials: "fn")))
+    MemberView(member: Member(id: "id", username: "username", avatarUrl: "https://via.placeholder.com/50", fullName: "full name", initials: "fn"))
   }
 }

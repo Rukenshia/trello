@@ -92,7 +92,7 @@ extension TrelloApi {
     }
   }
   
-  func updateCard(cardId: String, listId: String? = nil, due: Date? = nil, desc: String? = nil, name: String? = nil, pos: Float? = nil, completion: @escaping (Card) -> Void) {
+  func updateCard(cardId: String, listId: String? = nil, memberIds: [String]? = nil, due: Date? = nil, desc: String? = nil, name: String? = nil, pos: Float? = nil, completion: @escaping (Card) -> Void) {
     var parameters: Parameters = [:]
     
     if let listId = listId {
@@ -109,6 +109,9 @@ extension TrelloApi {
     }
     if let pos = pos {
       parameters["pos"] = pos
+    }
+    if let memberIds = memberIds {
+      parameters["idMembers"] = memberIds
     }
     
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
