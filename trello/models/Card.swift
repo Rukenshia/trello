@@ -24,6 +24,7 @@ struct Card: Identifiable, Codable, Hashable {
   var idMembers: [String] = []
   var name: String
   var desc: String = ""
+  var closed: Bool = false
   var due: String?
   var dueComplete: Bool = false
   var badges: Badges = Badges(checkItems: 0, checkItemsChecked: 0, comments: 0, attachments: 0)

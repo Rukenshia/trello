@@ -32,6 +32,20 @@ struct CardView: View {
   @State private var showPopover: Bool = false;
   @State private var popoverState: PopoverState = .none;
   
+  @State private var bgImage: AnyView? = nil
+  
+  private var bgHoverImage: AnyView? {
+    if let bgImage = self.bgImage {
+      if self.isHovering {
+        return AnyView(bgImage.brightness(0.1))
+      }
+      
+      return bgImage
+    }
+    
+    return nil
+  }
+  
   private var background: AnyView {
     var cardBg: Color = Color("TwZinc700")
     
@@ -57,7 +71,9 @@ struct CardView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       if let cover = card.cover {
-        CardCoverView(cardId: card.id, cover: cover)
+        if cover.size == .normal {
+          CardCoverView(cardId: card.id, cover: cover)
+        }
       }
       HStack {
         VStack(alignment: .leading, spacing: 4) {
@@ -131,7 +147,7 @@ struct CardView: View {
       }
     }
     .frame(alignment: .leading)
-    .background(self.background)
+    .background(self.bgImage != nil ? self.bgHoverImage! : self.background)
     .onHover(perform: {hover in
       self.isHovering = hover
       withAnimation(.easeInOut(duration: 0.1)) {
@@ -226,6 +242,20 @@ struct CardView: View {
       }
     }
     .cornerRadius(4)
+    .task {
+      if let cover = card.cover {
+        if cover.size == .full {
+          if let idAttachment = cover.idAttachment {
+            trelloApi.getCardAttachment(cardId: card.id, attachmentId: idAttachment) { attachment in
+              trelloApi.downloadAttachment(url: attachment.previews.last!.url, completion: { data in
+                guard let nsImage = NSImage(data: data) else { return }
+                self.bgImage = AnyView(Image(nsImage: nsImage).resizable().scaledToFill())
+              })
+            }
+          }
+        }
+      }
+    }
   }
 }
 

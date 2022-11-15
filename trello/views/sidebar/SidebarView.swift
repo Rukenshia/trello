@@ -17,6 +17,7 @@ struct SidebarView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
+      
       if hovering {
         Text("Boards")
           .font(.system(size: 18))

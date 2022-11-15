@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Member: Identifiable, Codable {
+struct Member: Identifiable, Codable, Hashable {
   var id: String
   var username: String
   var avatarUrl: String

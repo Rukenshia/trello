@@ -25,7 +25,7 @@ struct ContentView: View {
             
             BoardView(board: $trelloApi.board)
             
-            RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") })).frame(maxWidth: 48)
+          RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$trelloApi.board).frame(maxWidth: 48)
         }.onAppear {
             self.cancellable = trelloApi.$board.sink { newBoard in
                 if newBoard.id == "" {
@@ -56,6 +56,9 @@ struct ContentView: View {
             self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
             }
         }
+//        .toolbar {
+//          SearchView()
+//        }
     }
 }
 

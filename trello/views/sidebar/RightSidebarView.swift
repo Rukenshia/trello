@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RightSidebarView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @Binding var board: Board
   var doneList: Binding<List>?;
   
   @State private var showDoneList: Bool = false
@@ -17,8 +18,11 @@ struct RightSidebarView: View {
   @State private var showManageLabels: Bool = false
   @State private var showMembers: Bool = false
   
-  init(doneList: Binding<List>? = nil) {
+  @State private var archivedCards: [Card] = []
+  
+  init(doneList: Binding<List>? = nil, board: Binding<Board>) {
     self.doneList = doneList
+    self._board = board
   }
   
   var body: some View {
@@ -55,7 +59,7 @@ struct RightSidebarView: View {
           }) { }
             .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
             .popover(isPresented: self.$showDoneList, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
-              DoneListView(list: dl)
+              DoneListView(list: dl, archivedCards: $archivedCards)
                 .frame(minWidth: 300, maxWidth: 300)
                 .background(Color("TwZinc900")
                   .scaleEffect(1.5))
@@ -96,13 +100,19 @@ struct RightSidebarView: View {
           }.padding()
         }
       }
-    }.padding(8)
+    }
+    .onChange(of: board) { nl in
+      trelloApi.getBoardCards(id: trelloApi.board.id, filter: "closed", limit: 50) { cards in
+        self.archivedCards = cards
+      }
+    }
+    .padding(8)
   }
 }
 
 struct RightSidebarView_Previews: PreviewProvider {
   static var previews: some View {
-    RightSidebarView(doneList: nil)
+    RightSidebarView(doneList: nil, board: .constant(Board(id: "", name: "", prefs: BoardPrefs())))
       .environmentObject(TrelloApi(key: "", token: ""))
   }
 }

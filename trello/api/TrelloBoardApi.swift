@@ -50,4 +50,10 @@ extension TrelloApi {
             }
         }
     }
+  
+  func getBoardCards(id: String, filter: String, limit: Int = 1000, completion: @escaping ([Card]) -> Void) {
+    self.request("/boards/\(id)/cards/\(filter)", parameters: ["limit": limit], result: [Card].self) { response, cards in
+      completion(cards)
+    }
+  }
 }
