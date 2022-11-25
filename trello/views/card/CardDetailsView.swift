@@ -49,7 +49,7 @@ struct CardDetailsView: View {
             if card.labels.count > 0 {
               HStack {
                 ForEach(card.labels) { label in
-                  LabelView(label: label)
+                  LabelView(label: label, size: 12)
                 }
               }
             }

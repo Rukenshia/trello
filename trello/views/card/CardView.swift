@@ -77,24 +77,26 @@ struct CardView: View {
       }
       HStack {
         VStack(alignment: .leading, spacing: 4) {
-          Text(card.name)
-            .font(.system(size: 13.25, weight: .medium))
-            .multilineTextAlignment(.leading)
-            .lineLimit(2)
-            .foregroundColor(.white)
           
           if displayedLabels.count > 0 {
             HStack {
               ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
-                LabelView(label: label)
-                  .font(.system(size: 10))
+                LabelView(label: label, size: 11)
               }
               if card.labels.count > 2 {
                 Text("+\(card.labels.count - 2)")
                   .font(.system(size: 10))
               }
+              Spacer()
+              CardDueView(card: $card)
             }
           }
+          
+          Text(card.name)
+            .font(.system(size: 13.25, weight: .medium))
+            .multilineTextAlignment(.leading)
+            .lineLimit(2)
+            .foregroundColor(.white)
           
           
           HStack {
@@ -139,11 +141,8 @@ struct CardView: View {
           
           CardMembersView(members: trelloApi.board.members.filter({ m in card.idMembers.contains(m.id) }))
         }.padding(8)
-        Spacer()
         
-        if card.due != nil {
-          CardDueView(card: $card)
-        }
+        Spacer()
       }
     }
     .frame(alignment: .leading)
@@ -261,7 +260,16 @@ struct CardView: View {
 
 struct CardView_Previews: PreviewProvider {
   static var previews: some View {
-    CardView(card: .constant(Card(id: UUID().uuidString, name: "Test card", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))))
-      .frame(width: 280)
+    VStack {
+      CardView(card: .constant(Card(id: UUID().uuidString, name: "A simple card, for simple people")))
+        .frame(width: 280, height: 100)
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 100000)))))
+        .frame(width: 280, height: 100)
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000)))))
+        .frame(width: 280, height: 100)
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))))
+        .frame(width: 280, height: 100)
+    }
+    .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
   }
 }

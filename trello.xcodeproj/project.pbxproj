@@ -107,7 +107,7 @@
 
 /* Begin PBXFileReference section */
 		3D0302E128F893B200213D3E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		3D14839A28DEF4870021C6FC /* trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trello.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D14839A28DEF4870021C6FC /* native trello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "native trello.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D14839D28DEF4870021C6FC /* trelloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trelloApp.swift; sourceTree = "<group>"; };
 		3D14839F28DEF4870021C6FC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3D1483A128DEF4890021C6FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 		3D14839B28DEF4870021C6FC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3D14839A28DEF4870021C6FC /* trello.app */,
+				3D14839A28DEF4870021C6FC /* native trello.app */,
 				3D1483AB28DEF4890021C6FC /* trelloTests.xctest */,
 				3D1483B528DEF48A0021C6FC /* trelloUITests.xctest */,
 			);
@@ -456,9 +456,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3D14839928DEF4870021C6FC /* trello */ = {
+		3D14839928DEF4870021C6FC /* native trello */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trello" */;
+			buildConfigurationList = 3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "native trello" */;
 			buildPhases = (
 				3D14839628DEF4870021C6FC /* Sources */,
 				3D14839728DEF4870021C6FC /* Frameworks */,
@@ -468,7 +468,7 @@
 			);
 			dependencies = (
 			);
-			name = trello;
+			name = "native trello";
 			packageProductDependencies = (
 				3D8470B828F996ED009FC33B /* Sparkle */,
 				3DB8B910290D49E900DC5786 /* MarkdownUI */,
@@ -476,7 +476,7 @@
 				3DDBD4532914FB89002E3F20 /* CodableWrappers */,
 			);
 			productName = trello;
-			productReference = 3D14839A28DEF4870021C6FC /* trello.app */;
+			productReference = 3D14839A28DEF4870021C6FC /* native trello.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3D1483AA28DEF4890021C6FC /* trelloTests */ = {
@@ -563,7 +563,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3D14839928DEF4870021C6FC /* trello */,
+				3D14839928DEF4870021C6FC /* native trello */,
 				3D1483AA28DEF4890021C6FC /* trelloTests */,
 				3D1483B428DEF48A0021C6FC /* trelloUITests */,
 			);
@@ -694,12 +694,12 @@
 /* Begin PBXTargetDependency section */
 		3D1483AD28DEF4890021C6FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3D14839928DEF4870021C6FC /* trello */;
+			target = 3D14839928DEF4870021C6FC /* native trello */;
 			targetProxy = 3D1483AC28DEF4890021C6FC /* PBXContainerItemProxy */;
 		};
 		3D1483B728DEF48A0021C6FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3D14839928DEF4870021C6FC /* trello */;
+			target = 3D14839928DEF4870021C6FC /* native trello */;
 			targetProxy = 3D1483B628DEF48A0021C6FC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -833,6 +833,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = trello/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Native Trello";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -862,6 +863,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = trello/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Native Trello";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -956,7 +958,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "trello" */ = {
+		3D1483BF28DEF48A0021C6FC /* Build configuration list for PBXNativeTarget "native trello" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D1483C028DEF48A0021C6FC /* Debug */,
