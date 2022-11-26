@@ -20,7 +20,7 @@ struct trelloApp: App {
             if preferences.trelloKey != nil && preferences.trelloToken != nil {
                 ContentView()
                     .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
-//                    .preferredColorScheme(.light)
+                    .preferredColorScheme(.light)
             } else {
                 OnboardingView(preferences: $preferences)
             }

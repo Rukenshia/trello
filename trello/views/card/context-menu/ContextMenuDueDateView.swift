@@ -14,9 +14,10 @@ struct ContextMenuDueDateView: View {
     @State private var date: Date = Date.now;
     
     var body: some View {
-        VStack {
+      VStack(alignment: .leading) {
             DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
             DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
+            .frame(width: 160)
             HStack {
                 if card.due != nil {
                     Button(action: {
@@ -27,9 +28,9 @@ struct ContextMenuDueDateView: View {
                         Text("Remove Due")
                     }
                     .buttonStyle(FlatButton(icon: "trash"))
+                  
+                    Spacer()
                 }
-                
-                Spacer()
                 
                 Button(action: {
                     self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
@@ -40,6 +41,7 @@ struct ContextMenuDueDateView: View {
                 }
                 .buttonStyle(FlatButton())
             }
+            .padding(.horizontal, 8)
         }
         .onAppear {
             if let due = self.card.dueDate {

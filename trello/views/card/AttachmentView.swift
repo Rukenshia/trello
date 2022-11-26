@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AttachmentView: View {
   @Binding var attachment: Attachment
+  let onDelete: () -> Void
   
   var body: some View {
     HStack {
@@ -30,29 +31,36 @@ struct AttachmentView: View {
           }
         }
       }
-      .background(Color("TwZinc700"))
+      .background(Color("ButtonBackground").brightness(-0.1))
       .cornerRadius(4)
       .frame(width: 64, height: 64)
       .padding()
       .padding(.horizontal, 4)
       
       VStack(alignment: .leading) {
-        Text(attachment.name)
-          .font(.title2)
+        HStack {
+          Text(attachment.name)
+            .font(.title2)
+          
+          Spacer()
+          
+          Button(action: onDelete) { }
+            .buttonStyle(IconButton(icon: "trash", size: 12))
+        }
         Text(attachment.url)
           .font(.subheadline)
-          .foregroundColor(Color("TwZinc300"))
+          .foregroundColor(.secondary)
       }
       
       Spacer()
     }
-    .background(Color("TwZinc800"))
+    .background(Color("ButtonBackground"))
     .cornerRadius(4)
   }
 }
 
 struct AttachmentView_Previews: PreviewProvider {
   static var previews: some View {
-    AttachmentView(attachment: .constant(Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: "")))
+    AttachmentView(attachment: .constant(Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: "")), onDelete: { })
   }
 }

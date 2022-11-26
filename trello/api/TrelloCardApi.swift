@@ -233,4 +233,10 @@ extension TrelloApi {
       }
     }
   }
+  
+  func deleteCardAttachment(cardId: String, attachmentId: String, completion: @escaping () -> Void) {
+    self.request("/cards/\(cardId)/attachments/\(attachmentId)", method: .delete) { response in
+      completion()
+    }
+  }
 }

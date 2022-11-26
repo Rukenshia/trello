@@ -17,7 +17,11 @@ struct CardAttachmentsView: View {
   var body: some View {
     VStack {
       ForEach(self.$attachments) { attachment in
-        AttachmentView(attachment: attachment)
+        AttachmentView(attachment: attachment, onDelete: {
+          trelloApi.deleteCardAttachment(cardId: card.id, attachmentId: attachment.id) {
+            attachments.removeAll(where: { a in a.id == attachment.id })
+          }
+        })
       }
     }
     .task {
