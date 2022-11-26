@@ -120,16 +120,26 @@ extension TrelloApi {
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
       if let listId = listId {
         // find old card
-        if let card = self.board.cards.first(where: { card in card.id == cardId }) {
-          
+        if var card = self.board.cards.first(where: { card in card.id == cardId }) {
           // Remove from old list and add to new locally
           if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
-            self.board.lists[oldList].cards.remove(at: self.board.lists[oldList].cards.firstIndex(of: card)!)
+            if let index = self.board.lists[oldList].cards.firstIndex(of: card) {
+              self.board.lists[oldList].cards.remove(at: index)
+            }
           }
-        }
-        
-        if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
-          self.board.lists[newList].cards.append(card)
+          
+          // Update the list on the card so that you can move the card again
+          if let index = self.board.cards.firstIndex(where: { card in card.id == cardId }) {
+            self.board.cards[index].idList = listId
+          }
+          
+          if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
+            self.board.lists[newList].cards.append(card)
+          }
+        } else {
+          if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
+            self.board.lists[newList].cards.append(card)
+          }
         }
       } else {
         let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!

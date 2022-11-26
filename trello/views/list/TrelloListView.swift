@@ -97,7 +97,6 @@ struct TrelloListView: View {
                     self.list.cards.remove(atOffsets: offsets)
                 }
                 .onInsert(of: [String(describing: Card.self)], perform: onInsert)
-                .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
                 .deleteDisabled(true)
                 .coordinateSpace(name: "cards")
             }
@@ -125,6 +124,7 @@ struct TrelloListView: View {
             .background(self.addCardColor)
             .cornerRadius(4)
         }
+        .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
         .padding(8)
         .sheet(isPresented: $showAddCard) {
             AddCardView(list: self.$list, showAddCard: self.$showAddCard)
