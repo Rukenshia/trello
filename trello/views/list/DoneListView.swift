@@ -71,10 +71,8 @@ struct DoneListView: View {
             HStack {
               if card.closed {
                 Image(systemName: "archivebox")
-                  .foregroundColor(Color.secondary)
               }
               Text(card.name)
-                .foregroundColor(Color.secondary)
             }
             .padding(4)
           }

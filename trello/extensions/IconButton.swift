@@ -11,8 +11,8 @@ struct IconButton: ButtonStyle {
     var icon: String
     var iconColor: Color = .white
     var size: CGFloat = 24
-    var color: Color = Color("TwZinc700").opacity(0.5)
-    var hoverColor: Color = Color("TwZinc700")
+    var color: Color = Color("IconButtonBackground").opacity(0.5)
+    var hoverColor: Color = Color("IconButtonBackground")
     var padding: CGFloat = 4.0
     
     @State var hovering: Bool = false

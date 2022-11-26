@@ -11,7 +11,7 @@ struct FlatButton: ButtonStyle {
     var icon: String?
     var text: String?
     
-    @State var color: Color = Color("TwZinc700").opacity(0.8)
+    @State var color: Color = Color("ButtonBackground").opacity(0.8)
     
     func makeBody(configuration: Configuration) -> some View {
         HStack {
@@ -29,7 +29,7 @@ struct FlatButton: ButtonStyle {
         .cornerRadius(4)
         .onHover { hover in
             withAnimation(.easeInOut(duration: 0.1)) {
-                self.color = hover ? Color("TwZinc700") : Color("TwZinc700").opacity(0.8);
+                self.color = hover ? Color("ButtonBackground") : Color("ButtonBackground").opacity(0.8);
                 
                 if (hover) {
                     NSCursor.pointingHand.push()

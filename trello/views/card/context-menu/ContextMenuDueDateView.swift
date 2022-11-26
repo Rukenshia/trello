@@ -26,7 +26,7 @@ struct ContextMenuDueDateView: View {
                     }) {
                         Text("Remove Due")
                     }
-                    .buttonStyle(FlatButton(icon: "trash", color: Color("TwZinc700")))
+                    .buttonStyle(FlatButton(icon: "trash"))
                 }
                 
                 Spacer()

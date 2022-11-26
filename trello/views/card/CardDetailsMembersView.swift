@@ -60,7 +60,7 @@ struct CardDetailsMembersView: View {
             .frame(width: 32, height: 32)
         }
         Circle()
-          .fill(Color("TwZinc600"))
+          .fill(Color("ButtonBackground"))
           .frame(width: 32, height: 32)
           .overlay {
             Image(systemName: "plus")
@@ -69,7 +69,7 @@ struct CardDetailsMembersView: View {
         Spacer()
       }
       .padding(4)
-      .background(self.hover ? Color("TwZinc700") : .clear)
+      .background(self.hover ? Color("ButtonBackground") : .clear)
       .cornerRadius(8)
       .onHover { hover in
         withAnimation(.easeInOut(duration: 0.1)) {

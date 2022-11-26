@@ -39,6 +39,7 @@ struct CardDueView: View {
     guard let due = card.dueDate else {
       return Color.clear;
     }
+    
     if self.card.dueComplete {
       return Color("CardDueCompleteBg").opacity(0.85);
     }
@@ -72,16 +73,13 @@ struct CardDueView: View {
           Button(action: {
             self.trelloApi.markAsDone(card: self.card) { _ in }
           }) {
-            VStack {
+            HStack {
               Spacer()
-              HStack {
-                Spacer()
-                Image(systemName: "checkmark")
-                  .foregroundColor(Color("TwGreen200"))
-                Spacer()
-              }
+              Image(systemName: "checkmark")
+                .foregroundColor(Color("TwGreen200"))
               Spacer()
             }
+            .padding(.vertical, 2)
             .background(Color("TwGreen800"))
             .cornerRadius(4)
           }

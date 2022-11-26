@@ -61,8 +61,6 @@ struct RightSidebarView: View {
             .popover(isPresented: self.$showDoneList, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
               DoneListView(list: dl, archivedCards: $archivedCards)
                 .frame(minWidth: 300, maxWidth: 300)
-                .background(Color("TwZinc900")
-                  .scaleEffect(1.5))
             }
         }
         

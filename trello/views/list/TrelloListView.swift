@@ -49,7 +49,7 @@ struct TrelloListView: View {
                 }) {
 
                 }
-                .buttonStyle(IconButton(icon: "ellipsis", size: 12, color: .clear, hoverColor: .clear))
+                .buttonStyle(IconButton(icon: "ellipsis", iconColor: .primary, size: 12, color: .clear, hoverColor: .clear))
                 .popover(isPresented: self.$showMenu, arrowEdge: .bottom) {
                     TrelloListMenuView(list: self.$list)
                 }

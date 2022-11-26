@@ -20,7 +20,7 @@ struct ContextMenuLabelView: View {
     private func setColors() {
         if hovering {
             guard let labelColor = label.color else {
-                self.bgColor = Color("TwZinc700");
+                self.bgColor = Color("ButtonBackground");
                 self.color = Color(.textColor);
                 return;
             }

@@ -78,8 +78,8 @@ struct CardView: View {
       HStack {
         VStack(alignment: .leading, spacing: 4) {
           
-          if displayedLabels.count > 0 {
-            HStack {
+          HStack {
+            if displayedLabels.count > 0 {
               ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
                 LabelView(label: label, size: 11)
               }
@@ -87,9 +87,9 @@ struct CardView: View {
                 Text("+\(card.labels.count - 2)")
                   .font(.system(size: 10))
               }
-              Spacer()
-              CardDueView(card: $card)
             }
+            Spacer()
+            CardDueView(card: $card)
           }
           
           Text(card.name)
@@ -132,10 +132,12 @@ struct CardView: View {
               .background(Color("CardBackground"))
               .cornerRadius(4)
             }
-            Text(card.desc)
-              .lineLimit(1)
-              .foregroundColor(.secondary)
-              .font(.system(size: 10))
+            if !card.desc.isEmpty {
+              Text(card.desc)
+                .lineLimit(1)
+                .foregroundColor(.secondary)
+                .font(.system(size: 10))
+            }
           }
           
           CardMembersView(members: trelloApi.board.members.filter({ m in card.idMembers.contains(m.id) }))

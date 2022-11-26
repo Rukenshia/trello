@@ -36,12 +36,12 @@ struct SidebarBoardView: View {
                 
                 withAnimation(.easeInOut(duration: 0.05)) {
                     if self.currentBoard.id == self.board.id {
-                        self.color = Color("TwZinc700")
+                      self.color = .secondary
                         return
                     }
                     
                     if hover {
-                        self.color = Color("TwZinc800")
+                      self.color = .secondary
                     } else {
                         self.color = Color(.clear)
                     }
@@ -51,12 +51,12 @@ struct SidebarBoardView: View {
         .buttonStyle(.plain)
         .onAppear {
             if self.currentBoard.id == self.board.id {
-                self.color = Color("TwZinc700")
+              self.color = .accentColor
             }
         }
         .onReceive(Just(currentBoard)) { newBoard in
             if newBoard.id == self.board.id {
-                self.color = Color("TwZinc700")
+              self.color = .accentColor
             } else {
                 if !self.isHovering {
                     self.color = Color(.clear)

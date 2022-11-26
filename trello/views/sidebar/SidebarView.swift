@@ -21,7 +21,6 @@ struct SidebarView: View {
       if hovering {
         Text("Boards")
           .font(.system(size: 18))
-          .foregroundColor(.white)
           .multilineTextAlignment(.leading)
           .padding(.leading, 4)
         Divider()
@@ -34,7 +33,7 @@ struct SidebarView: View {
       } else {
         Image(systemName: "books.vertical.fill")
           .font(.system(size: 18))
-          .foregroundColor(.white)
+          .foregroundColor(Color("SidebarIconColor"))
           .multilineTextAlignment(.leading)
           .padding(.leading, 4)
         Spacer()
@@ -50,7 +49,6 @@ struct SidebarView: View {
     .frame(alignment: .top)
     .frame(minWidth: self.width, maxWidth: self.width)
     .padding(8)
-    .background(Color("TwZinc900"))
     .task {
       trelloApi.getOrganizations() { organizations in
         for organization in organizations {
