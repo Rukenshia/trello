@@ -52,7 +52,6 @@ struct TrelloListNameView: View {
             }
                 .lineLimit(1)
                 .font(.title3)
-                .foregroundColor(.white)
                 .multilineTextAlignment(.leading)
                 .padding(.horizontal, 8)
             Spacer()

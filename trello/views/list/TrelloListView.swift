@@ -29,7 +29,7 @@ struct TrelloListView: View {
     @State private var showMenu: Bool = false
     
     var background: Color {
-        return Color("TwZinc900").opacity(0.95)
+        return Color("ListBackground").opacity(0.95)
     }
     
     // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
@@ -60,10 +60,13 @@ struct TrelloListView: View {
                     HStack(spacing: 2) {
                         Image(systemName: "circle.fill")
                             .font(.system(size: 6))
+                            .foregroundColor(.secondary)
                         CardView(card: card)
                             .onDrag {
                                 NSItemProvider(object: card.wrappedValue.id as NSString)
                             }
+                            .padding(.trailing, 8)
+                            .padding(.bottom, 4)
                     }
                 }
                 .onMove { source, dest in
@@ -148,6 +151,7 @@ struct TrelloListView_Previews: PreviewProvider {
             Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
             Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
         ])))
-        .environmentObject(TrelloApi(key: "", token: ""))
+        .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+        .frame(height: 1200)
     }
 }

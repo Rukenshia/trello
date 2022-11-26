@@ -47,7 +47,7 @@ struct CardView: View {
   }
   
   private var background: AnyView {
-    var cardBg: Color = Color("TwZinc700")
+    var cardBg: Color = Color("CardBackground")
     
     if let cover = card.cover {
       if cover.color != nil {
@@ -96,7 +96,6 @@ struct CardView: View {
             .font(.system(size: 13.25, weight: .medium))
             .multilineTextAlignment(.leading)
             .lineLimit(2)
-            .foregroundColor(.white)
           
           
           HStack {
@@ -108,7 +107,7 @@ struct CardView: View {
               }
               .padding(.horizontal, 4)
               .padding(.vertical, 2)
-              .background(Color("TwZinc700"))
+              .background(Color("CardBackground"))
               .cornerRadius(4)
             }
             if card.badges.comments > 0 {
@@ -119,7 +118,7 @@ struct CardView: View {
               }
               .padding(.horizontal, 4)
               .padding(.vertical, 2)
-              .background(Color("TwZinc700"))
+              .background(Color("CardBackground"))
               .cornerRadius(4)
             }
             if card.badges.attachments > 0 {
@@ -130,7 +129,7 @@ struct CardView: View {
               }
               .padding(.horizontal, 4)
               .padding(.vertical, 2)
-              .background(Color("TwZinc700"))
+              .background(Color("CardBackground"))
               .cornerRadius(4)
             }
             Text(card.desc)
@@ -241,6 +240,7 @@ struct CardView: View {
       }
     }
     .cornerRadius(4)
+    .shadow(color: .black.opacity(0.2), radius: 3, x: 4, y: 4)
     .task {
       if let cover = card.cover {
         if cover.size == .full {
@@ -270,6 +270,7 @@ struct CardView_Previews: PreviewProvider {
       CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))))
         .frame(width: 280, height: 100)
     }
+    .padding()
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
   }
 }
