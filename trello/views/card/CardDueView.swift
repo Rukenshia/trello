@@ -59,36 +59,40 @@ struct CardDueView: View {
   
   var body: some View {
     if let due = card.dueDate {
-      HStack(alignment: .center, spacing: 2) {
-        Image(systemName: "clock")
-          .background(dueColor.clipShape(Circle()))
-        if Calendar.current.isDateInToday(due) {
-          Text(formattedDueTime)
-        } else {
-          Text(formattedDueDate)
-        }
-      }
-      .overlay {
-        if isHovering {
-          Button(action: {
-            self.trelloApi.markAsDone(card: self.card) { _ in }
-          }) {
-            HStack {
-              Spacer()
-              Image(systemName: "checkmark")
-                .foregroundColor(Color("TwGreen200"))
-              Spacer()
+      Button(action: {
+        self.trelloApi.markAsDone(card: self.card) { _ in }
+      }) {
+        HStack(alignment: .center, spacing: 2) {
+          Image(systemName: "clock")
+            .background(dueColor.clipShape(Circle()))
+            .overlay {
+              if isHovering {
+                Button(action: {
+                  self.trelloApi.markAsDone(card: self.card) { _ in }
+                }) {
+                  Image(systemName: "checkmark")
+                    .padding(3)
+                    .font(.system(size: 10))
+                    .foregroundColor(Color("TwGreen200"))
+                    .background(Color("TwGreen800"))
+                    .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+              }
             }
-            .padding(.vertical, 2)
-            .background(Color("TwGreen800"))
-            .cornerRadius(4)
+          if Calendar.current.isDateInToday(due) {
+            Text(formattedDueTime)
+          } else {
+            Text(formattedDueDate)
           }
-          .buttonStyle(.plain)
         }
+        .onHover { hover in
+          isHovering = hover
+        }
+        .padding(2)
+        .background(isHovering ? Color("TwGreen800") : Color.clear)
       }
-      .onHover { hover in
-        isHovering = hover
-      }
+      .buttonStyle(.plain)
     } else {
       EmptyView()
     }
