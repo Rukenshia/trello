@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Preview: Identifiable, Codable {
+struct Preview: Identifiable, Hashable, Codable {
   var id: String
   var scaled: Bool
   var url: String
@@ -16,7 +16,7 @@ struct Preview: Identifiable, Codable {
   var width: Int
 }
 
-struct Attachment: Identifiable, Codable {
+struct Attachment: Identifiable, Hashable, Codable {
   var id: String
   var bytes: Int
   var date: String

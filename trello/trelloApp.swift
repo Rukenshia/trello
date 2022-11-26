@@ -20,7 +20,6 @@ struct trelloApp: App {
             if preferences.trelloKey != nil && preferences.trelloToken != nil {
                 ContentView()
                     .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
-                    .preferredColorScheme(.light)
             } else {
                 OnboardingView(preferences: $preferences)
             }
@@ -30,5 +29,10 @@ struct trelloApp: App {
                 CheckForUpdatesView(updater: updaterController.updater)
             }
         }
+      WindowGroup("Attachment", for: Attachment.self) { attachment in
+        AttachmentDetailView(attachment: Binding(attachment)!, onDelete: {})
+          .navigationTitle("Attachment - " + attachment.wrappedValue!.name)
+          .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
+      }
     }
 }

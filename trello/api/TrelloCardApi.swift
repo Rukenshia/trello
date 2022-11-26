@@ -120,7 +120,7 @@ extension TrelloApi {
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
       if let listId = listId {
         // find old card
-        if var card = self.board.cards.first(where: { card in card.id == cardId }) {
+        if let card = self.board.cards.first(where: { card in card.id == cardId }) {
           // Remove from old list and add to new locally
           if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
             if let index = self.board.lists[oldList].cards.firstIndex(of: card) {

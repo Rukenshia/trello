@@ -86,6 +86,8 @@
 		3DECF5982913AAF8007A796C /* TrelloChecklistApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DECF5972913AAF8007A796C /* TrelloChecklistApi.swift */; };
 		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
 		3DF2C2DF291120AC00ABF690 /* CardDetailsDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */; };
+		3DFDB89029327D89005BE925 /* AttachmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFDB88F29327D89005BE925 /* AttachmentDetailView.swift */; };
+		3DFDB89229327DD0005BE925 /* AttachmentDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFDB89129327DD0005BE925 /* AttachmentDetailImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +186,8 @@
 		3DECF5972913AAF8007A796C /* TrelloChecklistApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloChecklistApi.swift; sourceTree = "<group>"; };
 		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
 		3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsDescriptionView.swift; sourceTree = "<group>"; };
+		3DFDB88F29327D89005BE925 /* AttachmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDetailView.swift; sourceTree = "<group>"; };
+		3DFDB89129327DD0005BE925 /* AttachmentDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDetailImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,6 +287,7 @@
 		3D1483C828DEF6730021C6FC /* views */ = {
 			isa = PBXGroup;
 			children = (
+				3DFDB88E29327D74005BE925 /* attachment */,
 				3D42EB7D29228A8F00406DD7 /* toolbar */,
 				3D7F66372920398100BF9D52 /* members */,
 				3D14839F28DEF4870021C6FC /* ContentView.swift */,
@@ -376,8 +381,6 @@
 				3DEB767B291EB7290050A715 /* CommentView.swift */,
 				3D914F37291EC1E300BF7279 /* AddCommentView.swift */,
 				3D7A54BB291EFE60004A8B1F /* CardAttachmentsView.swift */,
-				3D7A54BF291F00F6004A8B1F /* AttachmentImageView.swift */,
-				3D7A54C1291F0305004A8B1F /* AttachmentView.swift */,
 				3DC1CFAF292018DC0089F05B /* CardCoverView.swift */,
 				3D7F663A29203AB000BF9D52 /* CardMembersView.swift */,
 				3D28FB5C2920EB6300B1348E /* CardDetailsMembersView.swift */,
@@ -451,6 +454,17 @@
 				3DCF96BF2920249D00305593 /* TrelloOrganizationApi.swift */,
 			);
 			path = api;
+			sourceTree = "<group>";
+		};
+		3DFDB88E29327D74005BE925 /* attachment */ = {
+			isa = PBXGroup;
+			children = (
+				3D7A54BF291F00F6004A8B1F /* AttachmentImageView.swift */,
+				3D7A54C1291F0305004A8B1F /* AttachmentView.swift */,
+				3DFDB88F29327D89005BE925 /* AttachmentDetailView.swift */,
+				3DFDB89129327DD0005BE925 /* AttachmentDetailImageView.swift */,
+			);
+			path = attachment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -610,6 +624,7 @@
 				3D7A54BE291EFE80004A8B1F /* Attachment.swift in Sources */,
 				3DD5043D291FC480004163EB /* ManageBoardLabelsView.swift in Sources */,
 				3D15B19B28F3F6D9007B95A0 /* SidebarView.swift in Sources */,
+				3DFDB89029327D89005BE925 /* AttachmentDetailView.swift in Sources */,
 				3D7A54C0291F00F6004A8B1F /* AttachmentImageView.swift in Sources */,
 				3D9DFDE029143ECF00DD0FAD /* TrelloCardApi.swift in Sources */,
 				3D1483CD28DEF7A20021C6FC /* List.swift in Sources */,
@@ -665,6 +680,7 @@
 				3DAC601E2906E57C009255CE /* CardDropDelegate.swift in Sources */,
 				3DCD03512920F63300564983 /* ContextMenuManageMembersView.swift in Sources */,
 				3DCF96BC2920221B00305593 /* TrelloMemberApi.swift in Sources */,
+				3DFDB89229327DD0005BE925 /* AttachmentDetailImageView.swift in Sources */,
 				3D9DFDDE29143EA600DD0FAD /* TrelloBoardApi.swift in Sources */,
 				3D7F6634292036A500BF9D52 /* MembersView.swift in Sources */,
 				3D7D03A3290D41AD00C767C2 /* CardDueView.swift in Sources */,
@@ -827,7 +843,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -857,7 +873,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
 				ENABLE_PREVIEWS = YES;
@@ -884,7 +900,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -902,7 +918,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
 				MARKETING_VERSION = 1.0;
@@ -919,7 +935,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
@@ -935,7 +951,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 83;
+				CURRENT_PROJECT_VERSION = 85;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rukenshia.trelloUITests;
