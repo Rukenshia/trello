@@ -36,7 +36,7 @@ struct TrelloListView: View {
     //       the number of cards is too high, I'd like to limit it at some point. When minHeight
     //       is not set, the list has a height of 0 and nothing works
     var listHeight: CGFloat {
-        min((NSApp.keyWindow?.contentView?.bounds.height ?? .infinity) - 160, self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 120)
+      min((NSApp.windows.first?.contentView?.bounds.height ?? .infinity) - 160, self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 120)
     }
     
     var body: some View {

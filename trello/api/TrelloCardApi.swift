@@ -142,10 +142,11 @@ extension TrelloApi {
           }
         }
       } else {
-        let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-        
-        self.board.lists[listIdx].cards[cardIdx] = card
+        if let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList }) {
+          let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+          
+          self.board.lists[listIdx].cards[cardIdx] = card
+        }
       }
       
       completion(response.value!)

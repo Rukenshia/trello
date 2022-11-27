@@ -20,6 +20,7 @@ enum PopoverState {
 }
 
 struct CardView: View {
+  @Environment(\.openWindow) var openWindow
   @EnvironmentObject var trelloApi: TrelloApi;
   
   @Binding var card: Card;
@@ -158,6 +159,9 @@ struct CardView: View {
         }
       }
     })
+//    .onTapGesture(count: 2) {
+//      openWindow(value: card)
+//    }
     .onTapGesture {
       showDetails = true
     }

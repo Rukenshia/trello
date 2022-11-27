@@ -230,7 +230,7 @@ struct CardDetailsView: View {
     }
     .padding(24)
     .padding(.vertical, self.checklists.count > 0 ? 16 : 0)
-    .frame(idealWidth: 800, idealHeight: (NSApp.keyWindow?.contentView?.bounds.height ?? 500) - 120)
+    .frame(idealWidth: 800, idealHeight: (NSApp.windows.first?.contentView?.bounds.height ?? 500) - 120)
   }
 }
 
