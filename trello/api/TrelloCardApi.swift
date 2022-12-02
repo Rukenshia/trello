@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import AppKit
 
 extension TrelloApi {
   func createCard(listId: String, sourceCardId: String, completion: @escaping (Card) -> Void) {
@@ -111,7 +112,7 @@ extension TrelloApi {
       parameters["name"] = name
     }
     if let pos = pos {
-      parameters["pos"] = pos
+      parameters["pos"] = "\(pos)"
     }
     if let memberIds = memberIds {
       parameters["idMembers"] = memberIds
@@ -120,7 +121,7 @@ extension TrelloApi {
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
       if let listId = listId {
         // find old card
-        if let card = self.board.cards.first(where: { card in card.id == cardId }) {
+        if var card = self.board.cards.first(where: { card in card.id == cardId }) {
           // Remove from old list and add to new locally
           if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
             if let index = self.board.lists[oldList].cards.firstIndex(of: card) {
@@ -128,13 +129,15 @@ extension TrelloApi {
             }
           }
           
-          // Update the list on the card so that you can move the card again
-          if let index = self.board.cards.firstIndex(where: { card in card.id == cardId }) {
-            self.board.cards[index].idList = listId
-          }
+          card.idList = listId
           
           if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
             self.board.lists[newList].cards.append(card)
+          }
+          
+          // Update the list on the card so that you can move the card again
+          if let index = self.board.cards.firstIndex(where: { card in card.id == cardId }) {
+            self.board.cards[index].idList = listId
           }
         } else {
           if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
@@ -232,6 +235,25 @@ extension TrelloApi {
       DispatchQueue.main.async {
         completion(response.data!)
       }
+    }
+  }
+  
+  func downloadAttachment(url: String, to: @escaping DownloadRequest.Destination, completion: @escaping () -> Void) {
+    self.session.download(
+      url,
+      method: .get,
+      headers: [
+        "Authorization": "OAuth oauth_consumer_key=\"\(self.key)\", oauth_token=\"\(self.token)\""
+      ],
+      to: to
+    ).response { response in
+      if response.error == nil, let path = response.fileURL {
+        NSWorkspace.shared.activateFileViewerSelecting([path])
+      }
+    }
+    
+    DispatchQueue.main.async {
+      completion()
     }
   }
   

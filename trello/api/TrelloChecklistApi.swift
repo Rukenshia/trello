@@ -46,7 +46,7 @@ extension TrelloApi {
     }
     
     func deleteChecklist(checklistId: String, completion: @escaping () -> Void) {
-        self.request("https://api.trello.com/1/checklists/\(checklistId)", method: .delete, completionHandler: { response in
+        self.request("/checklists/\(checklistId)", method: .delete, completionHandler: { response in
             completion()
         })
     }

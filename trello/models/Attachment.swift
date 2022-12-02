@@ -18,7 +18,7 @@ struct Preview: Identifiable, Hashable, Codable {
 
 struct Attachment: Identifiable, Hashable, Codable {
   var id: String
-  var bytes: Int
+  var bytes: Int?
   var date: String
   var edgeColor: String?
   var idMember: String

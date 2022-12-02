@@ -77,7 +77,7 @@ struct CardView: View {
         }
       }
       HStack {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
           
           HStack {
             if displayedLabels.count > 0 {
@@ -86,7 +86,7 @@ struct CardView: View {
               }
               if card.labels.count > 2 {
                 Text("+\(card.labels.count - 2)")
-                  .font(.system(size: 10))
+                  .font(.system(size: 11))
               }
             }
             Spacer()
@@ -94,7 +94,7 @@ struct CardView: View {
           }
           
           Text(card.name)
-            .font(.system(size: 13.25, weight: .medium))
+            .font(.system(size: 13.25))
             .multilineTextAlignment(.leading)
             .lineLimit(2)
           
@@ -122,7 +122,7 @@ struct CardView: View {
               .background(Color("CardBackground"))
               .cornerRadius(4)
             }
-            if card.badges.attachments > 0 {
+            if card.badges.attachments > 1 || card.badges.attachments == 1 && card.cover?.idAttachment == nil {
               HStack(spacing: 1) {
                 Image(systemName: "paperclip")
                 Text("\(card.badges.attachments)")
@@ -137,9 +137,9 @@ struct CardView: View {
               Text(card.desc)
                 .lineLimit(1)
                 .foregroundColor(.secondary)
-                .font(.system(size: 10))
             }
           }
+          .font(.system(size: 10))
           
           CardMembersView(members: trelloApi.board.members.filter({ m in card.idMembers.contains(m.id) }))
         }.padding(8)

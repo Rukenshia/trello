@@ -6,23 +6,61 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct AttachmentView: View {
   @Environment(\.openWindow) var openWindow
+  @Environment(\.openURL) var openURL
   
+  @EnvironmentObject var trelloApi: TrelloApi
   @Binding var attachment: Attachment
   let onDelete: () -> Void
   
+  var isUrl: Bool {
+    attachment.previews.count == 0 && attachment.mimeType == "" && !attachment.isUpload
+  }
+  
   var body: some View {
     Button(action: {
-      openWindow(value: attachment)
+      if attachment.isUpload && ((attachment.mimeType?.hasPrefix("application/")) != nil) {
+        
+        let destination: DownloadRequest.Destination = { _, _ in
+          let documentsURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
+          var fileURL = documentsURL
+          
+          if FileManager.default.fileExists(atPath: fileURL.appendingPathComponent(attachment.name).path) {
+            fileURL = fileURL.appendingPathComponent("\(Int.random(in: 1..<1000)).\(attachment.name)")
+          } else {
+            fileURL = fileURL.appendingPathComponent(attachment.name)
+          }
+          
+          return (fileURL, [.createIntermediateDirectories])
+        }
+        
+        trelloApi.downloadAttachment(url: attachment.url, to: destination) {}
+        return
+      }
+      
+      if isUrl {
+        openURL(URL(string: attachment.url)!)
+      } else {
+        openWindow(value: attachment)
+      }
     }) {
       HStack {
         VStack {
           if let mimeType = attachment.mimeType {
             switch(mimeType) {
-            case "image/png", "image/jpeg":
+            case "image/png", "image/jpeg", "image/gif":
               AttachmentImageView(attachment: $attachment)
+                .frame(width: 64, height: 64)
+            case "application/zip":
+              Image(systemName: "paperclip")
+                .font(.system(size: 32))
+                .frame(width: 64, height: 64)
+            case "application/pdf":
+              Image(systemName: "doc.text")
+                .font(.system(size: 32))
                 .frame(width: 64, height: 64)
             default:
               EmptyView()
@@ -35,6 +73,12 @@ struct AttachmentView: View {
               EmptyView()
             }
           }
+          
+          if isUrl {
+            Image(systemName: "globe")
+              .font(.system(size: 32))
+              .frame(width: 64, height: 64)
+          }
         }
         .background(Color("ButtonBackground").brightness(-0.1))
         .cornerRadius(4)
@@ -46,6 +90,7 @@ struct AttachmentView: View {
           HStack {
             Text(attachment.name)
               .font(.title2)
+              .lineLimit(1)
             
             Spacer()
             

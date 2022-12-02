@@ -27,7 +27,7 @@ struct BoardTableLabelsView: View {
 }
 
 // Needed for the table "value" so that we can sort
-extension Card {
+private extension Card {
   var dueString: String {
     due ?? "9999" // will break in the year 9999 :(
   }

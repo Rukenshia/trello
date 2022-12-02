@@ -29,7 +29,7 @@ struct LabelView: View {
   
   var body: some View {
     HStack(spacing: 2) {
-      Circle().fill(self.labelFgColor).frame(width: size / 2, height: size / 2)
+      Circle().fill(self.labelFgColor).frame(width: size / 1.5, height: size / 1.5)
       Text(label.name)
         .font(.system(size: size))
         .foregroundColor(Color("LabelText"))

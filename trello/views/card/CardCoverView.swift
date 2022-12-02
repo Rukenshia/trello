@@ -13,6 +13,7 @@ struct CardCoverView: View {
   var cardId: String
   var cover: CardCover
   
+  @State private var attachment: Attachment? = nil
   @State private var image: Image? = nil
   
     var body: some View {
@@ -29,9 +30,13 @@ struct CardCoverView: View {
         
         if let image = self.image {
           HStack {
-            image
-              .resizable()
-              .scaledToFill()
+            if attachment?.mimeType == "image/gif" {
+                image
+            } else {
+              image
+                .resizable()
+                .scaledToFill()
+            }
           }
           .frame(maxWidth: .infinity)
         }
@@ -39,8 +44,10 @@ struct CardCoverView: View {
       .task {
         if let idAttachment = cover.idAttachment {
           trelloApi.getCardAttachment(cardId: cardId, attachmentId: idAttachment) { attachment in
+            self.attachment = attachment
+            
             trelloApi.downloadAttachment(url: attachment.previews.last!.url, completion: { data in
-              guard let nsImage = NSImage(data: data) else { return }
+              guard var nsImage = NSImage(data: data) else { return }
               self.image = Image(nsImage: nsImage)
             })
           }

@@ -20,6 +20,9 @@ struct trelloApp: App {
       if preferences.trelloKey != nil && preferences.trelloToken != nil {
         ContentView()
           .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
+          .onAppear {
+//            DevEnv()
+          }
       } else {
         OnboardingView(preferences: $preferences)
       }
