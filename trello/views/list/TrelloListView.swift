@@ -18,9 +18,27 @@ extension NSTableView {
   }
 }
 
+struct HeightCounterView: View {
+  @Binding var listHeight: CGFloat
+  @State private var height: CGFloat = 0
+  
+  var body: some View {
+    GeometryReader { proxy in
+      Color.clear
+        .onAppear {
+          height = proxy.size.height
+          listHeight += height + 16
+        }.onDisappear {
+          listHeight -= height - 16
+        }
+    }
+  }
+}
+
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi;
   @Binding var list: List;
+  let windowHeight: CGFloat
   
   @State private var selection: Card? = nil;
   @State private var addCardColor: Color = Color(.clear);
@@ -28,15 +46,10 @@ struct TrelloListView: View {
   
   @State private var showMenu: Bool = false
   
+  @State private var height: CGFloat = 0
+  
   var background: Color {
     return Color("ListBackground").opacity(0.95)
-  }
-  
-  // TODO: I couldn't figure out how to do this properly. I want to show all items, but when
-  //       the number of cards is too high, I'd like to limit it at some point. When minHeight
-  //       is not set, the list has a height of 0 and nothing works
-  var listHeight: CGFloat {
-    min((NSApp.windows.first?.contentView?.bounds.height ?? .infinity) - 200, self.list.cards.count > 20 ? CGFloat(self.list.cards.count) * 40: CGFloat(self.list.cards.count) * 120)
   }
   
   var body: some View {
@@ -61,6 +74,9 @@ struct TrelloListView: View {
             .onDrag {
               NSItemProvider(object: card.wrappedValue.id as NSString)
             }
+            .overlay(
+              HeightCounterView(listHeight: $height)
+            )
             .padding(.bottom, 4)
         }
         .onMove { source, dest in
@@ -80,7 +96,6 @@ struct TrelloListView: View {
         .deleteDisabled(true)
       }
       .listStyle(.plain)
-      .frame(minHeight: self.listHeight)
       Button(action: {
         self.showAddCard = true
       }) {
@@ -110,7 +125,7 @@ struct TrelloListView: View {
     }
     .background(background)
     .cornerRadius(4)
-    .frame(minWidth: self.list.cards.count > 0 ? 290 : 150, minHeight: 180)
+    .frame(minWidth: self.list.cards.count > 0 ? 290 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))
   }
   
   private func moveCard(cardId: String, from: Int, to: Int) {
@@ -171,7 +186,7 @@ struct TrelloListView_Previews: PreviewProvider {
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-    ])))
+    ])), windowHeight: 200)
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
     .frame(height: 1200)
   }

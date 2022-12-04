@@ -46,23 +46,25 @@ struct BoardView: View {
   var body: some View {
     switch viewType {
     case .lists:
-      ScrollView([.horizontal]) {
-        VStack {
-          HStack(alignment: .top) {
-            ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
-              TrelloListView(list: list)
-                .fixedSize(horizontal: false, vertical: true)
+      GeometryReader { reader in
+        ScrollView([.horizontal]) {
+          VStack {
+            HStack(alignment: .top) {
+              ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
+                TrelloListView(list: list, windowHeight: reader.size.height)
+                  .fixedSize(horizontal: false, vertical: true)
+              }
             }
           }
+          .frame(alignment: .top)
+          .padding()
+          Spacer()
         }
-        .frame(alignment: .top)
-        .padding()
-        Spacer()
+        .background(
+          self.backgroundImage.allowsHitTesting(false)
+        )
+        .clipped()
       }
-      .background(
-        self.backgroundImage.allowsHitTesting(false)
-      )
-      .clipped()
     case .table:
       BoardTableView(board: $board)
         .background(
