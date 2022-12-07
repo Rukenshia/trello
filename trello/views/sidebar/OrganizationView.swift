@@ -70,6 +70,6 @@ struct OrganizationView: View {
 
 struct OrganizationView_Previews: PreviewProvider {
   static var previews: some View {
-    OrganizationView(organization: .constant(Organization(id: "", name: "", displayName: "", idBoards: [], logoUrl: "")))
+    OrganizationView(organization: .constant(Organization(id: "", name: "", displayName: "", logoUrl: "")))
   }
 }

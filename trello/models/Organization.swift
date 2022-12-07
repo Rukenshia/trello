@@ -11,7 +11,6 @@ struct Organization: Identifiable, Codable {
   var id: String
   var name: String
   var displayName: String
-  var idBoards: [String]
   var logoUrl: String?
   
   var boards: [BasicBoard] = []
@@ -20,7 +19,6 @@ struct Organization: Identifiable, Codable {
     case id
     case name
     case displayName
-    case idBoards
     case logoUrl
   }
 }

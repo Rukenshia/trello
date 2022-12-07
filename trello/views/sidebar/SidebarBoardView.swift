@@ -68,6 +68,6 @@ struct SidebarBoardView: View {
 
 struct SidebarBoardView_Previews: PreviewProvider {
     static var previews: some View {
-        SidebarBoardView(board: .constant(BasicBoard(id: "abc", name: "one two three", prefs: BoardPrefs())), currentBoard: .constant(Board(id: "no-board", name: "no board", prefs: BoardPrefs())))
+      SidebarBoardView(board: .constant(BasicBoard(id: "abc", name: "one two three", prefs: BoardPrefs())), currentBoard: .constant(Board(id: "no-board", idOrganization: "foo", name: "no board", prefs: BoardPrefs())))
     }
 }

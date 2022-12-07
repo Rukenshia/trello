@@ -11,6 +11,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #1 in HeightCounterView.body.getter:TrelloListView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "proxy.height">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in TrelloListView.body.getter:TrelloListView.swift">
       </ContextState>
       <ContextState

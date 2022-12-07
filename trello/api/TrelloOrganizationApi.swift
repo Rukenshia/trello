@@ -14,4 +14,10 @@ extension TrelloApi {
       completion(boards)
     }
   }
+  
+  func getOrganization(id: String, completion: @escaping (Organization) -> Void) {
+    self.request("/organizations/\(id)", result: Organization.self) { response, organization in
+      completion(organization)
+    }
+  }
 }

@@ -10,47 +10,28 @@ import SwiftUI
 struct SidebarView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   
-  @State var hovering: Bool = false
-  @State var width: CGFloat = 32
-  
-  @State private var organizations: [Organization] = []
+  @State var organizations: [Organization] = []
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       
-      if hovering {
-        Text("Boards")
-          .font(.system(size: 18))
-          .multilineTextAlignment(.leading)
-          .padding(.leading, 4)
-        Divider()
-          .frame(width: 240)
-        
-        ForEach($organizations) { organization in
-          OrganizationView(organization: organization)
-        }
-        Spacer()
-      } else {
-        Image(systemName: "books.vertical.fill")
-          .font(.system(size: 18))
-          .foregroundColor(Color("SidebarIconColor"))
-          .multilineTextAlignment(.leading)
-          .padding(.leading, 4)
-        Spacer()
-      }
-    }
-    .onHover { hover in
-      self.hovering = hover
+      Text("Boards")
+        .font(.system(size: 18))
+        .multilineTextAlignment(.leading)
+        .padding(.leading, 4)
+      Divider()
       
-      withAnimation(.easeInOut(duration: 0.1)) {
-        self.width = self.hovering ? 240 : 32
+      ForEach($organizations) { organization in
+        OrganizationView(organization: organization)
       }
+      Spacer()
     }
     .frame(alignment: .top)
-    .frame(minWidth: self.width, maxWidth: self.width)
     .padding(8)
     .task {
       trelloApi.getOrganizations() { organizations in
+        self.organizations = []
+        
         for organization in organizations {
           var organization = organization
           trelloApi.getOrganizationBoards(id: organization.id) { boards in
@@ -62,11 +43,11 @@ struct SidebarView: View {
       }
     }
   }
-}
-
-struct SidebarView_Previews: PreviewProvider {
-  static var previews: some View {
-    SidebarView()
-      .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+  
+  struct SidebarView_Previews: PreviewProvider {
+    static var previews: some View {
+      SidebarView()
+        .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+    }
   }
 }

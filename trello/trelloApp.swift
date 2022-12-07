@@ -31,6 +31,7 @@ struct trelloApp: App {
       CommandGroup(after: .appInfo) {
         CheckForUpdatesView(updater: updaterController.updater)
       }
+      SidebarCommands()
     }
     WindowGroup("Attachment", for: Attachment.self) { attachment in
       AttachmentDetailView(attachment: Binding(attachment)!, onDelete: {})

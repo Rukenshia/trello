@@ -27,11 +27,25 @@ struct ContentView: View {
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
-      SidebarView()
+      NavigationView {
+        SidebarView()
+          .listStyle(SidebarListStyle())
+        
+        HStack {
+          BoardView(board: $trelloApi.board, viewType: $viewType)
+          
+          RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$trelloApi.board).frame(maxWidth: 48)
+        }
+      }.toolbar {
+        ToolbarItem(placement: .navigation) {
+          Button(action: {
+            NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+          }, label: {
+            Image(systemName: "sidebar.leading")
+          })
+        }
+      }
       
-      BoardView(board: $trelloApi.board, viewType: $viewType)
-      
-      RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$trelloApi.board).frame(maxWidth: 48)
     }.onAppear {
       self.cancellable = trelloApi.$board.sink { newBoard in
         if newBoard.id == "" {

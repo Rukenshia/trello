@@ -110,7 +110,7 @@ struct RightSidebarView: View {
 
 struct RightSidebarView_Previews: PreviewProvider {
   static var previews: some View {
-    RightSidebarView(doneList: nil, board: .constant(Board(id: "", name: "", prefs: BoardPrefs())))
+    RightSidebarView(doneList: nil, board: .constant(Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs())))
       .environmentObject(TrelloApi(key: "", token: ""))
   }
 }
