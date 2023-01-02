@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppKit
+import CachedAsyncImage
 
 struct AttachmentImageView: View {
   @EnvironmentObject var trelloApi: TrelloApi
@@ -31,7 +32,7 @@ struct AttachmentImageView: View {
             .scaledToFit())
         }
       } else {
-        self.image = AnyView(AsyncImage(url: URL(string: attachment.url)) { phase in
+        self.image = AnyView(CachedAsyncImage(url: URL(string: attachment.url)) { phase in
           switch phase {
           case .empty:
             ProgressView()

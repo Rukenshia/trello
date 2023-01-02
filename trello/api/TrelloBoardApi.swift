@@ -56,4 +56,10 @@ extension TrelloApi {
       completion(cards)
     }
   }
+  
+  func getBoardUpdateCardActions(boardId: String, limit: Int = 500, completion: @escaping ([ActionUpdateCard]) -> Void) {
+    self.request("/boards/\(boardId)/actions", parameters: ["limit": limit, "filter": "updateCard"], result: [ActionUpdateCard].self) { response, actions in
+      completion(actions)
+    }
+  }
 }

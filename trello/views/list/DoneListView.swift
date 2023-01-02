@@ -10,9 +10,12 @@ import SwiftUI
 
 struct DoneListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
-  
+
+  @Binding var boardActions: [ActionUpdateCard]
   @Binding var list: List;
   @Binding var archivedCards: [Card]
+  
+  @State private var actionForCard: Dictionary<String, ActionUpdateCard> = Dictionary()
   
   var allCards: [Card] {
     list.cards + archivedCards
@@ -21,8 +24,30 @@ struct DoneListView: View {
   let bucketKeys: [String] = ["today", "yesterday", "this week", "this month", "older"]
   
   var sortedCards: [Card] {
-    self.allCards.sorted{ (a, b) in
-      a.dateLastActivity > b.dateLastActivity
+    self.allCards.sorted{ (a: Card, b: Card) in
+      var dateA = ""
+      var dateB = ""
+      
+      if let actionA = actionForCard[a.id] {
+        dateA = actionA.date
+      }
+      if let actionB = actionForCard[b.id] {
+        dateB = actionB.date
+      }
+      
+      if dateA.isEmpty && dateB.isEmpty {
+        return a.dateLastActivity > b.dateLastActivity
+      }
+      
+      if !dateA.isEmpty && dateB.isEmpty {
+        return true
+      }
+      
+      if dateA.isEmpty && !dateB.isEmpty {
+        return false
+      }
+      
+      return dateA > dateB
     }
   }
   
@@ -79,11 +104,36 @@ struct DoneListView: View {
         }
       }
     }
+    .onChange(of: boardActions) { actions in
+      var newDict = Dictionary<String, ActionUpdateCard>()
+      
+      // Take the first action as it should be the newest one
+      for action in actions {
+        if newDict[action.data.card.id] != nil {
+          continue
+        }
+        
+        if action.data.listBefore?.id == nil {
+          // Reject changes that don't move the card
+          continue
+        }
+        
+        if action.data.listAfter?.id != list.id {
+          // Reject changes that don't move the card to the done list
+          continue
+        }
+        
+        newDict[action.data.card.id] = action
+      }
+      
+      actionForCard = newDict
+      
+    }
   }
 }
 
 struct DoneListView_Previews: PreviewProvider {
   static var previews: some View {
-    DoneListView(list: .constant(List(id: "list", name: "list", cards: [])), archivedCards: .constant([]))
+    DoneListView(boardActions: .constant([]), list: .constant(List(id: "list", name: "list", cards: [])), archivedCards: .constant([]))
   }
 }

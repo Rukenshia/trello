@@ -8,5 +8,7 @@
 	<string>https://in.fkn.space/apps/trello/appcast.xml</string>
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
+	<key>ATSApplicationFontsPath</key>
+	<string>./</string>
 </dict>
 </plist>

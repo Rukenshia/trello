@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import CachedAsyncImage
 
 struct OrganizationView: View {
   @EnvironmentObject var trelloApi: TrelloApi
@@ -50,7 +51,7 @@ struct OrganizationView: View {
     }
     .task {
       if let logoUrl = organization.logoUrl {
-        self.image = AnyView(AsyncImage(url: URL(string: "\(logoUrl)/50.png")) { phase in
+        self.image = AnyView(CachedAsyncImage(url: URL(string: "\(logoUrl)/50.png")) { phase in
           switch phase {
           case .empty:
             defaultLogo

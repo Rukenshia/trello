@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MarkdownUI
+import CachedAsyncImage
 
 struct CommentView: View {
   @Binding var comment: ActionCommentCard
@@ -18,7 +19,7 @@ struct CommentView: View {
   @State private var newText: String = ""
   
   var avatar: AnyView {
-    return AnyView(AsyncImage(url: URL(string: "\(self.comment.memberCreator.avatarUrl)/50.png")) { phase in
+    return AnyView(CachedAsyncImage(url: URL(string: "\(self.comment.memberCreator.avatarUrl)/50.png")) { phase in
       switch phase {
       case .empty:
         Circle()

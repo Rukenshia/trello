@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct MemberAvatarView: View {
   var url: String
   var size: Int = 50
   
   var body: some View {
-    AsyncImage(url: URL(string: "\(url)/\(size).png")) { phase in
+    CachedAsyncImage(url: URL(string: "\(url)/\(size).png")) { phase in
       switch phase {
       case .empty:
         ProgressView()

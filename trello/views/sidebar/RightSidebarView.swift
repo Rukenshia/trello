@@ -19,6 +19,7 @@ struct RightSidebarView: View {
   @State private var showMembers: Bool = false
   
   @State private var archivedCards: [Card] = []
+  @State private var boardActions: [ActionUpdateCard] = []
   
   init(doneList: Binding<List>? = nil, board: Binding<Board>) {
     self.doneList = doneList
@@ -59,8 +60,13 @@ struct RightSidebarView: View {
           }) { }
             .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
             .popover(isPresented: self.$showDoneList, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
-              DoneListView(list: dl, archivedCards: $archivedCards)
+              DoneListView(boardActions: $boardActions, list: dl, archivedCards: $archivedCards)
                 .frame(minWidth: 300, maxWidth: 300)
+            }
+            .task {
+              trelloApi.getBoardUpdateCardActions(boardId: board.id) { actions in
+                boardActions = actions
+              }
             }
         }
         

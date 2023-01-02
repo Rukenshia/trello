@@ -15,10 +15,12 @@ struct SidebarView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       
-      Text("Boards")
-        .font(.system(size: 18))
-        .multilineTextAlignment(.leading)
-        .padding(.leading, 4)
+      HStack {
+        Text("Boards")
+          .font(.system(size: 18))
+          .multilineTextAlignment(.leading)
+          .padding(.leading, 4)
+      }
       Divider()
       
       ForEach($organizations) { organization in

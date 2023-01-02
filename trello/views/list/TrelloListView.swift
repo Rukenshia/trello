@@ -36,13 +36,13 @@ struct HeightCounterView: View {
 }
 
 struct TrelloListView: View {
-  @EnvironmentObject var trelloApi: TrelloApi;
-  @Binding var list: List;
+  @EnvironmentObject var trelloApi: TrelloApi
+  @Binding var list: List
   let windowHeight: CGFloat
   
-  @State private var selection: Card? = nil;
-  @State private var addCardColor: Color = Color(.clear);
-  @State private var showAddCard: Bool = false;
+  @State private var selection: Card? = nil
+  @State private var addCardColor: Color = Color(.clear)
+  @State private var showAddCard: Bool = false
   
   @State private var showMenu: Bool = false
   
@@ -94,6 +94,11 @@ struct TrelloListView: View {
         .onInsert(of: ["public.text"], perform: onInsert)
         .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
         .deleteDisabled(true)
+        
+        if showAddCard {
+          AddCardView(list: self.$list, showAddCard: self.$showAddCard)
+//            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
+        }
       }
       .listStyle(.plain)
       Button(action: {
@@ -118,11 +123,15 @@ struct TrelloListView: View {
       .background(self.addCardColor)
       .cornerRadius(4)
     }
+    .onChange(of: showAddCard) { nv in
+      if nv {
+        self.height += 40
+      } else {
+        self.height -= 40
+      }
+    }
     .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
     .padding(8)
-    .sheet(isPresented: $showAddCard) {
-      AddCardView(list: self.$list, showAddCard: self.$showAddCard)
-    }
     .background(background)
     .cornerRadius(4)
     .frame(minWidth: self.list.cards.count > 0 ? 290 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))

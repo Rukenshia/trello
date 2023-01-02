@@ -94,7 +94,6 @@ struct CardView: View {
           }
           
           Text(card.name)
-            .font(.system(size: 13.25))
             .multilineTextAlignment(.leading)
             .lineLimit(2)
           

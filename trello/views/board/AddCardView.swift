@@ -6,63 +6,82 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct AddCardView: View {
-    @EnvironmentObject var trelloApi: TrelloApi;
-    @Binding var list: List;
-    @Binding var showAddCard: Bool;
-    
-    @State private var name: String = "";
-    @State private var description: String = "";
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Text("Add card")
-                    .font(.title)
+  @EnvironmentObject var trelloApi: TrelloApi;
+  @Binding var list: List;
+  @Binding var showAddCard: Bool;
+  
+  @State private var name: String = "";
+  
+  enum FocusField: Hashable {
+    case name
+  }
+  
+  @FocusState private var focusedField: FocusField?
+  
+  var body: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack(alignment: .top, spacing: 0) {
+        TextEditor(text: $name)
+          .scrollIndicators(.never)
+          .padding(2)
+          .lineLimit(2)
+          .focused($focusedField, equals: .name)
+          .textFieldStyle(.plain)
+          .scrollContentBackground(.hidden)
+          .onSubmit {
+            self.trelloApi.createCard(list: self.list, name: self.name, description: "") { card in
+              print("card \(card.name) created")
+              
+              self.showAddCard = false
+            }
+          }
+          .onAppear {
+            focusedField = .name
+          }
+          .overlay {
+            if name.isEmpty {
+              VStack {
+                HStack {
+                  Text("Start typing and press return to add card")
+                    .padding(.leading, 5)
+                    .foregroundColor(Color(.secondaryLabelColor))
+                    .frame(alignment: .leading)
+                    .lineLimit(2)
+                    .scrollIndicators(.hidden)
+                  Spacer()
+                }
                 Spacer()
-                Button(action: {
-                    showAddCard = false;
-                }) {
-                    HStack {
-                        Image(systemName: "xmark.circle.fill")
-                            .imageScale(.large)
-                    }
-                }
-                .keyboardShortcut(.cancelAction)
-                .buttonStyle(PlainButtonStyle())
+              }
+              .allowsHitTesting(false)
             }
-            HStack {
-                Text("Card name:")
-                TextField(text: self.$name) {
-                    
-                }
+          }
+          .onChange(of: name) { newName in
+            if newName.hasSuffix("\n") {
+              var newName = newName
+              var _ = newName.popLast()
+              
+              self.trelloApi.createCard(list: self.list, name: newName, description: "") { card in
+                print("card \(card.name) created")
+                
+                self.showAddCard = false
+                self.name = ""
+              }
             }
-            HStack(alignment: .top) {
-                Text("Description:")
-                TextEditor(text: self.$description)
-            }
-            HStack(alignment: .top) {
-                Text("List:")
-                Text(self.list.name)
-            }
-            Button(action: {
-                self.trelloApi.createCard(list: self.list, name: self.name, description: self.description) { card in
-                    print("card \(card.name) created")
-                    
-                    self.showAddCard = false
-                }
-            }) {
-                Text("Create")
-            }
-        }
-        .padding(8)
-        .frame(minWidth: 400, minHeight: 400)
+          }
+      }
     }
+    .padding(6)
+    .background(Color("CardBackground"))
+    .cornerRadius(4)
+    .frame(height: 40)
+  }
 }
 
 struct AddCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddCardView(list: .constant(List(id: "id", name: "list name")), showAddCard: .constant(true))
-    }
+  static var previews: some View {
+    AddCardView(list: .constant(List(id: "id", name: "list name")), showAddCard: .constant(true))
+  }
 }
