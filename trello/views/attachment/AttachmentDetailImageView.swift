@@ -32,7 +32,7 @@ struct AttachmentDetailImageView: View {
             .scaledToFit())
         }
       } else {
-        self.image = AnyView(CachedAsyncImage(url: URL(string: attachment.url)) { phase in
+        self.image = AnyView(CachedAsyncImage(url: URL(string: attachment.url), urlCache: .imageCache) { phase in
           switch phase {
           case .empty:
             ProgressView()

@@ -77,7 +77,7 @@ struct CardView: View {
         }
       }
       HStack {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 0) {
           
           HStack {
             if displayedLabels.count > 0 {
@@ -245,7 +245,7 @@ struct CardView: View {
       }
     }
     .cornerRadius(4)
-    .shadow(color: .black.opacity(0.2), radius: 3, x: 4, y: 4)
+    .shadow(color: .black.opacity(0.1), radius: 0, x: 0, y: 1)
     .task {
       if let cover = card.cover {
         if cover.size == .full {

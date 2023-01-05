@@ -77,7 +77,6 @@ struct TrelloListView: View {
             .overlay(
               HeightCounterView(listHeight: $height)
             )
-            .padding(.bottom, 4)
         }
         .onMove { source, dest in
           if dest < 0 {

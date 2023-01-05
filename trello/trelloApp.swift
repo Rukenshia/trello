@@ -27,6 +27,7 @@ struct VisualEffectView: NSViewRepresentable {
 @main
 struct trelloApp: App {
   @State var preferences: Preferences = Preferences()
+  @State private var showCommandBar = false
   
   private let updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
   
@@ -37,32 +38,32 @@ struct trelloApp: App {
     
     WindowGroup {
       if preferences.trelloKey != nil && preferences.trelloToken != nil {
-        ContentView()
+        ContentView(showCommandBar: $showCommandBar)
           .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
           .onAppear {
 //            DevEnv()
           }
+//          .preferredColorScheme(.light)
       } else {
         OnboardingView(preferences: $preferences)
       }
-      
     }
     .commands {
       CommandGroup(after: .appInfo) {
         CheckForUpdatesView(updater: updaterController.updater)
       }
       SidebarCommands()
+      CommandGroup(after: .newItem) {
+        Button("Open Command Bar") {
+          showCommandBar.toggle()
+        }
+          .keyboardShortcut("p", modifiers: [.command])
+      }
     }
     WindowGroup("Attachment", for: Attachment.self) { attachment in
       AttachmentDetailView(attachment: Binding(attachment)!, onDelete: {})
         .navigationTitle("Attachment - " + attachment.wrappedValue!.name)
         .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
     }
-//    WindowGroup("Card", for: Card.self) { card in
-//      CardDetailsView(card: Binding(card)!, isVisible: .constant(true))
-//        .frame(minHeight: 600)
-//        .navigationTitle("Card - " + card.wrappedValue!.name)
-//        .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
-//    }
   }
 }

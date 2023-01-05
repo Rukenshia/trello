@@ -13,7 +13,7 @@ struct MemberAvatarView: View {
   var size: Int = 50
   
   var body: some View {
-    CachedAsyncImage(url: URL(string: "\(url)/\(size).png")) { phase in
+    CachedAsyncImage(url: URL(string: "\(url)/\(size).png"), urlCache: .imageCache) { phase in
       switch phase {
       case .empty:
         ProgressView()

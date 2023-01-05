@@ -24,7 +24,7 @@ struct BoardView: View {
     
     // TODO: the old background image stays around until the new one is loaded, maybe there's a way
     //       to force the placeholder in the meantime?
-    return AnyView(CachedAsyncImage(url: URL(string: url)) { phase in
+    return AnyView(CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { phase in
       switch phase {
       case .empty:
         ProgressView()

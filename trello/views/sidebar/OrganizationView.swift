@@ -51,7 +51,7 @@ struct OrganizationView: View {
     }
     .task {
       if let logoUrl = organization.logoUrl {
-        self.image = AnyView(CachedAsyncImage(url: URL(string: "\(logoUrl)/50.png")) { phase in
+        self.image = AnyView(CachedAsyncImage(url: URL(string: "\(logoUrl)/50.png"), urlCache: .imageCache) { phase in
           switch phase {
           case .empty:
             defaultLogo
