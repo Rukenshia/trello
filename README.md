@@ -32,6 +32,7 @@ for trello.
     - [x] Press "c" to change card color
     - [x] Press "l" to manage labels
     - [x] Press "e" to quick edit a card
+    - [x] Press "r" to remove/archive a card
   - [ ] Card details
     - [x] View description as rendered markdown
     - [x] Change due date
