@@ -93,7 +93,7 @@ extension TrelloApi {
     }
   }
   
-  func updateCard(cardId: String, listId: String? = nil, memberIds: [String]? = nil, due: Date? = nil, dueComplete: Bool? = nil, desc: String? = nil, name: String? = nil, pos: Float? = nil, completion: @escaping (Card) -> Void) {
+  func updateCard(cardId: String, listId: String? = nil, memberIds: [String]? = nil, due: Date? = nil, dueComplete: Bool? = nil, desc: String? = nil, name: String? = nil, pos: Float? = nil, closed: Bool? = nil, completion: @escaping (Card) -> Void) {
     var parameters: Parameters = [:]
     
     if let listId = listId {
@@ -116,6 +116,9 @@ extension TrelloApi {
     }
     if let memberIds = memberIds {
       parameters["idMembers"] = memberIds
+    }
+    if let closed = closed {
+      parameters["closed"] = closed
     }
     
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
@@ -146,9 +149,10 @@ extension TrelloApi {
         }
       } else {
         if let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList }) {
-          let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-          
-          self.board.lists[listIdx].cards[cardIdx] = card
+          if let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id }) {
+            
+            self.board.lists[listIdx].cards[cardIdx] = card
+          }
         }
       }
       

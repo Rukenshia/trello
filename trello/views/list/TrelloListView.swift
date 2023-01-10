@@ -133,7 +133,7 @@ struct TrelloListView: View {
     .padding(8)
     .background(background)
     .cornerRadius(4)
-    .frame(minWidth: self.list.cards.count > 0 ? 290 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))
+    .frame(minWidth: self.list.cards.count > 0 ? 260 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))
   }
   
   private func moveCard(cardId: String, from: Int, to: Int) {
@@ -196,6 +196,6 @@ struct TrelloListView_Previews: PreviewProvider {
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
     ])), windowHeight: 200)
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
-    .frame(height: 1200)
+    .frame(width: 260, height: 1200)
   }
 }

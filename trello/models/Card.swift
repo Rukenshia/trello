@@ -61,7 +61,7 @@ struct CardCover: Codable, Hashable {
     case .some(.blue):
       return Color("TwBlue700")
     case .some(.black):
-      return Color("TwSlate600")
+      return Color("CardCoverBlack")
     case .some(.orange):
       return Color("TwAmber600")
     case .some(.purple):

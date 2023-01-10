@@ -89,16 +89,22 @@ struct CardView: View {
                   .font(.system(size: 11))
               }
             }
-            Spacer()
-            CardDueView(card: $card)
           }
           
-          Text(card.name)
-            .multilineTextAlignment(.leading)
-            .lineLimit(2)
+          HStack {
+            if card.closed {
+              Image(systemName: "archivebox")
+            }
+            Text(card.name)
+              .multilineTextAlignment(.leading)
+              .lineLimit(2)
+          }
           
           
           HStack {
+            CardDueView(card: $card)
+              .font(.system(size: 12))
+            
             if card.badges.checkItems > 0 {
               HStack(spacing: 1) {
                 Image(systemName: "checklist")
@@ -200,6 +206,10 @@ struct CardView: View {
         case "e":
           self.popoverState = .editCard
           self.showPopover = true
+        case "r":
+          trelloApi.updateCard(cardId: card.id, closed: true) { _ in
+            card.closed = true
+          }
         default:
           ()
         }
