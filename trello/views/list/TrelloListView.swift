@@ -35,6 +35,17 @@ struct HeightCounterView: View {
   }
 }
 
+enum PopoverState {
+  case none;
+  
+  case moveToList;
+  case manageLabels;
+  case dueDate;
+  case cardColor;
+  case editCard;
+  case manageMembers
+}
+
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @Binding var list: List
@@ -45,8 +56,14 @@ struct TrelloListView: View {
   @State private var showAddCard: Bool = false
   
   @State private var showMenu: Bool = false
+  @State private var showDetailsForCard: Card? = nil
+  @State private var popoverCard: Card? = nil
+  @State private var cardPopoverState: PopoverState = .none;
+  @State private var monitor: Any?;
   
   @State private var height: CGFloat = 0
+  
+  @State private var hoveredCard: Card? = nil
   
   var background: Color {
     return Color("ListBackground").opacity(0.95)
@@ -70,7 +87,26 @@ struct TrelloListView: View {
       Divider()
       SwiftUI.List {
         ForEach(self.$list.cards) { card in
-          CardView(card: card)
+          CardView(card: card,
+                   hovering: hoveredCard?.id == card.wrappedValue.id,
+                   showDetails: Binding(get: { showDetailsForCard?.id == card.wrappedValue.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }),
+                   popoverState: $cardPopoverState,
+                   showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }))
+            .onTapGesture {
+              showDetailsForCard = card.wrappedValue
+            }
+          
+            .onHover { isHovering in
+              self.hoveredCard = isHovering ? card.wrappedValue : nil
+              
+              withAnimation(.easeInOut(duration: 0.1)) {
+                if isHovering {
+                  NSCursor.pointingHand.push()
+                } else {
+                  NSCursor.pop()
+                }
+              }
+            }
             .onDrag {
               NSItemProvider(object: card.wrappedValue.id as NSString)
             }
@@ -96,7 +132,7 @@ struct TrelloListView: View {
         
         if showAddCard {
           AddCardView(list: self.$list, showAddCard: self.$showAddCard)
-//            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
+          //            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
         }
       }
       .listStyle(.plain)
@@ -134,6 +170,60 @@ struct TrelloListView: View {
     .background(background)
     .cornerRadius(4)
     .frame(minWidth: self.list.cards.count > 0 ? 260 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))
+    .onAppear {
+      monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
+        if showAddCard {
+          return nsevent
+        }
+        
+        if showDetailsForCard != nil {
+          return nsevent
+        }
+        
+        if hoveredCard == nil {
+          return nsevent
+        }
+        
+        if popoverCard != nil {
+          return nsevent
+        }
+        
+        switch (nsevent.characters) {
+        case "a":
+          self.cardPopoverState = .manageMembers
+          self.popoverCard = hoveredCard
+        case "m":
+          self.cardPopoverState = .moveToList
+          self.popoverCard = hoveredCard
+        case "l":
+          self.cardPopoverState = .manageLabels
+          self.popoverCard = hoveredCard
+        case "d":
+          self.cardPopoverState = .dueDate
+          self.popoverCard = hoveredCard
+        case "c":
+          self.cardPopoverState = .cardColor
+          self.popoverCard = hoveredCard
+        case "e":
+          self.cardPopoverState = .editCard
+          self.popoverCard = hoveredCard
+        case "r":
+          var card = hoveredCard!
+          trelloApi.updateCard(cardId: card.id, closed: true) { _ in
+            card.closed = true
+          }
+        default:
+          ()
+        }
+        
+        return nsevent
+      }
+    }
+    .onDisappear {
+      if let monitor = self.monitor {
+        NSEvent.removeMonitor(monitor)
+      }
+    }
   }
   
   private func moveCard(cardId: String, from: Int, to: Int) {
