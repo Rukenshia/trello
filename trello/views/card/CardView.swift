@@ -54,6 +54,20 @@ struct CardView: View {
     card.labels.filter { label in label.color != nil && !label.name.contains("color:") }
   }
   
+  private var cardNameForegroundColor: Color {
+    guard let cover = card.cover else { return Color(nsColor: .textColor) }
+    
+    if cover.size != .full {
+      return Color(nsColor: .textColor)
+    }
+    
+    if let color = cover.color {
+      return Color("CardNameCover_\(color.rawValue)")
+    }
+    
+    return Color(nsColor: .textColor)
+  }
+  
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       if let cover = card.cover {
@@ -84,6 +98,7 @@ struct CardView: View {
               .multilineTextAlignment(.leading)
               .lineLimit(2)
           }
+          .foregroundColor(cardNameForegroundColor)
           
           
           HStack {
