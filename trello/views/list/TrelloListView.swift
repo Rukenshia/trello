@@ -146,24 +146,28 @@ struct TrelloListView: View {
       Button(action: {
         self.showAddCard = true
       }) {
-        HStack {
-          Image(systemName: "plus")
-          Text("Add card")
-        }
-      }
-      .onHover { hover in
-        if hover {
-          self.addCardColor = Color("TwZinc700");
-          return;
-        }
-        
-        self.addCardColor = Color(.clear);
-        return;
+            HStack {
+              Spacer()
+              Image(systemName: "plus")
+              Text("Add card")
+              Spacer()
+            }
+            .padding(4)
+            .padding(.vertical, 6)
+            .background(self.addCardColor)
+            .cornerRadius(4)
+            .clipShape(Rectangle())
+            .onHover { hover in
+              if hover {
+                self.addCardColor = Color("TwZinc700");
+                return;
+              }
+              
+              self.addCardColor = Color(.clear);
+              return;
+            }
       }
       .buttonStyle(.plain)
-      .padding(4)
-      .background(self.addCardColor)
-      .cornerRadius(4)
     }
     .onChange(of: showAddCard) { nv in
       if nv {
@@ -304,6 +308,6 @@ struct TrelloListView_Previews: PreviewProvider {
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
     ])), windowHeight: 200)
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
-    .frame(width: 260, height: 1200)
+    .frame(width: 260, height: 800)
   }
 }
