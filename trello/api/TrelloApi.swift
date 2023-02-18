@@ -66,7 +66,7 @@ class TrelloApi: ObservableObject {
     .response { response in
       
       if case let .failure(error) = response.result {
-        print("API error on '\(url)' \(error.responseCode): \(response)")
+        print("API error on '\(url)' \(String(describing: error.responseCode)): \(response)")
         self.addError(error)
         return
       }
@@ -87,7 +87,7 @@ class TrelloApi: ObservableObject {
     .responseDecodable(of: result) { response in
       print(String(decoding: response.request!.httpBody!, as: UTF8.self))
       if case let .failure(error) = response.result {
-        print("API error on '\(url)' \(error.responseCode): \(response)")
+        print("API error on '\(url)' \(String(describing: error.responseCode)): \(response)")
         self.addError(error)
         return
       }
@@ -107,7 +107,7 @@ class TrelloApi: ObservableObject {
     )
     .responseDecodable(of: result) { response in
       if case let .failure(error) = response.result {
-        print("API error on '\(url)' \(error.responseCode): \(response)")
+        print("API error on '\(url)' \(String(describing: error.responseCode)) \(String(describing: response.response?.statusCode)): \(response)")
         print(String(decoding: response.data!, as: UTF8.self))
         self.addError(error)
         return

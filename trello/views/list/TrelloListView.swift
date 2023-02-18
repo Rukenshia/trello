@@ -61,6 +61,7 @@ struct TrelloListView: View {
   @State private var cardPopoverState: PopoverState = .none;
   @State private var monitor: Any?;
   
+  @State private var width: CGFloat = 150
   @State private var height: CGFloat = 0
   
   @State private var hoveredCard: Card? = nil
@@ -86,16 +87,21 @@ struct TrelloListView: View {
       }
       Divider()
       SwiftUI.List {
-        ForEach(self.$list.cards) { card in
-          CardView(card: card,
-                   hovering: hoveredCard?.id == card.wrappedValue.id,
-                   showDetails: Binding(get: { showDetailsForCard?.id == card.wrappedValue.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }),
-                   popoverState: $cardPopoverState,
-                   showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }))
+        if $list.cards.count == 0 {
+          Spacer()
+            .frame(height: 180)
+            .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+        } else {
+          ForEach(self.$list.cards) { card in
+            CardView(card: card,
+                     hovering: hoveredCard?.id == card.wrappedValue.id,
+                     showDetails: Binding(get: { showDetailsForCard?.id == card.wrappedValue.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }),
+                     popoverState: $cardPopoverState,
+                     showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }))
             .onTapGesture {
               showDetailsForCard = card.wrappedValue
             }
-          
+            
             .onHover { isHovering in
               self.hoveredCard = isHovering ? card.wrappedValue : nil
               
@@ -113,22 +119,23 @@ struct TrelloListView: View {
             .overlay(
               HeightCounterView(listHeight: $height)
             )
-        }
-        .onMove { source, dest in
-          if dest < 0 {
-            return
           }
-          
-          for sourceIdx in source {
-            moveCard(cardId: self.list.cards[sourceIdx].id, from: sourceIdx, to: dest)
+          .onMove { source, dest in
+            if dest < 0 {
+              return
+            }
+            
+            for sourceIdx in source {
+              moveCard(cardId: self.list.cards[sourceIdx].id, from: sourceIdx, to: dest)
+            }
           }
+          .onDelete { offsets in
+            self.list.cards.remove(atOffsets: offsets)
+          }
+          .onInsert(of: ["public.text"], perform: onInsert)
+          .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+          .deleteDisabled(true)
         }
-        .onDelete { offsets in
-          self.list.cards.remove(atOffsets: offsets)
-        }
-        .onInsert(of: ["public.text"], perform: onInsert)
-        .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
-        .deleteDisabled(true)
         
         if showAddCard {
           AddCardView(list: self.$list, showAddCard: self.$showAddCard)
@@ -169,8 +176,15 @@ struct TrelloListView: View {
     .padding(8)
     .background(background)
     .cornerRadius(4)
-    .frame(minWidth: self.list.cards.count > 0 ? 260 : 150, minHeight: height == 0 ? 300 : min(windowHeight - 64, height + 128))
+    .frame(minWidth: width, minHeight: max(280, min(windowHeight - 64, height + 128)))
+    .onChange(of: list.cards) { cards in
+      withAnimation {
+        setWidth()
+      }
+    }
     .onAppear {
+      setWidth()
+      
       monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
         if showAddCard {
           return nsevent
@@ -224,6 +238,10 @@ struct TrelloListView: View {
         NSEvent.removeMonitor(monitor)
       }
     }
+  }
+  
+  private func setWidth() {
+    self.width = self.list.cards.count > 0 ? 260 : 150
   }
   
   private func moveCard(cardId: String, from: Int, to: Int) {

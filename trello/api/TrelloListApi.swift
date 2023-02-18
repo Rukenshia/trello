@@ -12,7 +12,7 @@ extension TrelloApi {
         self.request("/lists", method: .post, parameters: [
             "idBoard": boardId,
             "name": name,
-            "pos": "bottom,"
+            "pos": "bottom"
         ], result: List.self) { response, list in
             self.board.lists.append(list)
             completion(list)
