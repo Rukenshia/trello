@@ -18,23 +18,6 @@ extension NSTableView {
   }
 }
 
-struct HeightCounterView: View {
-  @Binding var listHeight: CGFloat
-  @State private var height: CGFloat = 0
-  
-  var body: some View {
-    GeometryReader { proxy in
-      Color.clear
-        .onAppear {
-          height = proxy.size.height
-          listHeight += height + 16
-        }.onDisappear {
-          listHeight -= height - 16
-        }
-    }
-  }
-}
-
 enum PopoverState {
   case none;
   
@@ -62,7 +45,6 @@ struct TrelloListView: View {
   @State private var monitor: Any?;
   
   @State private var width: CGFloat = 150
-  @State private var height: CGFloat = 0
   
   @State private var hoveredCard: Card? = nil
   
@@ -120,9 +102,6 @@ struct TrelloListView: View {
             .onDrag {
               NSItemProvider(object: card.wrappedValue.id as NSString)
             }
-            .overlay(
-              HeightCounterView(listHeight: $height)
-            )
           }
           .onMove { source, dest in
             if dest < 0 {
@@ -176,13 +155,6 @@ struct TrelloListView: View {
             }
       }
       .buttonStyle(.plain)
-    }
-    .onChange(of: showAddCard) { nv in
-      if nv {
-        self.height += 40
-      } else {
-        self.height -= 40
-      }
     }
     .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
     .onChange(of: list.cards) { cards in
