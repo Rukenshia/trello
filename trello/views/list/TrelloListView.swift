@@ -49,7 +49,7 @@ enum PopoverState {
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @Binding var list: List
-  let windowHeight: CGFloat
+  @Binding var scale: CGFloat
   
   @State private var selection: Card? = nil
   @State private var addCardColor: Color = Color(.clear)
@@ -67,20 +67,21 @@ struct TrelloListView: View {
   @State private var hoveredCard: Card? = nil
   
   var background: Color {
-    return Color("ListBackground").opacity(0.95)
+    return Color("ListBackground").opacity(0.8)
   }
   
   var body: some View {
     VStack(spacing: 4) {
       HStack {
         TrelloListNameView(list: self.$list)
+          .font(.system(size: 12 * scale))
         Spacer()
         Button(action: {
           self.showMenu = true
         }) {
           
         }
-        .buttonStyle(IconButton(icon: "ellipsis", iconColor: .primary, size: 12, color: .clear, hoverColor: .clear))
+        .buttonStyle(IconButton(icon: "ellipsis", iconColor: .primary, size: 12 * scale, color: .clear, hoverColor: .clear))
         .popover(isPresented: self.$showMenu, arrowEdge: .bottom) {
           TrelloListMenuView(list: self.$list)
         }
@@ -88,16 +89,19 @@ struct TrelloListView: View {
       Divider()
       SwiftUI.List {
         if $list.cards.count == 0 {
-          Spacer()
-            .frame(height: 180)
-            .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+          if !showAddCard {
+            Spacer()
+              .frame(height: 180 * scale)
+              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+          }
         } else {
           ForEach(self.$list.cards) { card in
             CardView(card: card,
                      hovering: hoveredCard?.id == card.wrappedValue.id,
                      showDetails: Binding(get: { showDetailsForCard?.id == card.wrappedValue.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }),
                      popoverState: $cardPopoverState,
-                     showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }))
+                     showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }),
+                     scale: $scale)
             .onTapGesture {
               showDetailsForCard = card.wrappedValue
             }
@@ -145,6 +149,10 @@ struct TrelloListView: View {
       .listStyle(.plain)
       Button(action: {
         self.showAddCard = true
+        
+        withAnimation {
+          self.setWidth()
+        }
       }) {
             HStack {
               Spacer()
@@ -152,14 +160,14 @@ struct TrelloListView: View {
               Text("Add card")
               Spacer()
             }
-            .padding(4)
-            .padding(.vertical, 6)
+            .padding(4 * scale)
+            .padding(.vertical, 6 * scale)
             .background(self.addCardColor)
             .cornerRadius(4)
             .clipShape(Rectangle())
             .onHover { hover in
               if hover {
-                self.addCardColor = Color("TwZinc700");
+                self.addCardColor = Color("ButtonBackground");
                 return;
               }
               
@@ -177,14 +185,13 @@ struct TrelloListView: View {
       }
     }
     .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
-    .padding(8)
-    .background(background)
-    .cornerRadius(4)
-    .frame(minWidth: width, minHeight: max(280, min(windowHeight - 64, height + 128)))
     .onChange(of: list.cards) { cards in
       withAnimation {
         setWidth()
       }
+    }
+    .onChange(of: scale) { scale in
+      setWidth()
     }
     .onAppear {
       setWidth()
@@ -242,10 +249,14 @@ struct TrelloListView: View {
         NSEvent.removeMonitor(monitor)
       }
     }
+    .padding(8)
+    .background(background)
+    .cornerRadius(4)
+    .frame(idealWidth:width)
   }
   
   private func setWidth() {
-    self.width = self.list.cards.count > 0 ? 260 : 150
+    self.width = self.list.cards.count > 0 || showAddCard ? 260 * scale : 150 * scale
   }
   
   private func moveCard(cardId: String, from: Int, to: Int) {
@@ -306,7 +317,7 @@ struct TrelloListView_Previews: PreviewProvider {
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
-    ])), windowHeight: 200)
+    ])), scale: .constant(1))
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
     .frame(width: 260, height: 800)
   }

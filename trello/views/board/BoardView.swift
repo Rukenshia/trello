@@ -11,9 +11,13 @@ import CachedAsyncImage
 struct BoardView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @Binding var board: Board
-  @Binding var viewType: BoardViewType
+  
+  @State private var viewType: BoardViewType = .lists
   
   @State private var organization: Organization?
+  
+  @State var preferences: Preferences = Preferences()
+  @State private var scale: CGFloat = 1.0
   
   var backgroundImage: AnyView {
     guard let url = trelloApi.board.prefs.backgroundImage else {
@@ -52,25 +56,34 @@ struct BoardView: View {
       case .lists:
         GeometryReader { reader in
           ScrollView([.horizontal]) {
-            VStack {
+            VStack(alignment: .leading) {
               HStack(alignment: .top) {
                 ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
-                  TrelloListView(list: list, windowHeight: reader.size.height)
-                    .fixedSize(horizontal: false, vertical: true)
+                  TrelloListView(list: list, scale: $scale)
                 }
               }
             }
-            .frame(alignment: .top)
             .padding()
-            Spacer()
           }
-          .background(
-            self.backgroundImage.allowsHitTesting(false)
-          )
-          .clipped()
+            .background(
+              self.backgroundImage.allowsHitTesting(false)
+            )
+            .clipped()
         }
         .navigationTitle(board.name)
         .navigationSubtitle(organization?.displayName ?? "")
+        .toolbar {
+          Button(action: { setScale(scale + 0.1) }) {
+              Image(systemName: "plus.magnifyingglass")
+            }
+          Button(action: { setScale(1.0) }) {
+            Text("\(Int(scale * 100))%")
+          }
+          Button(action: { setScale(scale - 0.1) }) {
+              Image(systemName: "minus.magnifyingglass")
+            }
+              ToolbarBoardVisualisationView(viewType: $viewType)
+        }
       case .table:
         BoardTableView(board: $board)
           .background(
@@ -79,18 +92,41 @@ struct BoardView: View {
           .clipped()
           .navigationTitle(board.name)
           .navigationSubtitle(organization?.displayName ?? "")
+          .toolbar {
+            ToolbarBoardVisualisationView(viewType: $viewType)
+          }
       }
     }
     .onChange(of: board) { board in
-        self.trelloApi.getOrganization(id: board.idOrganization) { organization in
-          self.organization = organization
-        }
+      self.trelloApi.getOrganization(id: board.idOrganization) { organization in
+        self.organization = organization
       }
+    }
+    .onAppear {
+      scale = preferences.scale;
+    }
+  }
+  
+  private func setScale(_ newScale: CGFloat) {
+    scale = newScale;
+    
+    
+    if (scale < 0.3) {
+      scale = 0.3
+    }
+    
+    if (scale > 2) {
+      scale = 2
+    }
+    
+    preferences.scale = scale;
+    preferences.save();
   }
 }
 
 struct BoardView_Previews: PreviewProvider {
   static var previews: some View {
-    BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs())), viewType: .constant(.table))
+    BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs(), lists: [List(id: "foo", name: "foo"), List(id: "bar", name: "bar")])))
+      .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
   }
 }

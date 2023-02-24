@@ -57,20 +57,23 @@ struct CardDetailsDescriptionView: View {
             }
             .buttonStyle(.plain)
         } else {
-            if !self.card.desc.isEmpty {
+          if self.card.desc.isEmpty {
+            HStack {
+              Text("_Click to add a description_")
+            }
+            .padding()
+            .onTapGesture {
+              self.startEditing()
+            }
+          } else {
                 Markdown(self.card.desc)
-                    .markdownStyle(MarkdownStyle(foregroundColor: Color("TwStone900")))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 4)
-                    .background(Color("TwZinc200"))
-                    .foregroundColor(Color("TwStone900"))
                     .cornerRadius(4)
+                    .onTapGesture {
+                      self.startEditing()
+                    }
             }
-            
-            Button(action: self.startEditing) {
-            }
-            .buttonStyle(FlatButton(icon: "pencil", text:" Edit"))
-            
         }
     }
     

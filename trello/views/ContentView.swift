@@ -18,7 +18,6 @@ struct ContentView: View {
   @Binding var showCommandBar: Bool
   
   @State private var cancellable: AnyCancellable?
-  @State private var viewType: BoardViewType = .lists
   
   private var timer = Timer.publish(
     every: 10, // second
@@ -38,7 +37,7 @@ struct ContentView: View {
             .listStyle(SidebarListStyle())
           
           HStack {
-            BoardView(board: $trelloApi.board, viewType: $viewType)
+            BoardView(board: $trelloApi.board)
             
             RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$trelloApi.board).frame(maxWidth: 48)
           }
@@ -82,9 +81,6 @@ struct ContentView: View {
       .onReceive(timer) { newTime in
         self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
         }
-      }
-      .toolbar {
-        ToolbarBoardVisualisationView(viewType: $viewType)
       }
       .sheet(isPresented: $showCommandBar) {
           VStack {
