@@ -64,6 +64,7 @@ struct BoardView: View {
               }
             }
             .padding()
+            Spacer()
           }
             .background(
               self.backgroundImage.allowsHitTesting(false)

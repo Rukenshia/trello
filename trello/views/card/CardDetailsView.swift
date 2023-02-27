@@ -18,6 +18,7 @@ struct CardDetailsView: View {
   @State var showChecklistForm: Bool = false
   @State var checklistName: String = ""
   
+  @State var showMove: Bool = false
   @State var showManageLabels: Bool = false
   @State var showCardCoverMenu: Bool = false
   
@@ -217,6 +218,16 @@ struct CardDetailsView: View {
                 self.isVisible = false
               }) { Spacer() }
                 .buttonStyle(FlatButton(icon: "doc.on.doc", text: "Copy"))
+              
+              Button(action: {
+                self.showMove = true
+              }) { Spacer() }
+                .buttonStyle(FlatButton(icon: "rectangle.leadinghalf.inset.filled.arrow.leading", text: "Move"))
+                .popover(isPresented: $showMove, arrowEdge: .bottom) {
+                  ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
+                    ContextMenuMoveListView(list: list, card: $card)
+                  }
+                }
             }
             .frame(maxWidth: 260)
           }

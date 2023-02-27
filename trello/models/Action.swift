@@ -11,6 +11,8 @@ enum ActionType: String, Codable {
   case commentCard = "commentCard"
   case copyCommentCard = "copyCommentCard"
   case updateCard = "updateCard"
+  case moveCard = "moveCard"
+  case closeCard = "closeCard"
 }
 
 struct ActionDataCommentCard: Codable, Hashable {

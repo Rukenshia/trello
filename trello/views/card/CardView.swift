@@ -69,6 +69,78 @@ struct CardView: View {
     return Color(nsColor: .textColor)
   }
   
+  private var badgeComponents: AnyView {
+    let checkItemsBadge = card.badges.checkItems > 0
+    let commentsBadge = card.badges.comments > 0
+    let attachmentsBadge = card.badges.attachments > 1 || card.badges.attachments == 1 && card.cover?.idAttachment == nil
+    let hasDescription = !card.desc.isEmpty
+    
+    if checkItemsBadge && commentsBadge && attachmentsBadge {
+      return AnyView(HStack(spacing: 1) {
+        HStack(spacing: 2) {
+          Image(systemName: "checklist")
+          Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+            .foregroundColor(.secondary)
+            .lineLimit(1)
+            .frame(maxWidth: .infinity)
+          
+          Image(systemName: "message")
+          
+          Image(systemName: "paperclip")
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(Color("CardBackground"))
+        .cornerRadius(4)
+        
+        Text(card.desc)
+          .lineLimit(1)
+          .foregroundColor(.secondary)
+      })
+    }
+    
+    return AnyView(HStack {
+      if checkItemsBadge {
+        HStack(spacing: 1) {
+          Image(systemName: "checklist")
+          Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+            .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(Color("CardBackground"))
+        .cornerRadius(4)
+      }
+      if commentsBadge {
+        HStack(spacing: 1) {
+          Image(systemName: "message")
+          Text("\(card.badges.comments)")
+            .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(Color("CardBackground"))
+        .cornerRadius(4)
+      }
+      if attachmentsBadge {
+        HStack(spacing: 1) {
+          Image(systemName: "paperclip")
+          Text("\(card.badges.attachments)")
+            .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(Color("CardBackground"))
+        .cornerRadius(4)
+      }
+      if hasDescription {
+        Text(card.desc)
+          .lineLimit(1)
+          .foregroundColor(.secondary)
+      }
+    })
+  }
+  
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       if let cover = card.cover {
@@ -107,44 +179,7 @@ struct CardView: View {
             CardDueView(card: $card)
               .font(.system(size: 12 * scale))
             
-            if card.badges.checkItems > 0 {
-              HStack(spacing: 1) {
-                Image(systemName: "checklist")
-                Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
-                  .foregroundColor(.secondary)
-              }
-              .padding(.horizontal, 4)
-              .padding(.vertical, 2)
-              .background(Color("CardBackground"))
-              .cornerRadius(4)
-            }
-            if card.badges.comments > 0 {
-              HStack(spacing: 1) {
-                Image(systemName: "message")
-                Text("\(card.badges.comments)")
-                  .foregroundColor(.secondary)
-              }
-              .padding(.horizontal, 4)
-              .padding(.vertical, 2)
-              .background(Color("CardBackground"))
-              .cornerRadius(4)
-            }
-            if card.badges.attachments > 1 || card.badges.attachments == 1 && card.cover?.idAttachment == nil {
-              HStack(spacing: 1) {
-                Image(systemName: "paperclip")
-                Text("\(card.badges.attachments)")
-                  .foregroundColor(.secondary)
-              }
-              .padding(.horizontal, 4)
-              .padding(.vertical, 2)
-              .background(Color("CardBackground"))
-              .cornerRadius(4)
-            }
-            if !card.desc.isEmpty {
-              Text(card.desc)
-                .lineLimit(1)
-                .foregroundColor(.secondary)
-            }
+            badgeComponents
           }
           .font(.system(size: 10 * scale))
           
@@ -225,6 +260,8 @@ struct CardView_Previews: PreviewProvider {
         .frame(width: 280, height: 100)
       CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
         .frame(width: 280, height: 100)
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [], name: "Lots of badges", desc: "A card with lots of extra badges", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 50000)), badges: Badges(checkItems: 14, checkItemsChecked: 3, comments: 5, attachments: 2))), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+        .frame(width: 260)
     }
     .padding()
     .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))

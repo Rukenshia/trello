@@ -49,7 +49,7 @@ struct TrelloListView: View {
   @State private var hoveredCard: Card? = nil
   
   var background: Color {
-    return Color("ListBackground").opacity(0.8)
+    return Color("ListBackground").opacity(0.6)
   }
   
   var body: some View {
@@ -87,7 +87,6 @@ struct TrelloListView: View {
             .onTapGesture {
               showDetailsForCard = card.wrappedValue
             }
-            
             .onHover { isHovering in
               self.hoveredCard = isHovering ? card.wrappedValue : nil
               

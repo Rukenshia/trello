@@ -59,9 +59,19 @@ struct RightSidebarView: View {
             self.showDoneList = true
           }) { }
             .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
-            .popover(isPresented: self.$showDoneList, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
-              DoneListView(boardActions: $boardActions, list: dl, archivedCards: $archivedCards)
-                .frame(minWidth: 300, maxWidth: 300)
+            .sheet(isPresented: self.$showDoneList) {
+              TabView {
+                DoneListView(boardActions: $boardActions, cards: dl.cards, list: dl.wrappedValue)
+                  .tabItem {
+                    SwiftUI.Label("Done List", systemImage: "checkmark")
+                  }
+                DoneListView(boardActions: $boardActions, cards: $archivedCards, list: nil)
+                  .frame(minWidth: 300, maxWidth: 300)
+                  .tabItem {
+                    SwiftUI.Label("Archive", systemImage: "archivebox")
+                  }
+              }
+              .frame(minWidth: 400, minHeight: 600)
             }
             .task {
               trelloApi.getBoardUpdateCardActions(boardId: board.id) { actions in

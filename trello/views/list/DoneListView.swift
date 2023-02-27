@@ -10,21 +10,21 @@ import SwiftUI
 
 struct DoneListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
-
+  
   @Binding var boardActions: [ActionUpdateCard]
-  @Binding var list: List;
-  @Binding var archivedCards: [Card]
+  @Binding var cards: [Card]
+  let list: List?
   
   @State private var actionForCard: Dictionary<String, ActionUpdateCard> = Dictionary()
   
-  var allCards: [Card] {
-    list.cards + archivedCards
-  }
+  @State private var hoveredCard: Card? = nil
+  @State private var showDetails = false
+  @State private var showDetailsForCard: Card? = nil
   
   let bucketKeys: [String] = ["today", "yesterday", "this week", "this month", "older"]
   
   var sortedCards: [Card] {
-    self.allCards.sorted{ (a: Card, b: Card) in
+    self.cards.sorted{ (a: Card, b: Card) in
       var dateA = ""
       var dateB = ""
       
@@ -90,17 +90,7 @@ struct DoneListView: View {
     SwiftUI.List {
       ForEach(bucketKeys, id: \.self) { key in
         if self.buckets[key]!.count > 0 {
-          Text(key)
-            .font(.headline)
-          ForEach(self.buckets[key]!) { card in
-            HStack {
-              if card.closed {
-                Image(systemName: "archivebox")
-              }
-              Text(card.name)
-            }
-            .padding(4)
-          }
+          BucketView(key: key, cards: self.buckets[key]!, showDetails: $showDetails, showDetailsForCard: $showDetailsForCard)
         }
       }
     }
@@ -118,9 +108,11 @@ struct DoneListView: View {
           continue
         }
         
-        if action.data.listAfter?.id != list.id {
-          // Reject changes that don't move the card to the done list
-          continue
+        if let list = self.list {
+          if action.data.listAfter?.id != list.id {
+            // Reject changes that don't move the card to the done list
+            continue
+          }
         }
         
         newDict[action.data.card.id] = action
@@ -132,8 +124,34 @@ struct DoneListView: View {
   }
 }
 
+struct BucketView: View {
+  let key: String
+  let cards: [Card]
+  
+  @State var hoveredCard: Card? = nil
+  @Binding var showDetails: Bool
+  @Binding var showDetailsForCard: Card?
+  
+  var body: some View {
+    Text(key)
+      .font(.headline)
+    ForEach(cards) { card in
+      CardView(card: Binding(get: { card }, set: {_ in }), hovering: hoveredCard?.id == card.id, showDetails: Binding(get: { showDetailsForCard?.id == card.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }), popoverState: .constant(.none), showPopover:.constant(false), scale: .constant(1))
+        .onHover { isHovering in
+          self.hoveredCard = isHovering ? card : nil
+        }
+        .onTapGesture {
+          showDetails = true
+          showDetailsForCard = card
+          print("onTapGesture")
+        }
+        .padding(4)
+    }
+  }
+}
+
 struct DoneListView_Previews: PreviewProvider {
   static var previews: some View {
-    DoneListView(boardActions: .constant([]), list: .constant(List(id: "list", name: "list", cards: [])), archivedCards: .constant([]))
+    DoneListView(boardActions: .constant([]), cards: .constant([]), list: List(id: "list", name: "list", cards: []))
   }
 }
