@@ -31,7 +31,7 @@ class TrelloApi: ObservableObject {
   init(key: String, token: String) {
     self.key = key
     self.token = token
-    self.board = Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs())
+    self.board = Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs(), boardStars: [])
     self.boards = []
     
     let authAdapter = TrelloApiAuthAdapter(key: self.key, token: self.token)

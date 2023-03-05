@@ -158,6 +158,6 @@ struct BoardTableView: View {
 
 struct BoardTableView_Previews: PreviewProvider {
   static var previews: some View {
-    BoardTableView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "name", prefs: BoardPrefs())))
+    BoardTableView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "name", prefs: BoardPrefs(), boardStars: [])))
   }
 }

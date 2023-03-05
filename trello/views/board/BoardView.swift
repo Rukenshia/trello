@@ -74,16 +74,31 @@ struct BoardView: View {
         .navigationTitle(board.name)
         .navigationSubtitle(organization?.displayName ?? "")
         .toolbar {
-          Button(action: { setScale(scale + 0.1) }) {
+         
+          ToolbarItem(placement: .navigation) {
+            Button() {
+            } label: {
+              Image(systemName: !board.boardStars.isEmpty ? "star.fill" : "star")
+                .foregroundColor(!board.boardStars.isEmpty ? .yellow : .secondary )
+            }
+            .disabled(true)
+          }
+          
+          
+          
+          ToolbarItemGroup(placement: .primaryAction) {
+
+            Button(action: { setScale(scale + 0.1) }) {
               Image(systemName: "plus.magnifyingglass")
             }
-          Button(action: { setScale(1.0) }) {
-            Text("\(Int(scale * 100))%")
-          }
-          Button(action: { setScale(scale - 0.1) }) {
+            Button(action: { setScale(1.0) }) {
+              Text("\(Int(scale * 100))%")
+            }
+            Button(action: { setScale(scale - 0.1) }) {
               Image(systemName: "minus.magnifyingglass")
             }
-              ToolbarBoardVisualisationView(viewType: $viewType)
+            ToolbarBoardVisualisationView(viewType: $viewType)
+          }
         }
       case .table:
         BoardTableView(board: $board)
@@ -127,7 +142,7 @@ struct BoardView: View {
 
 struct BoardView_Previews: PreviewProvider {
   static var previews: some View {
-    BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs(), lists: [List(id: "foo", name: "foo"), List(id: "bar", name: "bar")])))
+    BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs(), boardStars: [], lists: [List(id: "foo", name: "foo"), List(id: "bar", name: "bar")])))
       .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
   }
 }

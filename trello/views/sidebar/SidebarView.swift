@@ -11,10 +11,10 @@ struct SidebarView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   
   @State var organizations: [Organization] = []
+  @State private var stars: [BoardStar] = []
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      
       HStack {
         Text("Boards")
           .font(.system(size: 18))
@@ -23,14 +23,19 @@ struct SidebarView: View {
       }
       Divider()
       
-      ForEach($organizations) { organization in
-        OrganizationView(organization: organization)
+      ScrollView {
+        ForEach(organizations) { organization in
+          OrganizationView(organization: organization, stars: stars)
+        }
       }
-      Spacer()
     }
     .frame(alignment: .top)
     .padding(8)
     .task {
+      trelloApi.getMemberBoardStars { stars in
+        self.stars = stars
+      }
+      
       trelloApi.getOrganizations() { organizations in
         self.organizations = []
         

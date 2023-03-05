@@ -40,6 +40,7 @@ struct trelloApp: App {
       if preferences.trelloKey != nil && preferences.trelloToken != nil {
         ContentView(showCommandBar: $showCommandBar)
           .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
+          .environmentObject(preferences)
           .onAppear {
 //            DevEnv()
           }

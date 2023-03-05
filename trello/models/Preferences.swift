@@ -8,32 +8,55 @@
 import Foundation
 
 struct PreferenceKeys {
-    static let currentBoard = "currentBoard";
-    static let trelloKey = "trelloKey";
-    static let trelloToken = "trelloToken";
+  static let currentBoard = "currentBoard";
+  static let trelloKey = "trelloKey";
+  static let trelloToken = "trelloToken";
   static let scale = "scale";
+  static let organizations = "organizations";
 }
 
-struct Preferences {
-    var trelloKey: String?;
-    var trelloToken: String?;
+class OrganizationPreferences: Codable {
+  var collapsed: Bool
+  
+  init(collapsed: Bool) {
+    self.collapsed = collapsed
+  }
+}
+
+class Preferences: ObservableObject {
+  var trelloKey: String?;
+  var trelloToken: String?;
   var scale: CGFloat;
+  @Published var organizations: [String: OrganizationPreferences];
+  
+  init() {
+    self.trelloKey = UserDefaults.standard.string(forKey: PreferenceKeys.trelloKey);
+    self.trelloToken = UserDefaults.standard.string(forKey: PreferenceKeys.trelloToken);
     
-    init() {
-        self.trelloKey = UserDefaults.standard.string(forKey: PreferenceKeys.trelloKey);
-        self.trelloToken = UserDefaults.standard.string(forKey: PreferenceKeys.trelloToken);
-      let storedScale = UserDefaults.standard.float(forKey: PreferenceKeys.scale);
-      
-      if storedScale == 0 {
-        scale = 1.0;
-      } else {
-        scale = CGFloat(storedScale);
-      }
+    if let orgs = UserDefaults.standard.value(forKey: PreferenceKeys.organizations) as? Data {
+      self.organizations = try! PropertyListDecoder().decode([String:OrganizationPreferences].self, from: orgs)
+    } else {
+      self.organizations = [:]
     }
     
-    func save() {
-        UserDefaults.standard.set(self.trelloKey, forKey: PreferenceKeys.trelloKey);
-      UserDefaults.standard.set(self.trelloToken, forKey: PreferenceKeys.trelloToken);
-      UserDefaults.standard.set(self.scale, forKey: PreferenceKeys.scale);
+    let storedScale = UserDefaults.standard.float(forKey: PreferenceKeys.scale);
+    
+    if storedScale == 0 {
+      scale = 1.0;
+    } else {
+      scale = CGFloat(storedScale);
     }
+    
+    $organizations.sink { _ in
+      self.save()
+    }
+  }
+  
+  func save() {
+    UserDefaults.standard.set(self.trelloKey, forKey: PreferenceKeys.trelloKey);
+    UserDefaults.standard.set(self.trelloToken, forKey: PreferenceKeys.trelloToken);
+    UserDefaults.standard.set(self.scale, forKey: PreferenceKeys.scale);
+    
+    UserDefaults.standard.set(try? PropertyListEncoder().encode(self.organizations), forKey: PreferenceKeys.organizations);
+  }
 }

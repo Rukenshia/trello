@@ -9,8 +9,8 @@ import Foundation
 import Alamofire
 
 extension TrelloApi {
-  func getOrganizations(completion: @escaping ([Organization]) -> Void) {
-    self.request("/members/me/organizations", result: [Organization].self) { response, organizations in
+  func getOrganizations(memberId: String = "me", completion: @escaping ([Organization]) -> Void) {
+    self.request("/members/\(memberId)/organizations", result: [Organization].self) { response, organizations in
       completion(organizations)
     }
   }
@@ -24,6 +24,12 @@ extension TrelloApi {
   func removeMemberFromCard(cardId: String, memberId: String, completion: @escaping () -> Void) {
     self.request("/cards/\(cardId)/idMembers/\(memberId)", method: .delete) { response in
       completion()
+    }
+  }
+  
+  func getMemberBoardStars(memberId: String = "me", completion: @escaping ([BoardStar]) -> Void) {
+    self.request("/members/\(memberId)/boardStars", result: [BoardStar].self) { response, boardStars in
+      completion(boardStars)
     }
   }
 }

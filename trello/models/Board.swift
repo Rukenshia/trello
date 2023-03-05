@@ -17,13 +17,24 @@ struct BasicBoard: Identifiable, Codable {
   var id: String
   var name: String
   var prefs: BoardPrefs
+  
+  var starred = false
 }
 
-struct Board: Identifiable, Codable, Hashable {
+struct BoardStar: Identifiable, Codable, Hashable {
+  var id: String?
+  var _id: String?
+  var idBoard: String
+  var pos: Int
+}
+
+struct Board: Codable, Hashable {
   var id: String
   var idOrganization: String
   var name: String
   var prefs: BoardPrefs
+  
+  var boardStars: [BoardStar]
   
   var lists: [List] = []
   var cards: [Card] = []

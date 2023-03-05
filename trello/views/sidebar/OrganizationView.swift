@@ -11,10 +11,13 @@ import CachedAsyncImage
 
 struct OrganizationView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var preferences: Preferences
   
-  @Binding var organization: Organization
+  let organization: Organization
+  let stars: [BoardStar]
   
   @State private var image: AnyView? = nil
+  @State private var expanded = true
   
   var defaultLogo: some View {
     Rectangle()
@@ -33,20 +36,49 @@ struct OrganizationView: View {
   
   var body: some View {
     VStack(alignment: .leading) {
-      HStack {
-        if let image = self.image {
-          image
-        } else {
-          defaultLogo
-        }
-        
-        Text(organization.displayName)
-          .font(.title2)
-          .lineLimit(1)
-      }
       
-      ForEach($organization.boards) { board in
-        SidebarBoardView(board: board, currentBoard: self.$trelloApi.board)
+      DisclosureGroup(isExpanded: $expanded) {
+        ForEach(organization.boards.sorted(by: { a, b in
+          let starredA = stars.first(where: { s in s.idBoard == a.id})
+          let starredB = stars.first(where: { s in s.idBoard == b.id})
+          
+          if let starA = starredA {
+            if let starB = starredB {
+              return starA.pos > starB.pos
+            } else {
+              return true
+            }
+          }
+          
+          if starredB != nil {
+            return false
+          }
+          
+          return a.name > b.name
+          
+        })) { board in
+          SidebarBoardView(board: board, starred: stars.first(where: { s in s.idBoard == board.id}) != nil, currentBoard: self.$trelloApi.board)
+        }
+        .padding(.leading, 12)
+      } label: {
+        HStack {
+          if let image = self.image {
+            image
+          } else {
+            defaultLogo
+          }
+          
+          Text(organization.displayName)
+            .font(.title2)
+            .lineLimit(1)
+        }
+        .padding(.leading, 4)
+        .padding(.bottom, 4)
+        .onTapGesture {
+          withAnimation {
+            expanded.toggle()
+          }
+        }
       }
     }
     .task {
@@ -66,11 +98,22 @@ struct OrganizationView: View {
         })
       }
     }
+    .onAppear {
+      if preferences.organizations[organization.id] == nil {
+        preferences.organizations[organization.id] = OrganizationPreferences(collapsed: false)
+      }
+      
+      expanded = !(preferences.organizations[organization.id]?.collapsed ?? false)
+    }
+    .onChange(of: expanded) { value in
+      preferences.organizations[organization.id] = OrganizationPreferences(collapsed: !value)
+      preferences.save()
+    }
   }
 }
 
 struct OrganizationView_Previews: PreviewProvider {
   static var previews: some View {
-    OrganizationView(organization: .constant(Organization(id: "", name: "", displayName: "", logoUrl: "")))
+    OrganizationView(organization: Organization(id: "", name: "", displayName: "", logoUrl: ""), stars: [])
   }
 }

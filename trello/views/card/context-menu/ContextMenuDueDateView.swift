@@ -8,52 +8,54 @@
 import SwiftUI
 
 struct ContextMenuDueDateView: View {
-    @EnvironmentObject var trelloApi: TrelloApi;
-    @Binding var card: Card;
-    
-    @State private var date: Date = Date.now;
-    
-    var body: some View {
-      VStack(alignment: .leading) {
-            DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
-            DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
-            .frame(width: 160)
-            HStack {
-                if card.due != nil {
-                    Button(action: {
-                        self.trelloApi.removeCardDue(cardId: card.id, completion: { card in
-                            print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
-                        })
-                    }) {
-                        Text("Remove Due")
-                    }
-                    .buttonStyle(FlatButton(icon: "trash"))
-                  
-                    Spacer()
-                }
-                
-                Button(action: {
-                    self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
-                        print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
-                    })
-                }) {
-                    Text("Save")
-                }
-                .buttonStyle(FlatButton())
-            }
-            .padding(.horizontal, 8)
+  @EnvironmentObject var trelloApi: TrelloApi;
+  @Binding var card: Card;
+  
+  @State private var date: Date = Date.now;
+  
+  var body: some View {
+    VStack(alignment: .leading) {
+      DatePicker("", selection: $date, displayedComponents: [.date]).datePickerStyle(.graphical)
+      Text(date.formatted(.dateTime.day().month().year()))
+        .padding(.horizontal, 8)
+      DatePicker("", selection: $date, displayedComponents: [.hourAndMinute]).datePickerStyle(.stepperField)
+        .frame(width: 160)
+      HStack {
+        if card.due != nil {
+          Button(action: {
+            self.trelloApi.removeCardDue(cardId: card.id, completion: { card in
+              print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
+            })
+          }) {
+            Text("Remove Due")
+          }
+          .buttonStyle(FlatButton(icon: "trash"))
+          
+          Spacer()
         }
-        .onAppear {
-            if let due = self.card.dueDate {
-                self.date = due
-            }
+        
+        Button(action: {
+          self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
+            print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
+          })
+        }) {
+          Text("Save")
         }
-        .padding()
+        .buttonStyle(FlatButton())
+      }
+      .padding(.horizontal, 8)
     }
+    .onAppear {
+      if let due = self.card.dueDate {
+        self.date = due
+      }
+    }
+    .padding()
+  }
 }
 
 struct ContextMenuDueDateView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContextMenuDueDateView(card: .constant(Card(id: "id", name: "card name", due: "2022-10-10T07:25:24.331Z")))
-    }
+  static var previews: some View {
+    ContextMenuDueDateView(card: .constant(Card(id: "id", name: "card name", due: "2022-10-10T07:25:24.331Z")))
+  }
 }
