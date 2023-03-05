@@ -77,11 +77,19 @@ struct BoardView: View {
          
           ToolbarItem(placement: .navigation) {
             Button() {
+              if board.boardStars.isEmpty {
+                trelloApi.createMemberBoardStar(boardId: board.id) { boardStar in
+                  board.boardStars = [boardStar]
+                }
+              } else {
+                trelloApi.deleteMemberBoardStar(boardStarId: board.boardStars[0].id ?? board.boardStars[0]._id!) {
+                  board.boardStars = []
+                }
+              }
             } label: {
               Image(systemName: !board.boardStars.isEmpty ? "star.fill" : "star")
                 .foregroundColor(!board.boardStars.isEmpty ? .yellow : .secondary )
             }
-            .disabled(true)
           }
           
           

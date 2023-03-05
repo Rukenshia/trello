@@ -32,4 +32,16 @@ extension TrelloApi {
       completion(boardStars)
     }
   }
+  
+  func createMemberBoardStar(memberId: String = "me", boardId: String, position: String = "bottom", completion: @escaping (BoardStar) -> Void) {
+    self.request("/members/\(memberId)/boardStars", method: .post, parameters: ["idBoard": boardId, "pos": position]) { response, boardStar in
+      completion(boardStar)
+    }
+  }
+  
+  func deleteMemberBoardStar(memberId: String = "me", boardStarId: String, completion: @escaping () -> Void) {
+    self.request("/members/\(memberId)/boardStars/\(boardStarId)", method: .delete) { response in
+      completion()
+    }
+  }
 }

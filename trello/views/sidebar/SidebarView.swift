@@ -31,6 +31,11 @@ struct SidebarView: View {
     }
     .frame(alignment: .top)
     .padding(8)
+    .onChange(of: trelloApi.board.boardStars) { _ in
+      trelloApi.getMemberBoardStars { stars in
+        self.stars = stars
+      }
+    }
     .task {
       trelloApi.getMemberBoardStars { stars in
         self.stars = stars

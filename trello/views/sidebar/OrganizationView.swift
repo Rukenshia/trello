@@ -44,7 +44,7 @@ struct OrganizationView: View {
           
           if let starA = starredA {
             if let starB = starredB {
-              return starA.pos > starB.pos
+              return starA.pos < starB.pos
             } else {
               return true
             }
