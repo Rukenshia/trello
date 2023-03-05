@@ -57,7 +57,7 @@ struct OrganizationView: View {
           return a.name > b.name
           
         })) { board in
-          SidebarBoardView(board: board, starred: stars.first(where: { s in s.idBoard == board.id}) != nil, currentBoard: self.$trelloApi.board)
+          SidebarBoardView(board: board, starred: stars.first(where: { s in s.idBoard == board.id}) != nil)
         }
         .padding(.leading, 12)
       } label: {

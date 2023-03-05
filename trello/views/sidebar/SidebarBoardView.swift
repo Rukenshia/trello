@@ -12,7 +12,6 @@ struct SidebarBoardView: View {
   @EnvironmentObject var trelloApi: TrelloApi;
   let board: BasicBoard;
   let starred: Bool;
-  @Binding var currentBoard: Board;
   
   @State var isHovering: Bool = false;
   @State var color: Color = Color(.clear);
@@ -41,7 +40,7 @@ struct SidebarBoardView: View {
         isHovering = hover
         
         withAnimation(.easeInOut(duration: 0.05)) {
-          if self.currentBoard.id == self.board.id {
+          if trelloApi.board.id == self.board.id {
             self.color = .secondary
             return
           }
@@ -56,15 +55,17 @@ struct SidebarBoardView: View {
     }
     .buttonStyle(.plain)
     .onAppear {
-      if self.currentBoard.id == self.board.id {
+      if trelloApi.board.id == self.board.id {
         self.color = .accentColor
       }
     }
-    .onReceive(Just(currentBoard)) { newBoard in
+    .onChange(of: trelloApi.board) { newBoard in
       if newBoard.id == self.board.id {
         self.color = .accentColor
       } else {
-        if !self.isHovering {
+        if isHovering {
+          self.color = .secondary
+        } else {
           self.color = Color(.clear)
         }
       }
@@ -74,6 +75,6 @@ struct SidebarBoardView: View {
 
 struct SidebarBoardView_Previews: PreviewProvider {
   static var previews: some View {
-    SidebarBoardView(board: BasicBoard(id: "abc", name: "one two three", prefs: BoardPrefs()), starred: false, currentBoard: .constant(Board(id: "no-board", idOrganization: "foo", name: "no board", prefs: BoardPrefs(), boardStars: [])))
+    SidebarBoardView(board: BasicBoard(id: "abc", name: "one two three", prefs: BoardPrefs()), starred: false)
   }
 }
