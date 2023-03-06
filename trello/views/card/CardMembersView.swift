@@ -13,8 +13,10 @@ struct CardMembersView: View {
   var body: some View {
     HStack {
       ForEach(members) { member in
-        MemberAvatarView(url: member.avatarUrl)
-          .frame(width: 24, height: 24)
+        if let url = member.avatarUrl {
+          MemberAvatarView(url: url)
+            .frame(width: 24, height: 24)
+        }
       }
     }
   }

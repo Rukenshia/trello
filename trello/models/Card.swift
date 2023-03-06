@@ -19,6 +19,7 @@ struct Badges: Codable, Hashable {
 struct Card: Identifiable, Codable, Hashable {
   var id: String
   var idList: String = "" // TODO: remove default
+  var idBoard: String = "" // TODO: remove default
   var labels: [Label] = []
   var idLabels: [String] = []
   var idMembers: [String] = []

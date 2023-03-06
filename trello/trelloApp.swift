@@ -27,6 +27,8 @@ struct VisualEffectView: NSViewRepresentable {
 @main
 struct trelloApp: App {
   @State var preferences: Preferences = Preferences()
+  @State var appState = AppState()
+  
   @State private var showCommandBar = false
   
   private let updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
@@ -41,6 +43,7 @@ struct trelloApp: App {
         ContentView(showCommandBar: $showCommandBar)
           .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
           .environmentObject(preferences)
+          .environmentObject(appState)
           .onAppear {
 //            DevEnv()
           }

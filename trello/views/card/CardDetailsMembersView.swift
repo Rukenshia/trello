@@ -14,8 +14,10 @@ struct CardDetailsMemberView: View {
   
   var body: some View {
     HStack {
-      MemberAvatarView(url: member.avatarUrl)
-        .frame(width: 32, height: 32)
+      if let url = member.avatarUrl {
+        MemberAvatarView(url: url)
+          .frame(width: 32, height: 32)
+      }
       Text(member.fullName)
       Spacer()
       if let onRemove = self.onRemove {
@@ -56,8 +58,10 @@ struct CardDetailsMembersView: View {
     }) {
       HStack {
         ForEach(members) { member in
-          MemberAvatarView(url: member.avatarUrl)
-            .frame(width: 32, height: 32)
+          if let url = member.avatarUrl {
+            MemberAvatarView(url: url)
+              .frame(width: 32, height: 32)
+          }
         }
         Circle()
           .fill(Color("ButtonBackground"))

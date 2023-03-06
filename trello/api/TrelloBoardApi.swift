@@ -8,14 +8,22 @@
 import Foundation
 
 extension TrelloApi {
-    func getBoards(completion: @escaping ([BasicBoard]) -> Void = { boards in }) {
-        self.request("/members/me/boards",
-                     result: [BasicBoard].self
-        ) { response, boards  in
-            self.boards = boards
-            completion(self.boards)
-        }
+  func getBoards(completion: @escaping ([BasicBoard]) -> Void = { boards in }) {
+    self.request("/members/me/boards",
+                 result: [BasicBoard].self
+    ) { response, boards  in
+      self.boards = boards
+      completion(self.boards)
     }
+  }
+  
+  func getBoardLists(boardId: String, completion: @escaping ([List]) -> Void) {
+    self.request("/boards/\(boardId)/lists",
+                 result: [List].self
+    ) { response, lists  in
+      completion(lists)
+    }
+  }
     
     func getBoard(id: String, completion: @escaping (Board) -> Void = { board in }) {
         self.request("/boards/\(id)",

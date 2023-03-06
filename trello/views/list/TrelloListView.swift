@@ -31,6 +31,7 @@ enum PopoverState {
 
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var appState: AppState
   @Binding var list: List
   @Binding var scale: CGFloat
   
@@ -164,11 +165,18 @@ struct TrelloListView: View {
     .onChange(of: scale) { scale in
       setWidth()
     }
+    .onChange(of: showAddCard) { nv in
+      appState.creatingCard = nv
+    }
     .onAppear {
       setWidth()
       
       monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
         if showAddCard {
+          return nsevent
+        }
+        
+        if appState.creatingCard {
           return nsevent
         }
         

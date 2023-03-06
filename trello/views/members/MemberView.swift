@@ -12,8 +12,10 @@ struct MemberView: View {
   
   var body: some View {
     HStack {
-      MemberAvatarView(url: member.avatarUrl)
-      .frame(width: 32, height: 32)
+      if let url = member.avatarUrl {
+        MemberAvatarView(url: url)
+          .frame(width: 32, height: 32)
+      }
       Text(member.fullName)
         .lineLimit(1)
     }

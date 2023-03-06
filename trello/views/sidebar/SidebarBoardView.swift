@@ -41,7 +41,11 @@ struct SidebarBoardView: View {
         
         withAnimation(.easeInOut(duration: 0.05)) {
           if trelloApi.board.id == self.board.id {
-            self.color = .secondary
+            if hover {
+              self.color = .secondary
+            } else {
+              self.color = .accentColor
+            }
             return
           }
           
@@ -63,11 +67,7 @@ struct SidebarBoardView: View {
       if newBoard.id == self.board.id {
         self.color = .accentColor
       } else {
-        if isHovering {
-          self.color = .secondary
-        } else {
-          self.color = Color(.clear)
-        }
+        self.color = Color(.clear)
       }
     }
   }
