@@ -8,11 +8,12 @@
 import Foundation
 
 struct PreferenceKeys {
-  static let currentBoard = "currentBoard";
-  static let trelloKey = "trelloKey";
-  static let trelloToken = "trelloToken";
-  static let scale = "scale";
-  static let organizations = "organizations";
+  static let currentBoard = "currentBoard"
+  static let trelloKey = "trelloKey"
+  static let trelloToken = "trelloToken"
+  static let scale = "scale"
+  static let organizations = "organizations"
+  static let showFavorites = "showFavorites"
 }
 
 class OrganizationPreferences: Codable {
@@ -28,6 +29,7 @@ class Preferences: ObservableObject {
   var trelloToken: String?;
   var scale: CGFloat;
   @Published var organizations: [String: OrganizationPreferences];
+  @Published var showFavorites: Bool;
   
   init() {
     self.trelloKey = UserDefaults.standard.string(forKey: PreferenceKeys.trelloKey);
@@ -47,9 +49,16 @@ class Preferences: ObservableObject {
       scale = CGFloat(storedScale);
     }
     
+    self.showFavorites = UserDefaults.standard.bool(forKey: PreferenceKeys.showFavorites)
+    
     $organizations.sink { _ in
       self.save()
     }
+  }
+  
+  func updateShowFavorites(_ value: Bool) {
+    self.showFavorites = value
+    UserDefaults.standard.set(value, forKey: PreferenceKeys.showFavorites)
   }
   
   func save() {
