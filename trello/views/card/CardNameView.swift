@@ -36,8 +36,16 @@ struct CardNameView: View {
                     }
                     .buttonStyle(IconButton(icon: "square.and.pencil", size: 16))
                     Text(card.name)
+                    
                 }
                 Spacer()
+            }
+            .onTapGesture {
+              if !editing {
+                editing = true
+                self.newName = card.name
+                self.focusedField = "name"
+              }
             }
             .font(.title)
             Spacer()
