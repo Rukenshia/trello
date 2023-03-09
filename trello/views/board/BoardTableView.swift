@@ -42,6 +42,7 @@ private extension Card {
 }
 
 struct BoardTableView: View {
+  @EnvironmentObject var preferences: Preferences
   @Binding var board: Board
   
   @State private var sortOrder = [KeyPathComparator(\Card.dueString)]
@@ -54,7 +55,7 @@ struct BoardTableView: View {
   
   private var due: TableColumn<Card, KeyPathComparator<Card>, some View, Text> {
     TableColumn("Due", value: \.dueString) { card in
-      CardDueView(card: Binding(get: { card }, set: { _ in }))
+      CardDueView(card: Binding(get: { card }, set: { _ in }), compact: preferences.compactDueDate)
         .frame(
           maxWidth: .infinity,
           maxHeight: .infinity,

@@ -42,7 +42,7 @@ struct SidebarBoardView: View {
         withAnimation(.easeInOut(duration: 0.05)) {
           if trelloApi.board.id == self.board.id {
             if hover {
-              self.color = .secondary
+              self.color = Color("CardBackground")
             } else {
               self.color = .accentColor
             }
@@ -50,9 +50,9 @@ struct SidebarBoardView: View {
           }
           
           if hover {
-            self.color = .secondary
+            self.color = Color("CardBackground")
           } else {
-            self.color = Color(.clear)
+            self.color = Color("CardBackground").opacity(0)
           }
         }
       })
@@ -67,7 +67,7 @@ struct SidebarBoardView: View {
       if newBoard.id == self.board.id {
         self.color = .accentColor
       } else {
-        self.color = Color(.clear)
+        self.color = Color("CardBackground").opacity(0)
       }
     }
   }

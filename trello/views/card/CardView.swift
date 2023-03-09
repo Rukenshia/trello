@@ -11,6 +11,7 @@ import Combine
 struct CardView: View {
   @Environment(\.openWindow) var openWindow
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var preferences: Preferences
   
   @Binding var card: Card
   let hovering: Bool
@@ -176,7 +177,7 @@ struct CardView: View {
           
           
           HStack {
-            CardDueView(card: $card)
+            CardDueView(card: $card, compact: preferences.compactDueDate)
               .font(.system(size: 12 * scale))
             
             badgeComponents

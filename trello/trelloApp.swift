@@ -35,7 +35,7 @@ struct trelloApp: App {
   
   var body: some Scene {
     Settings {
-      OnboardingView(preferences: $preferences)
+      SettingsView(preferences: $preferences)
     }
     
     WindowGroup {
