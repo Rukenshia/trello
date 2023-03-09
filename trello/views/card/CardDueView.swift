@@ -41,11 +41,11 @@ struct CardDueView: View {
     }
     
     if self.card.dueComplete {
-      return Color("CardDueCompleteBg").opacity(0.85);
+      return Color("CardDueCompleteBackground").opacity(0.85);
     }
     
     if Date.now > due {
-      return Color("CardOverdueBg").opacity(0.85);
+      return Color("CardOverdueBackground").opacity(0.85);
     }
     
     let diff = Calendar.current.dateComponents([.day], from: Date.now, to: due);
@@ -54,7 +54,7 @@ struct CardDueView: View {
       return Color.clear;
     }
     
-    return Color("CardDueSoonBg").opacity(0.85);
+    return Color("CardDueSoonBackground").opacity(0.85);
   }
   
   var body: some View {
@@ -64,7 +64,6 @@ struct CardDueView: View {
       }) {
         HStack(alignment: .center, spacing: 2) {
           Image(systemName: "clock")
-            .background(dueColor.clipShape(Circle()))
             .overlay {
               if isHovering {
                 Button(action: {
@@ -74,7 +73,7 @@ struct CardDueView: View {
                     .padding(3)
                     .font(.system(size: 10))
                     .foregroundColor(Color("TwGreen200"))
-                    .background(Color("TwGreen800"))
+                    .background(Color("CardDueCompleteBackground"))
                     .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
@@ -87,10 +86,16 @@ struct CardDueView: View {
           }
         }
         .onHover { hover in
-          isHovering = hover
+          withAnimation(.easeIn(duration: 0.05)) {
+            isHovering = hover
+          }
         }
+        .frame(alignment: .leading)
+        .frame(minWidth: 60)
         .padding(2)
-        .background(isHovering ? Color("TwGreen800") : Color.clear)
+        .foregroundColor(isHovering ? Color("TwGreen200") : Color.primary)
+        .background(isHovering ? Color("CardDueCompleteBackground") : dueColor)
+        .cornerRadius(4)
       }
       .buttonStyle(.plain)
     } else {
@@ -102,9 +107,16 @@ struct CardDueView: View {
 struct CardDueView_Previews: PreviewProvider {
   static var previews: some View {
     VStack {
-      CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now))))
-      CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 10)))))
-      CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))))
+      VStack {
+        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now))))
+        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 10)))))
+        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))))
+        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))), isHovering: true)
+      }
+      .padding()
+      .background(Color("CardBackground"))
+      .cornerRadius(4)
     }
+    .padding()
   }
 }

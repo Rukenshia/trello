@@ -72,7 +72,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F2FEB673-8483-4B94-9196-0A22C3864D30"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "trello/models/Preferences.swift"
@@ -82,6 +82,38 @@
             endingLineNumber = "53"
             landmarkName = "init()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F2FEB673-8483-4B94-9196-0A22C3864D30 - 90a4a48ac3953b11"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "trello.Preferences.init() -&gt; trello.Preferences"
+                  moduleName = "trello"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jan/src/priv/trello/trello/trello/models/Preferences.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "2100">
+               </Location>
+               <Location
+                  uuid = "F2FEB673-8483-4B94-9196-0A22C3864D30 - ed130bffab474f32"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Dictionary&lt;Swift.String, trello.OrganizationPreferences&gt;) -&gt; () in trello.Preferences.init() -&gt; trello.Preferences"
+                  moduleName = "trello"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jan/src/priv/trello/trello/trello/models/Preferences.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "28">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

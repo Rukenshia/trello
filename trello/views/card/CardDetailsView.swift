@@ -227,6 +227,7 @@ struct CardDetailsView: View {
                   ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
                     ContextMenuMoveListView(list: list, card: $card)
                   }
+                  .padding()
                 }
             }
             .frame(maxWidth: 260)
