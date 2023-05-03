@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LookAndFeelSettingsView: View {
-  @Binding var preferences: Preferences
+  @EnvironmentObject var preferences: Preferences
   
   @State private var selection: String = "compact"
   
@@ -40,8 +40,8 @@ struct LookAndFeelSettingsView: View {
 
 struct LookAndFeelSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-      LookAndFeelSettingsView(preferences: .constant(Preferences()))
-        .environmentObject(TrelloApi(key: "", token: ""))
+      LookAndFeelSettingsView()
+        .environmentObject(TrelloApi.testing)
         .frame(width: 300, height: 200)
     }
 }

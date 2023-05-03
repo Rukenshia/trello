@@ -50,6 +50,6 @@ struct AttachmentDetailView: View {
 struct AttachmentDetailView_Previews: PreviewProvider {
   static var previews: some View {
     AttachmentDetailView(attachment: .constant(Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: false, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: "https://via.placeholder.com/500")), onDelete: { })
-      .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+      .environmentObject(TrelloApi.testing)
   }
 }

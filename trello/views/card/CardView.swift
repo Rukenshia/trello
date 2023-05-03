@@ -265,6 +265,6 @@ struct CardView_Previews: PreviewProvider {
         .frame(width: 260)
     }
     .padding()
-    .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+    .environmentObject(TrelloApi.testing)
   }
 }

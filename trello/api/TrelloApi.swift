@@ -12,6 +12,7 @@ import Alamofire
 class TrelloApi: ObservableObject {
   let key: String
   let token: String
+  let credentials: [Credential]
   
   @Published var board: Board
   @Published var boards: [BasicBoard]
@@ -21,22 +22,31 @@ class TrelloApi: ObservableObject {
   @Published var errors: Int = 0
   @Published var errorMessages: [String] = []
   
-  private var auth: Parameters {
-    [
-      "key": self.key,
-      "token": self.token,
-    ]
+  static var testing: TrelloApi {
+    let prefs = Preferences()
+    
+    return TrelloApi(key: prefs.trelloKey!, token: prefs.trelloToken!, credentials: prefs.credentials)
   }
   
-  init(key: String, token: String) {
+  init(key: String, token: String, credentials: [Credential]) {
     self.key = key
     self.token = token
+    self.credentials = credentials
     self.board = Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs(), boardStars: [])
     self.boards = []
     
-    let authAdapter = TrelloApiAuthAdapter(key: self.key, token: self.token)
-    
-    self.session = Session(interceptor: Interceptor(adapter: authAdapter, retrier: authAdapter))
+    if credentials.count > 0 {
+      // Use dedicated credentials for board refresh so that we don't need strict rate limiting
+      let authAdapter = TrelloApiAuthAdapter(credentials: credentials, boardRefreshCredential: Credential(key: self.key, token: self.token))
+      
+      self.session = Session(interceptor: Interceptor(adapter: authAdapter, retrier: authAdapter))
+    } else {
+      
+      let authAdapter = TrelloApiAuthAdapter(credentials: [
+        Credential(key: self.key, token: self.token)
+      ] + credentials)
+      self.session = Session(interceptor: Interceptor(adapter: authAdapter, retrier: authAdapter))
+    }
   }
   
   static var DateFormatter: ISO8601DateFormatter {
@@ -121,17 +131,20 @@ class TrelloApi: ObservableObject {
 }
 
 class TrelloApiAuthAdapter: RequestAdapter, RequestRetrier {
-  let key: String
-  let token: String
+  let credentials: [Credential]
+  let boardRefreshCredential: Credential?
   
-  init(key: String, token: String) {
-    self.key = key
-    self.token = token
+  init(credentials: [Credential], boardRefreshCredential: Credential? = nil) {
+    self.credentials = credentials
+    self.boardRefreshCredential = boardRefreshCredential
+  }
+  
+  private var credential: Credential {
+    credentials.randomElement()!
   }
   
   func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
     var urlRequest = urlRequest
-    urlRequest.headers.add(name: "x", value: "y")
     if let url = urlRequest.url {
       guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
         completion(.success(urlRequest))
@@ -140,10 +153,25 @@ class TrelloApiAuthAdapter: RequestAdapter, RequestRetrier {
       
       var queryItems = components.queryItems ?? []
       
+      var cred = credential
+      
+      if let boardRefreshCredential = boardRefreshCredential {
+        do {
+          let regex = try NSRegularExpression(pattern: "^\\/1\\/boards\\/[0-9a-fA-F]{24}$", options: [])
+          let matches = regex.matches(in: components.path, options: [], range: NSRange(location: 0, length: components.path.count))
+          
+          if !matches.isEmpty {
+            cred = boardRefreshCredential
+          }
+        } catch {
+          print("Invalid regex pattern: \(error.localizedDescription)")
+        }
+      }
+      
       queryItems.append(
-        URLQueryItem(name: "key", value: self.key))
+        URLQueryItem(name: "key", value: cred.key))
       queryItems.append(
-        URLQueryItem(name: "token", value: self.token)
+        URLQueryItem(name: "token", value: cred.token)
       )
       
       components.queryItems = queryItems

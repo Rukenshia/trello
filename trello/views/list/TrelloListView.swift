@@ -297,7 +297,7 @@ struct TrelloListView_Previews: PreviewProvider {
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
       Card(id: UUID().uuidString, name: "Test Card", due: TrelloApi.DateFormatter.string(from: Date.now.addingTimeInterval(60))),
     ])), scale: .constant(1))
-    .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+    .environmentObject(TrelloApi.testing)
     .frame(width: 260, height: 800)
   }
 }

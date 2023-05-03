@@ -151,6 +151,6 @@ struct BoardView: View {
 struct BoardView_Previews: PreviewProvider {
   static var previews: some View {
     BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs(), boardStars: [], lists: [List(id: "foo", name: "foo"), List(id: "bar", name: "bar")])))
-      .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+      .environmentObject(TrelloApi.testing)
   }
 }

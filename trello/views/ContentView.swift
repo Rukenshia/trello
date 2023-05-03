@@ -15,15 +15,13 @@ enum BoardViewType {
 
 struct ContentView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var preferences: Preferences
   @Binding var showCommandBar: Bool
   
   @State private var cancellable: AnyCancellable?
   
-  private var timer = Timer.publish(
-    every: 10, // second
-    on: .main,
-    in: .common
-  ).autoconnect();
+  @State private var timer: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+  
   
   init(showCommandBar: Binding<Bool>) {
     self._showCommandBar = showCommandBar
@@ -61,6 +59,17 @@ struct ContentView: View {
           UserDefaults.standard.set(newBoard.id, forKey: PreferenceKeys.currentBoard)
         }
         
+        // Allow a faster refresh when having multiple credentials
+        if preferences.credentials.count > 0 {
+          timer.upstream.connect().cancel()
+          
+          timer = Timer.publish(
+            every: 3, // second
+            on: .main,
+            in: .common
+          ).autoconnect();
+        }
+        
         trelloApi.getBoards { boards in
           if let currentBoard = UserDefaults.standard.string(forKey: PreferenceKeys.currentBoard) {
             if currentBoard.isEmpty {
@@ -96,6 +105,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView(showCommandBar: .constant(true))
-      .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+      .environmentObject(TrelloApi.testing)
   }
 }

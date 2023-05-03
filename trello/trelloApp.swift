@@ -35,13 +35,14 @@ struct trelloApp: App {
   
   var body: some Scene {
     Settings {
-      SettingsView(preferences: $preferences)
+      SettingsView()
+        .environmentObject(preferences)
     }
     
     WindowGroup {
       if preferences.trelloKey != nil && preferences.trelloToken != nil {
         ContentView(showCommandBar: $showCommandBar)
-          .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
+          .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials))
           .environmentObject(preferences)
           .environmentObject(appState)
           .onAppear {
@@ -49,7 +50,8 @@ struct trelloApp: App {
           }
 //          .preferredColorScheme(.light)
       } else {
-        OnboardingView(preferences: $preferences)
+        OnboardingView()
+          .environmentObject(preferences)
       }
     }
     .commands {
@@ -67,7 +69,7 @@ struct trelloApp: App {
     WindowGroup("Attachment", for: Attachment.self) { attachment in
       AttachmentDetailView(attachment: Binding(attachment)!, onDelete: {})
         .navigationTitle("Attachment - " + attachment.wrappedValue!.name)
-        .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!))
+        .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials))
     }
   }
 }

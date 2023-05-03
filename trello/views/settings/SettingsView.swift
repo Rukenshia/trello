@@ -8,16 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-  @Binding var preferences: Preferences
-  
     var body: some View {
       TabView {
-        LookAndFeelSettingsView(preferences: $preferences)
+        LookAndFeelSettingsView()
           .tabItem {
             SwiftUI.Label("Look and Feel", systemImage: "photo.fill")
           }
         
-        OnboardingView(preferences: $preferences)
+        OnboardingView()
           .tabItem {
             SwiftUI.Label("API Settings", systemImage: "key")
           }
@@ -27,6 +25,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-      SettingsView(preferences: .constant(Preferences()))
+      SettingsView()
     }
 }

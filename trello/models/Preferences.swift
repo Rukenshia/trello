@@ -9,6 +9,7 @@ import Foundation
 
 struct PreferenceKeys {
   static let currentBoard = "currentBoard"
+  static let credentials = "credentials"
   static let trelloKey = "trelloKey"
   static let trelloToken = "trelloToken"
   static let scale = "scale"
@@ -25,7 +26,19 @@ class OrganizationPreferences: Codable {
   }
 }
 
+struct Credential: Codable, Hashable {
+  
+  var key: String
+  var token: String
+  
+  init(key: String, token: String) {
+    self.key = key
+    self.token = token
+  }
+}
+
 class Preferences: ObservableObject {
+  @Published var credentials: [Credential]
   var trelloKey: String?
   var trelloToken: String?
   var scale: CGFloat
@@ -34,6 +47,12 @@ class Preferences: ObservableObject {
   @Published var showFavorites: Bool
   
   init() {
+    if let creds = UserDefaults.standard.value(forKey: PreferenceKeys.credentials) as? Data {
+      self.credentials = try! PropertyListDecoder().decode([Credential].self, from: creds)
+    } else {
+      self.credentials = []
+    }
+    
     self.trelloKey = UserDefaults.standard.string(forKey: PreferenceKeys.trelloKey)
     self.trelloToken = UserDefaults.standard.string(forKey: PreferenceKeys.trelloToken)
     
@@ -54,6 +73,10 @@ class Preferences: ObservableObject {
     self.showFavorites = UserDefaults.standard.bool(forKey: PreferenceKeys.showFavorites)
     self.compactDueDate = UserDefaults.standard.bool(forKey: PreferenceKeys.compactDueDate)
     
+    $credentials.sink { _ in
+      self.save()
+    }
+    
     $organizations.sink { _ in
       self.save()
     }
@@ -71,5 +94,6 @@ class Preferences: ObservableObject {
     UserDefaults.standard.set(self.compactDueDate, forKey: PreferenceKeys.compactDueDate)
     
     UserDefaults.standard.set(try? PropertyListEncoder().encode(self.organizations), forKey: PreferenceKeys.organizations)
+    UserDefaults.standard.set(try? PropertyListEncoder().encode(self.credentials), forKey: PreferenceKeys.credentials)
   }
 }

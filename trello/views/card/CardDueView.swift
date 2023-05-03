@@ -63,7 +63,7 @@ struct CardDueView: View {
       self.trelloApi.markAsDone(card: self.card) { _ in }
     }) {
       Image(systemName: "checkmark")
-        .padding(3)
+        .padding(10)
         .font(.system(size: 10))
         .foregroundColor(Color("TwGreen200"))
         .background(Color("CardDueCompleteBackground"))
@@ -73,19 +73,19 @@ struct CardDueView: View {
   }
   
   private var foregroundColor: Color {
-    if compact {
-      return .primary
-    }
-    
     return isHovering ? Color("TwGreen200") : .primary
   }
   
   private var backgroundColor: Color {
+    if isHovering {
+      return Color("CardDueCompleteBackground")
+    }
+    
     if compact {
       return .clear
     }
     
-    return isHovering ? Color("CardDueCompleteBackground") : dueColor
+    return dueColor
   }
   
   var body: some View {
@@ -95,14 +95,14 @@ struct CardDueView: View {
       }) {
         HStack(alignment: .center, spacing: 2) {
           Image(systemName: "clock")
+            .padding(compact ? 1 : 0)
+            .background(compact ? dueColor : Color.clear)
+            .clipShape(Circle())
             .overlay {
               if isHovering {
                 hoverButton
               }
             }
-            .padding(2)
-            .background(compact ? dueColor : Color.clear)
-            .clipShape(Circle())
           if Calendar.current.isDateInToday(due) {
             Text(formattedDueTime)
           } else {
@@ -116,7 +116,7 @@ struct CardDueView: View {
         }
         .frame(alignment: .leading)
         .frame(minWidth: 60)
-        .padding(2)
+        .padding(compact ? 1 : 2)
         .foregroundColor(foregroundColor)
         .background(backgroundColor)
         .cornerRadius(4)

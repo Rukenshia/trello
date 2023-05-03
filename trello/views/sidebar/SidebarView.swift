@@ -104,7 +104,7 @@ struct SidebarView: View {
   struct SidebarView_Previews: PreviewProvider {
     static var previews: some View {
       SidebarView()
-        .environmentObject(TrelloApi(key: Preferences().trelloKey!, token: Preferences().trelloToken!))
+        .environmentObject(TrelloApi.testing)
     }
   }
 }

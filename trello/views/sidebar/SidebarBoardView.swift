@@ -67,7 +67,7 @@ struct SidebarBoardView: View {
       if newBoard.id == self.board.id {
         self.color = .accentColor
       } else {
-        self.color = Color("CardBackground").opacity(0)
+        self.color = .clear
       }
     }
   }
