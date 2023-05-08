@@ -173,6 +173,10 @@ struct TrelloListView: View {
       
       monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
         if showAddCard {
+          // When pressing escape, stop showing the new card field
+          if nsevent.keyCode == 53 {
+            showAddCard = false
+          }
           return nsevent
         }
         
