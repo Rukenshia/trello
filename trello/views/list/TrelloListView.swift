@@ -40,14 +40,8 @@ struct TrelloListView: View {
   @State private var showAddCard: Bool = false
   
   @State private var showMenu: Bool = false
-  @State private var showDetailsForCard: Card? = nil
-  @State private var popoverCard: Card? = nil
-  @State private var cardPopoverState: PopoverState = .none;
-  @State private var monitor: Any?;
   
   @State private var width: CGFloat = 150
-  
-  @State private var hoveredCard: Card? = nil
   
   var background: Color {
     return Color("ListBackground").opacity(0.6)
@@ -80,25 +74,7 @@ struct TrelloListView: View {
         } else {
           ForEach(self.$list.cards) { card in
             CardView(card: card,
-                     hovering: hoveredCard?.id == card.wrappedValue.id,
-                     showDetails: Binding(get: { showDetailsForCard?.id == card.wrappedValue.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }),
-                     popoverState: $cardPopoverState,
-                     showPopover: Binding(get: { popoverCard?.id == card.wrappedValue.id }, set: { v in popoverCard = v ? popoverCard : nil }),
                      scale: $scale)
-            .onTapGesture {
-              showDetailsForCard = card.wrappedValue
-            }
-            .onHover { isHovering in
-              self.hoveredCard = isHovering ? card.wrappedValue : nil
-              
-              withAnimation(.easeInOut(duration: 0.1)) {
-                if isHovering {
-                  NSCursor.pointingHand.push()
-                } else {
-                  NSCursor.pop()
-                }
-              }
-            }
             .onDrag {
               NSItemProvider(object: card.wrappedValue.id as NSString)
             }
@@ -172,67 +148,6 @@ struct TrelloListView: View {
     }
     .onAppear {
       setWidth()
-      
-      monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
-        if showAddCard {
-          // When pressing escape, stop showing the new card field
-          if nsevent.keyCode == 53 {
-            showAddCard = false
-          }
-          return nsevent
-        }
-        
-        if appState.creatingCard {
-          return nsevent
-        }
-        
-        if showDetailsForCard != nil {
-          return nsevent
-        }
-        
-        if hoveredCard == nil {
-          return nsevent
-        }
-        
-        if popoverCard != nil {
-          return nsevent
-        }
-        
-        switch (nsevent.characters) {
-        case "a":
-          self.cardPopoverState = .manageMembers
-          self.popoverCard = hoveredCard
-        case "m":
-          self.cardPopoverState = .moveToList
-          self.popoverCard = hoveredCard
-        case "l":
-          self.cardPopoverState = .manageLabels
-          self.popoverCard = hoveredCard
-        case "d":
-          self.cardPopoverState = .dueDate
-          self.popoverCard = hoveredCard
-        case "c":
-          self.cardPopoverState = .cardColor
-          self.popoverCard = hoveredCard
-        case "e":
-          self.cardPopoverState = .editCard
-          self.popoverCard = hoveredCard
-        case "r":
-          var card = hoveredCard!
-          trelloApi.updateCard(cardId: card.id, closed: true) { _ in
-            card.closed = true
-          }
-        default:
-          ()
-        }
-        
-        return nsevent
-      }
-    }
-    .onDisappear {
-      if let monitor = self.monitor {
-        NSEvent.removeMonitor(monitor)
-      }
     }
     .padding(8)
     .background(background)

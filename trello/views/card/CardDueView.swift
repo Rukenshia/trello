@@ -6,16 +6,16 @@
 //
 
 import SwiftUI
+import Combine
 
 struct CardDueView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   let cardId: String // TODO: remove
-  let dueDate: Date? // TODO: remove optional
+  let dueDate: Date? // TODO: remove optional, use 
   let dueComplete: Bool
   var compact: Bool = false
   
   @State var isHovering: Bool = false
-  @State private var dueColor: Color = .clear
   
   private var formattedDueDate: String {
     guard let due = dueDate else {
@@ -39,27 +39,26 @@ struct CardDueView: View {
     return formatter.string(from: due)
   }
   
-  private func setDueColor() {
+  private var dueColor: Color {
     guard let due = dueDate else {
-      self.dueColor = Color.clear;
-      return;
+      return Color.clear;
     }
     
     if dueComplete {
-      self.dueColor = Color("CardDueCompleteBackground").opacity(0.85);
+      return Color("CardDueCompleteBackground").opacity(0.85);
     }
     
     if Date.now > due {
-      self.dueColor = Color("CardOverdueBackground").opacity(0.85);
+      return Color("CardOverdueBackground").opacity(0.85);
     }
     
     let diff = Calendar.current.dateComponents([.day], from: Date.now, to: due);
     
     if diff.day! > 0 {
-      self.dueColor = Color.clear;
+      return Color.clear;
     }
     
-    self.dueColor = Color("CardDueSoonBackground").opacity(0.85);
+    return Color("CardDueSoonBackground").opacity(0.85);
   }
   
   private var hoverButton: some View {
@@ -112,9 +111,6 @@ struct CardDueView: View {
           } else {
             Text(formattedDueDate)
           }
-        }
-        .task {
-          setDueColor()
         }
         .onHover { hover in
           withAnimation(.easeIn(duration: 0.05)) {

@@ -88,8 +88,8 @@ struct ContentView: View {
       }
       .frame(minWidth: 900, minHeight: 600, alignment: .top)
       .onReceive(timer) { newTime in
-        self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
-        }
+//        self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
+//        }
       }
       .sheet(isPresented: $showCommandBar) {
           VStack {

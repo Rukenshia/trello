@@ -12,19 +12,23 @@ struct CardView: View {
   @Environment(\.openWindow) var openWindow
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var preferences: Preferences
+  @EnvironmentObject var appState: AppState
   
   @Binding var card: Card
-  let hovering: Bool
-  @Binding var showDetails: Bool
-  @Binding var popoverState: PopoverState
-  @Binding var showPopover: Bool
+  @State private var showDetails = false
+  @State private var popoverState: PopoverState = .none
+  @State private var showPopover = false
   @Binding var scale: CGFloat
+  
+  @State private var isHovering = false
   
   @State private var bgImage: AnyView? = nil
   
+  @State private var monitor: Any?;
+  
   private var bgHoverImage: AnyView? {
     if let bgImage = self.bgImage {
-      if self.hovering {
+      if self.isHovering {
         return AnyView(bgImage.brightness(0.1))
       }
       
@@ -45,7 +49,7 @@ struct CardView: View {
       }
     }
     
-    if hovering {
+    if isHovering {
       return AnyView(cardBg.brightness(0.1))
     }
     
@@ -190,11 +194,16 @@ struct CardView: View {
         Spacer()
       }
     }
+    .onHover { hover in
+      withAnimation(.easeInOut) {
+        self.isHovering = hover
+      }
+    }
     .frame(alignment: .leading)
+    .onTapGesture {
+      showDetails = true
+    }
     .background(self.bgImage != nil ? self.bgHoverImage! : self.background)
-    //    .onTapGesture(count: 2) {
-    //      openWindow(value: card)
-    //    }
     .sheet(isPresented: $showDetails) {
       CardDetailsView(card: $card, isVisible: $showDetails)
     }
@@ -233,6 +242,55 @@ struct CardView: View {
     
     .cornerRadius(4)
     .shadow(color: .black.opacity(0.1), radius: 0, x: 0, y: 1)
+    .onAppear {
+      monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
+        if !isHovering {
+          return nsevent
+        }
+        
+        if appState.creatingCard {
+          return nsevent
+        }
+        
+        if showDetails {
+          return nsevent
+        }
+        
+        switch (nsevent.characters) {
+        case "a":
+          self.popoverState = .manageMembers
+          showPopover = true
+        case "m":
+          self.popoverState = .moveToList
+          showPopover = true
+        case "l":
+          self.popoverState = .manageLabels
+          showPopover = true
+        case "d":
+          self.popoverState = .dueDate
+          showPopover = true
+        case "c":
+          self.popoverState = .cardColor
+          showPopover = true
+        case "e":
+          self.popoverState = .editCard
+          showPopover = true
+        case "r":
+          trelloApi.updateCard(cardId: card.id, closed: true) { _ in
+            card.closed = true
+          }
+        default:
+          ()
+        }
+        
+        return nsevent
+      }
+    }
+    .onDisappear {
+      if let monitor = self.monitor {
+        NSEvent.removeMonitor(monitor)
+      }
+    }
     .task {
       if let cover = card.cover {
         if cover.size == .full {
@@ -253,15 +311,15 @@ struct CardView: View {
 struct CardView_Previews: PreviewProvider {
   static var previews: some View {
     VStack {
-      CardView(card: .constant(Card(id: UUID().uuidString, name: "A simple card, for simple people")), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+      CardView(card: .constant(Card(id: UUID().uuidString, name: "A simple card, for simple people")), scale: .constant(1))
         .frame(width: 280, height: 100)
-      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 100000)))), hovering: true, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 100000)))), scale: .constant(1))
         .frame(width: 280, height: 100)
-      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000)))), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000)))), scale: .constant(1))
         .frame(width: 280, height: 100)
-      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [Label(id: "label-id", name: "label name", color: "sky"), Label(id: "duration", name: "duration:15")], name: "A long card name that spans over at least two lines and truncates", desc: "A card desc with pretty long text to check how it behaves", due: TrelloApi.DateFormatter.string(from: Date.now))), scale: .constant(1))
         .frame(width: 280, height: 100)
-      CardView(card: .constant(Card(id: UUID().uuidString, labels: [], name: "Lots of badges", desc: "A card with lots of extra badges", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 50000)), badges: Badges(checkItems: 14, checkItemsChecked: 3, comments: 5, attachments: 2))), hovering: false, showDetails: .constant(false), popoverState: .constant(.none), showPopover: .constant(false), scale: .constant(1))
+      CardView(card: .constant(Card(id: UUID().uuidString, labels: [], name: "Lots of badges", desc: "A card with lots of extra badges", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 50000)), badges: Badges(checkItems: 14, checkItemsChecked: 3, comments: 5, attachments: 2))), scale: .constant(1))
         .frame(width: 260)
     }
     .padding()

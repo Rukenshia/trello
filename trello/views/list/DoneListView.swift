@@ -90,7 +90,7 @@ struct DoneListView: View {
     SwiftUI.List {
       ForEach(bucketKeys, id: \.self) { key in
         if self.buckets[key]!.count > 0 {
-          BucketView(key: key, cards: self.buckets[key]!, showDetails: $showDetails, showDetailsForCard: $showDetailsForCard)
+//          BucketView(key: key, cards: self.buckets[key]!, showDetails: $showDetails, showDetailsForCard: $showDetailsForCard)
         }
       }
     }
@@ -128,23 +128,11 @@ struct BucketView: View {
   let key: String
   let cards: [Card]
   
-  @State var hoveredCard: Card? = nil
-  @Binding var showDetails: Bool
-  @Binding var showDetailsForCard: Card?
-  
   var body: some View {
     Text(key)
       .font(.headline)
     ForEach(cards) { card in
-      CardView(card: Binding(get: { card }, set: {_ in }), hovering: hoveredCard?.id == card.id, showDetails: Binding(get: { showDetailsForCard?.id == card.id }, set: { v in showDetailsForCard = v ? showDetailsForCard : nil }), popoverState: .constant(.none), showPopover:.constant(false), scale: .constant(1))
-        .onHover { isHovering in
-          self.hoveredCard = isHovering ? card : nil
-        }
-        .onTapGesture {
-          showDetails = true
-          showDetailsForCard = card
-          print("onTapGesture")
-        }
+      CardView(card: Binding(get: { card }, set: {_ in }), scale: .constant(1))
         .padding(4)
     }
   }

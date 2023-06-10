@@ -54,27 +54,25 @@ struct BoardView: View {
     ZStack {
       switch viewType {
       case .lists:
-        GeometryReader { reader in
-          ScrollView([.horizontal]) {
-            VStack(alignment: .leading) {
-              HStack(alignment: .top) {
-                ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
-                  TrelloListView(list: list, scale: $scale)
-                }
+        ScrollView([.horizontal]) {
+          VStack(alignment: .leading) {
+            HStack(alignment: .top) {
+              ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
+                TrelloListView(list: list, scale: $scale)
               }
             }
-            .padding()
-            Spacer()
           }
-            .background(
-              self.backgroundImage.allowsHitTesting(false)
-            )
-            .clipped()
+          .padding()
+          Spacer()
         }
+        .background(
+          self.backgroundImage.allowsHitTesting(false)
+        )
+        .clipped()
         .navigationTitle(board.name)
         .navigationSubtitle(organization?.displayName ?? "")
         .toolbar {
-         
+          
           ToolbarItem(placement: .navigation) {
             Button() {
               if board.boardStars.isEmpty {
@@ -95,7 +93,7 @@ struct BoardView: View {
           
           
           ToolbarItemGroup(placement: .primaryAction) {
-
+            
             Button(action: { setScale(scale + 0.1) }) {
               Image(systemName: "plus.magnifyingglass")
             }
