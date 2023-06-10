@@ -44,11 +44,11 @@ struct ContextMenuLabelView: View {
     var body: some View {
         Button(action: {
             if self.applied {
-                self.trelloApi.removeLabelsFromCard(card: self.card, labelIds: [label.id], completion: { newCard in
+                self.trelloApi.removeLabelsFromCard(card: self.card, labelIds: [label.id], completion: { newCard in // TODO: update to cardId
                     print("label removed from card")
                 })
             } else {
-                self.trelloApi.addLabelsToCard(card: self.card, labelIds: [label.id], completion: { newCard in
+              self.trelloApi.addLabelsToCard(cardId: self.card.id, labelIds: [label.id], completion: { newCard in
                     print("label added to card")
                 })
             }

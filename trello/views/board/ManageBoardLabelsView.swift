@@ -43,10 +43,8 @@ struct ManageBoardLabelsView: View {
         }
         .frame(width: 200)
       } detail: {
-        if let label = $selection {
-          if label.wrappedValue != nil {
-            EditLabelView(label: Binding($selection)!, isNew: label.wrappedValue!.id.isEmpty)
-          }
+        if let label = selection {
+          EditLabelView(label: Binding($selection)!, isNew: label.id.isEmpty)
         } else {
           Text("Select a label to edit")
         }

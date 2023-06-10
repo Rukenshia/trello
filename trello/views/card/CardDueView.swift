@@ -9,13 +9,16 @@ import SwiftUI
 
 struct CardDueView: View {
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var card: Card
+  let cardId: String // TODO: remove
+  let dueDate: Date? // TODO: remove optional
+  let dueComplete: Bool
   var compact: Bool = false
   
   @State var isHovering: Bool = false
+  @State private var dueColor: Color = .clear
   
   private var formattedDueDate: String {
-    guard let due = card.dueDate else {
+    guard let due = dueDate else {
       return ""
     }
     
@@ -26,7 +29,7 @@ struct CardDueView: View {
   }
   
   private var formattedDueTime: String {
-    guard let due = card.dueDate else {
+    guard let due = dueDate else {
       return ""
     }
     
@@ -36,31 +39,32 @@ struct CardDueView: View {
     return formatter.string(from: due)
   }
   
-  private var dueColor: Color {
-    guard let due = card.dueDate else {
-      return Color.clear;
+  private func setDueColor() {
+    guard let due = dueDate else {
+      self.dueColor = Color.clear;
+      return;
     }
     
-    if self.card.dueComplete {
-      return Color("CardDueCompleteBackground").opacity(0.85);
+    if dueComplete {
+      self.dueColor = Color("CardDueCompleteBackground").opacity(0.85);
     }
     
     if Date.now > due {
-      return Color("CardOverdueBackground").opacity(0.85);
+      self.dueColor = Color("CardOverdueBackground").opacity(0.85);
     }
     
     let diff = Calendar.current.dateComponents([.day], from: Date.now, to: due);
     
     if diff.day! > 0 {
-      return Color.clear;
+      self.dueColor = Color.clear;
     }
     
-    return Color("CardDueSoonBackground").opacity(0.85);
+    self.dueColor = Color("CardDueSoonBackground").opacity(0.85);
   }
   
   private var hoverButton: some View {
     Button(action: {
-      self.trelloApi.markAsDone(card: self.card) { _ in }
+      self.trelloApi.markAsDone(cardId: self.cardId) { _ in }
     }) {
       Image(systemName: "checkmark")
         .padding(10)
@@ -89,9 +93,9 @@ struct CardDueView: View {
   }
   
   var body: some View {
-    if let due = card.dueDate {
+    if let due = dueDate {
       Button(action: {
-        self.trelloApi.markAsDone(card: self.card) { _ in }
+        self.trelloApi.markAsDone(cardId: cardId) { _ in }
       }) {
         HStack(alignment: .center, spacing: 2) {
           Image(systemName: "clock")
@@ -108,6 +112,9 @@ struct CardDueView: View {
           } else {
             Text(formattedDueDate)
           }
+        }
+        .task {
+          setDueColor()
         }
         .onHover { hover in
           withAnimation(.easeIn(duration: 0.05)) {
@@ -132,20 +139,20 @@ struct CardDueView_Previews: PreviewProvider {
   static var previews: some View {
     VStack {
       VStack {
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now))))
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 10)))))
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))))
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))), isHovering: true)
+        CardDueView(cardId: "card", dueDate: Date.now, dueComplete: false)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 10), dueComplete: false)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 1000000), dueComplete: false)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 1000000), dueComplete: false, isHovering: true)
       }
       .padding()
       .background(Color("CardBackground"))
       .cornerRadius(4)
       
       VStack {
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now))), compact: true)
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 10)))), compact: true)
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))), compact: true)
-        CardDueView(card: .constant(Card(id: "card", name: "card", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 1000000)))), compact: true, isHovering: true)
+        CardDueView(cardId: "card", dueDate: Date.now, dueComplete: false, compact: true)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 10), dueComplete: false, compact: true)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 1000000), dueComplete: false, compact: true)
+        CardDueView(cardId: "card", dueDate: Date.now.advanced(by: 1000000), dueComplete: false, compact: true, isHovering: true)
       }
       .padding()
       .background(Color("CardBackground"))

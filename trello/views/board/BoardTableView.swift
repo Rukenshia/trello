@@ -55,7 +55,7 @@ struct BoardTableView: View {
   
   private var due: TableColumn<Card, KeyPathComparator<Card>, some View, Text> {
     TableColumn("Due", value: \.dueString) { card in
-      CardDueView(card: Binding(get: { card }, set: { _ in }), compact: preferences.compactDueDate)
+      CardDueView(cardId: card.id, dueDate: card.dueDate, dueComplete: card.dueComplete, compact: preferences.compactDueDate)
         .frame(
           maxWidth: .infinity,
           maxHeight: .infinity,

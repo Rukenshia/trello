@@ -37,21 +37,29 @@ extension TrelloApi {
     }
   }
   
+  func getCard(id: String, completion: @escaping (Card) -> Void) {
+    self.request("/cards/\(id)", result: Card.self) { response, card in
+        completion(card)
+    }
+  }
+  
   func getCardChecklists(id: String, completion: @escaping ([Checklist]) -> Void = { checklists in }) {
     self.request("/cards/\(id)/checklists", result: [Checklist].self) { response, checklists in
       completion(checklists)
     }
   }
   
-  func addLabelsToCard(card: Card, labelIds: [String], completion: @escaping (Card) -> Void) {
-    self.request("/cards/\(card.id)", method: .put, parameters: [
-      "idLabels": (card.idLabels + labelIds).joined(separator: ","),
-    ], result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-      
-      self.board.lists[listIdx].cards[cardIdx] = card
-      completion(card)
+  func addLabelsToCard(cardId: String, labelIds: [String], completion: @escaping (Card) -> Void) {
+    self.getCard(id: cardId) { card in
+      self.request("/cards/\(card.id)", method: .put, parameters: [
+        "idLabels": (card.idLabels + labelIds).joined(separator: ","),
+      ], result: Card.self) { response, card in
+        let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
+        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
+        
+        self.board.lists[listIdx].cards[cardIdx] = card
+        completion(card)
+      }
     }
   }
   

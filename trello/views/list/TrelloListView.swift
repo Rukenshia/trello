@@ -121,7 +121,9 @@ struct TrelloListView: View {
         }
         
         if showAddCard {
-          AddCardView(list: self.$list, showAddCard: self.$showAddCard)
+          AddCardView(list: self.$list, showAddCard: self.$showAddCard, onFocusLost: {
+            showAddCard = false
+          })
           //            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
         }
       }

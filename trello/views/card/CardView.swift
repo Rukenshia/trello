@@ -177,7 +177,7 @@ struct CardView: View {
           
           
           HStack {
-            CardDueView(card: $card, compact: preferences.compactDueDate)
+            CardDueView(cardId: card.id, dueDate: card.dueDate, dueComplete: card.dueComplete, compact: preferences.compactDueDate)
               .font(.system(size: 12 * scale))
             
             badgeComponents

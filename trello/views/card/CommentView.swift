@@ -80,19 +80,24 @@ struct CommentView: View {
           )
           
           HStack {
-            Button(action: {
-              self.editing = true
-            }) {
-              Text("Edit")
+            if comment.type == .copyCommentCard {
+              Text("_Copied comment_")
                 .font(.system(size: 10))
+            } else {
+              Button(action: {
+                self.editing = true
+              }) {
+                Text("Edit")
+                  .font(.system(size: 10))
+              }
+              .buttonStyle(.borderless)
+              
+              Button(action: self.onDelete) {
+                Text("Delete")
+                  .font(.system(size: 10))
+              }
+              .buttonStyle(.borderless)
             }
-            .buttonStyle(.borderless)
-            
-            Button(action: self.onDelete) {
-              Text("Delete")
-                .font(.system(size: 10))
-            }
-            .buttonStyle(.borderless)
             
             Spacer()
             Text(TrelloApi.DateFormatter.date(from: comment.date)!.formatted())

@@ -13,6 +13,7 @@ struct CardDetailsView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   
   @Binding var card: Card
+  @State private var loadingComments = true
   @State var comments: [ActionCommentCard] = []
   @State var checklists: [Checklist] = []
   @State var showChecklistForm: Bool = false
@@ -116,6 +117,10 @@ struct CardDetailsView: View {
                     self.comments.insert(comment, at: 0)
                   }
                 })
+                
+                if loadingComments {
+                  ProgressView()
+                }
                 
                 if comments.count > 0 {
                   ForEach(self.$comments) { comment in
@@ -246,6 +251,7 @@ struct CardDetailsView: View {
         
         trelloApi.getCardComments(id: card.id) { comments in
           self.comments = comments
+          self.loadingComments = false
         }
       }
     }

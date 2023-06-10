@@ -15,11 +15,11 @@ struct LookAndFeelSettingsView: View {
     var body: some View {
       VStack {
         Picker("Due date", selection: $selection) {
-          CardDueView(card: .constant(Card(id: "card-id", name: "card name", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 5)))), isHovering: false)
+          CardDueView(cardId: "card-id", dueDate: Date.now.advanced(by: 5), dueComplete: false, isHovering: false)
             .allowsHitTesting(false)
             .tag("full")
           
-          CardDueView(card: .constant(Card(id: "card-id", name: "card name", due: TrelloApi.DateFormatter.string(from: Date.now.advanced(by: 5)))), compact: true, isHovering: false)
+          CardDueView(cardId: "card-id", dueDate: Date.now.advanced(by: 5), dueComplete: false, compact: true, isHovering: false)
             .allowsHitTesting(false)
             .tag("compact")
         }

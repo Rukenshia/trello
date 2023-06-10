@@ -12,6 +12,7 @@ struct AddCardView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @Binding var list: List
   @Binding var showAddCard: Bool
+  var onFocusLost: (() -> Void) = {}
   
   @State private var name: String = ""
   @State private var debouncedCreate: (() -> Void) = {}
@@ -38,6 +39,11 @@ struct AddCardView: View {
               print("card \(card.name) created")
               
               self.showAddCard = false
+            }
+          }
+          .onChange(of: focusedField) { field in
+            if field != .name {
+              self.onFocusLost()
             }
           }
           .overlay {
