@@ -126,6 +126,8 @@ class BoardState: ObservableObject {
       return
     }
     
+    // FIXME: update when switching to async/await
+    self.updateCard(cardId: cardId, dueComplete: true)
     self.addLabelsToCard(cardId: cardId, labelIds: [doneLabel.id])
   }
   
