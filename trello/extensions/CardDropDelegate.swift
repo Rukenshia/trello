@@ -10,9 +10,10 @@ import SwiftUI
 
 struct CardDropDelegate: DropDelegate {
   @EnvironmentObject var state: AppState
-  @EnvironmentObject var boardVm: BoardState
   
   var trelloApi: TrelloApi;
+  var boardVm: BoardState
+  
   @Binding var list: List;
   
   func validateDrop(info: DropInfo) -> Bool {

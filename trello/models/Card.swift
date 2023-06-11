@@ -51,7 +51,7 @@ struct CardCover: Codable, Hashable {
   
   var displayColor: Color {
     switch self.color {
-    case .red:
+    case .some(.red):
       return Color("TwRed700")
     case .some(.pink):
       return Color("TwPink500")
@@ -72,7 +72,7 @@ struct CardCover: Codable, Hashable {
     case .some(.green):
       return Color("TwEmerald600")
     case .none:
-      return Color.clear
+      return Color("CardBackground")
     }
   }
 }

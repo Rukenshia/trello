@@ -86,17 +86,13 @@ struct AddCardView: View {
   }
   
   private func create(_ newName: String) {
-    var newName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
-    
-    self.name = newName
-    
+    let newName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
     if newName.isEmpty {
       return
     }
     
-    self.name = ""
-    
     boardVm.createCard(listId: self.list.id, name: newName, description: "")
+    self.name = ""
   }
   
   func debounce(interval: TimeInterval, queue: DispatchQueue = DispatchQueue.main, action: @escaping (() -> Void)) -> () -> Void {

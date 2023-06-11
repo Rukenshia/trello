@@ -154,7 +154,7 @@ class BoardState: ObservableObject {
     api.setListName(listId: listId, name: name) { list in
       let listIdx = self.board.lists.firstIndex(where: { l in l.id == listId })!
 
-      self.board.lists = self.board.lists.filter{ l in l.id != listId }
+      self.board.lists[listIdx].name = name
     }
   }
   
@@ -163,6 +163,36 @@ class BoardState: ObservableObject {
       let listIdx = self.board.lists.firstIndex(where: { l in l.id == list.id })!
       
       self.board.lists[listIdx].pos = list.pos
+    }
+  }
+  
+  func addMemberToCard(cardId: String, memberId: String) {
+    api.addMemberToCard(cardId: cardId, memberId: memberId) {
+      let cardIdx = self.board.cards.firstIndex(where: { c in c.id == cardId })!
+      let cardListId = self.board.cards[cardIdx].idList
+      
+      self.board.cards[cardIdx].idMembers.append(memberId)
+      
+      if let listIdx = self.board.lists.firstIndex(where: { l in l.id == cardListId }) {
+        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == cardId })!
+        
+        self.board.lists[listIdx].cards[cardIdx].idMembers.append(memberId)
+      }
+    }
+  }
+  
+  func removeMemberFromCard(cardId: String, memberId: String) {
+    api.removeMemberFromCard(cardId: cardId, memberId: memberId) {
+      let cardIdx = self.board.cards.firstIndex(where: { c in c.id == cardId })!
+      let cardListId = self.board.cards[cardIdx].idList
+      
+      self.board.cards[cardIdx].idMembers.removeAll(where: { m in m == memberId })
+      
+      if let listIdx = self.board.lists.firstIndex(where: { l in l.id == cardListId }) {
+        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == cardId })!
+        
+        self.board.lists[listIdx].cards[cardIdx].idMembers.removeAll(where: { m in m == memberId })
+      }
     }
   }
 }

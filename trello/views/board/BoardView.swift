@@ -120,13 +120,17 @@ struct BoardView: View {
       }
     }
     // TODO: needed?
-//    .onChange(of: board) { board in
-//      self.trelloApi.getOrganization(id: board.idOrganization) { organization in
-//        self.organization = organization
-//      }
-//    }
+    .onChange(of: boardVm.board.idOrganization) { newOrg in
+      self.trelloApi.getOrganization(id: newOrg) { organization in
+        self.organization = organization
+      }
+    }
     .onAppear {
       scale = preferences.scale;
+      
+      self.trelloApi.getOrganization(id: boardVm.board.idOrganization) { organization in
+        self.organization = organization
+      }
     }
   }
   

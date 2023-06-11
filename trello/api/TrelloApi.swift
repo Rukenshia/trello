@@ -62,6 +62,20 @@ class TrelloApi: ObservableObject {
     return formatter
   }
   
+  static var DateFormatterDate: DateFormatter {
+    let formatter = Foundation.DateFormatter()
+    formatter.dateFormat = "MMM dd"
+    
+    return formatter
+  }
+  
+  static var DateFormatterTime: DateFormatter {
+    let formatter = Foundation.DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    
+    return formatter
+  }
+  
   internal func addError(_ error: AFError? = nil) {
     DispatchQueue.main.async {
       self.errors += 1

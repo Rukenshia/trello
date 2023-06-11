@@ -28,7 +28,7 @@ struct BoardStar: Identifiable, Codable, Hashable {
   var pos: Int
 }
 
-struct Board: Codable, Hashable {
+struct Board: Identifiable, Codable, Hashable {
   var id: String
   var idOrganization: String
   var name: String

@@ -73,20 +73,14 @@ struct CommandBarView: View {
               selection = selection! > 1 ? selection! - 1 : 0
             }
           }
-          
-          print(selection)
         } else {
-          print("selection 0")
           selection = 0
         }
         return nsevent
       }
     }
-    //    .padding()
     .frame(minHeight: 32)
     .frame(minWidth: 600, maxWidth: .infinity)
-    //    .background(Color("CardBackground"))
-    //    .cornerRadius(8)
   }
 }
 

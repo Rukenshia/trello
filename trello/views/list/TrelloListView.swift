@@ -52,8 +52,10 @@ struct TrelloListView: View {
   var body: some View {
     VStack(spacing: 4) {
       HStack {
-        TrelloListNameView(listId: list.id, name: list.name)
-          .font(.system(size: 12 * scale))
+        TrelloListNameView(listId: list.id, name: list.name, onRename: { newName in
+          boardVm.setListName(listId: list.id, name: newName)
+        })
+        .font(.system(size: 12 * scale))
         Spacer()
         Button(action: {
           self.showMenu = true
@@ -71,14 +73,14 @@ struct TrelloListView: View {
           if !showAddCard {
             Spacer()
               .frame(height: 180 * scale)
-              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
           }
         } else {
-          ForEach(self.$list.cards) { card in
+          ForEach(self.$list.cards, id: \.id) { card in
             CardView(card: card,
                      scale: $scale)
             .onDrag {
-              NSItemProvider(object: card.wrappedValue.id as NSString)
+              NSItemProvider(object: card.id as NSString)
             }
           }
           .onMove { source, dest in
@@ -94,7 +96,7 @@ struct TrelloListView: View {
             self.list.cards.remove(atOffsets: offsets)
           }
           .onInsert(of: ["public.text"], perform: onInsert)
-          .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+          .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
           .deleteDisabled(true)
         }
         
@@ -102,10 +104,10 @@ struct TrelloListView: View {
           AddCardView(list: self.list, showAddCard: self.$showAddCard, onFocusLost: {
             showAddCard = false
           })
-          //            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
         }
       }
       .listStyle(.plain)
+      .scrollIndicators(.never) // FIXME: with the scroll indicators visible, there's always some white background
       Button(action: {
         self.showAddCard = true
         
@@ -113,30 +115,30 @@ struct TrelloListView: View {
           self.setWidth()
         }
       }) {
-            HStack {
-              Spacer()
-              Image(systemName: "plus")
-              Text("Add card")
-              Spacer()
-            }
-            .padding(4 * scale)
-            .padding(.vertical, 6 * scale)
-            .background(self.addCardColor)
-            .cornerRadius(4)
-            .clipShape(Rectangle())
-            .onHover { hover in
-              if hover {
-                self.addCardColor = Color("ButtonBackground");
-                return;
-              }
-              
-              self.addCardColor = Color(.clear);
-              return;
-            }
+        HStack {
+          Spacer()
+          Image(systemName: "plus")
+          Text("Add card")
+          Spacer()
+        }
+        .padding(4 * scale)
+        .padding(.vertical, 6 * scale)
+        .background(self.addCardColor)
+        .cornerRadius(4)
+        .clipShape(Rectangle())
+        .onHover { hover in
+          if hover {
+            self.addCardColor = Color("ButtonBackground");
+            return;
+          }
+          
+          self.addCardColor = Color(.clear);
+          return;
+        }
       }
       .buttonStyle(.plain)
     }
-    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, list: self.$list))
+    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
     .onChange(of: list.cards) { cards in
       withAnimation {
         setWidth()

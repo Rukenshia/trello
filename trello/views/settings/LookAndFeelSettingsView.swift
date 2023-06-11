@@ -15,11 +15,11 @@ struct LookAndFeelSettingsView: View {
     var body: some View {
       VStack {
         Picker("Due date", selection: $selection) {
-          CardDueView(cardId: "card-id", dueDate: Date.now.advanced(by: 5), dueComplete: false, isHovering: false)
+          CardDueView(dueDate: Date.now.advanced(by: 5), dueComplete: false, compact: false)
             .allowsHitTesting(false)
             .tag("full")
           
-          CardDueView(cardId: "card-id", dueDate: Date.now.advanced(by: 5), dueComplete: false, compact: true, isHovering: false)
+          CardDueView(dueDate: Date.now.advanced(by: 5), dueComplete: false, compact: true)
             .allowsHitTesting(false)
             .tag("compact")
         }

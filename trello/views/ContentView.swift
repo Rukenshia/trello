@@ -93,7 +93,9 @@ struct ContentView: View {
       .onReceive(timer) { newTime in
         if let boardVm {
           self.trelloApi.getBoard(id: boardVm.board.id) { board in
-            boardVm.board = board
+            if (board.id == boardVm.board.id) {
+              boardVm.board = board
+            }
           }
        }
       }
@@ -107,11 +109,8 @@ struct ContentView: View {
     }
     .onChange(of: state.selectedBoard) { newBoard in
       if let selectedBoard = newBoard {
-        if let boardVm {
-          boardVm.selectBoard(board: selectedBoard)
-        } else {
           boardVm = BoardState(api: state.api!, board: selectedBoard)
-        }
+        
       }
     }
   }

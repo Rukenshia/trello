@@ -27,34 +27,51 @@ struct CardView: View {
   
   @State private var monitor: Any?;
   
-  private var bgHoverImage: AnyView? {
-    if let bgImage = self.bgImage {
-      if self.isHovering {
-        return AnyView(bgImage.brightness(0.1))
-      }
-      
-      return bgImage
-    }
-    
-    return nil
-  }
-  
-  private var background: AnyView {
-    var cardBg: Color = Color("CardBackground")
-    
+  private var hasBackgroundImage: Bool {
     if let cover = card.cover {
-      if cover.color != nil {
+      if cover.idAttachment != nil {
         if cover.size == .full {
-          cardBg = cover.displayColor
+          return true
         }
       }
     }
     
-    if isHovering {
-      return AnyView(cardBg.brightness(0.1))
+    return false
+  }
+  
+  @ViewBuilder
+  private var bgHoverImage: some View {
+    if let bgImage = self.bgImage {
+      bgImage
+    } else {
+      EmptyView()
     }
-    
-    return AnyView(cardBg.opacity(0.95))
+  }
+  
+  @ViewBuilder
+  private var cardBgColor: some View {
+    if let cover = card.cover {
+      if cover.color != nil {
+        if cover.size == .full {
+          cover.displayColor
+        } else {
+          Color("CardBackground")
+        }
+      } else {
+        Color("CardBackground")
+      }
+    } else {
+      Color("CardBackground")
+    }
+  }
+  
+  @ViewBuilder
+  private var background: some View {
+    if hasBackgroundImage {
+      bgHoverImage.brightness(isHovering ? -0.1 : 0.0)
+    } else {
+      cardBgColor.brightness(isHovering ? -0.1 : 0.0)
+    }
   }
   
   private var displayedLabels: [Label] {
@@ -75,14 +92,15 @@ struct CardView: View {
     return Color(nsColor: .textColor)
   }
   
-  private var badgeComponents: AnyView {
+  @ViewBuilder
+  private var badgeComponents: some View {
     let checkItemsBadge = card.badges.checkItems > 0
     let commentsBadge = card.badges.comments > 0
     let attachmentsBadge = card.badges.attachments > 1 || card.badges.attachments == 1 && card.cover?.idAttachment == nil
     let hasDescription = !card.desc.isEmpty
     
     if checkItemsBadge && commentsBadge && attachmentsBadge {
-      return AnyView(HStack(spacing: 1) {
+      HStack(spacing: 1) {
         HStack(spacing: 2) {
           Image(systemName: "checklist")
           Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
@@ -102,49 +120,49 @@ struct CardView: View {
         Text(card.desc)
           .lineLimit(1)
           .foregroundColor(.secondary)
-      })
+      }
+    } else {
+      HStack {
+        if checkItemsBadge {
+          HStack(spacing: 1) {
+            Image(systemName: "checklist")
+            Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
+              .foregroundColor(.secondary)
+          }
+          .padding(.horizontal, 4)
+          .padding(.vertical, 2)
+          .background(Color("CardBackground"))
+          .cornerRadius(4)
+        }
+        if commentsBadge {
+          HStack(spacing: 1) {
+            Image(systemName: "message")
+            Text("\(card.badges.comments)")
+              .foregroundColor(.secondary)
+          }
+          .padding(.horizontal, 4)
+          .padding(.vertical, 2)
+          .background(Color("CardBackground"))
+          .cornerRadius(4)
+        }
+        if attachmentsBadge {
+          HStack(spacing: 1) {
+            Image(systemName: "paperclip")
+            Text("\(card.badges.attachments)")
+              .foregroundColor(.secondary)
+          }
+          .padding(.horizontal, 4)
+          .padding(.vertical, 2)
+          .background(Color("CardBackground"))
+          .cornerRadius(4)
+        }
+        if hasDescription {
+          Text(card.desc)
+            .lineLimit(1)
+            .foregroundColor(.secondary)
+        }
+      }
     }
-    
-    return AnyView(HStack {
-      if checkItemsBadge {
-        HStack(spacing: 1) {
-          Image(systemName: "checklist")
-          Text("\(card.badges.checkItemsChecked)/\(card.badges.checkItems)")
-            .foregroundColor(.secondary)
-        }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 2)
-        .background(Color("CardBackground"))
-        .cornerRadius(4)
-      }
-      if commentsBadge {
-        HStack(spacing: 1) {
-          Image(systemName: "message")
-          Text("\(card.badges.comments)")
-            .foregroundColor(.secondary)
-        }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 2)
-        .background(Color("CardBackground"))
-        .cornerRadius(4)
-      }
-      if attachmentsBadge {
-        HStack(spacing: 1) {
-          Image(systemName: "paperclip")
-          Text("\(card.badges.attachments)")
-            .foregroundColor(.secondary)
-        }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 2)
-        .background(Color("CardBackground"))
-        .cornerRadius(4)
-      }
-      if hasDescription {
-        Text(card.desc)
-          .lineLimit(1)
-          .foregroundColor(.secondary)
-      }
-    })
   }
   
   var body: some View {
@@ -182,29 +200,39 @@ struct CardView: View {
           
           
           HStack {
-            CardDueView(cardId: card.id, dueDate: card.dueDate, dueComplete: card.dueComplete, compact: preferences.compactDueDate)
-              .font(.system(size: 12 * scale))
+            if let dueDate = card.dueDate {
+              CardDueView(dueDate: dueDate, dueComplete: card.dueComplete, markAsDone: { boardVm.markCardAsDone(cardId: card.id) }, compact: preferences.compactDueDate)
+                .font(.system(size: 12 * scale))
+            }
             
             badgeComponents
           }
           .font(.system(size: 10 * scale))
           
-          CardMembersView(members: boardVm.board.members.filter({ m in card.idMembers.contains(m.id) }))
+          if card.idMembers.count > 0 {
+            CardMembersView(members: boardVm.board.members.filter({ m in card.idMembers.contains(m.id) }))
+          }
         }.padding(8 * scale)
         
         Spacer()
       }
     }
     .onHover { hover in
-      withAnimation(.easeInOut) {
-        self.isHovering = hover
+      self.isHovering = hover
+      
+      DispatchQueue.main.async {
+        if hover {
+          NSCursor.pointingHand.push()
+        } else {
+          NSCursor.pop()
+        }
       }
     }
     .frame(alignment: .leading)
     .onTapGesture {
       showDetails = true
     }
-    .background(self.bgImage != nil ? self.bgHoverImage! : self.background)
+    .background(self.background)
     .sheet(isPresented: $showDetails) {
       CardDetailsView(card: $card, isVisible: $showDetails)
     }
@@ -228,13 +256,9 @@ struct CardView: View {
           .frame(minWidth: 240)
       case .manageMembers:
         ContextMenuManageMembersView(members: boardVm.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: boardVm.board.members, onAdd: { member in
-          self.trelloApi.addMemberToCard(cardId: card.id, memberId: member.id) {
-            card.idMembers.append(member.id)
-          }
+          boardVm.addMemberToCard(cardId: card.id, memberId: member.id)
         }, onRemove: { member in
-          self.trelloApi.removeMemberFromCard(cardId: card.id, memberId: member.id) {
-            card.idMembers.removeAll(where: { m in m == member.id })
-          }
+          boardVm.removeMemberFromCard(cardId: card.id, memberId: member.id)
         })
       default:
         EmptyView()
@@ -242,7 +266,7 @@ struct CardView: View {
     }
     
     .cornerRadius(4)
-    .shadow(color: .black.opacity(0.1), radius: 0, x: 0, y: 1)
+    .shadow(color: .black.opacity(0.15), radius: 0, x: 0, y: 1)
     .onAppear {
       monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in
         if !isHovering {

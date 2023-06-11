@@ -43,6 +43,7 @@ private extension Card {
 
 struct BoardTableView: View {
   @EnvironmentObject var preferences: Preferences
+  @EnvironmentObject var boardVm: BoardState
   @Binding var board: Board
   
   @State private var sortOrder = [KeyPathComparator(\Card.dueString)]
@@ -55,20 +56,22 @@ struct BoardTableView: View {
   
   private var due: TableColumn<Card, KeyPathComparator<Card>, some View, Text> {
     TableColumn("Due", value: \.dueString) { card in
-      CardDueView(cardId: card.id, dueDate: card.dueDate, dueComplete: card.dueComplete, compact: preferences.compactDueDate)
-        .frame(
-          maxWidth: .infinity,
-          maxHeight: .infinity,
-          alignment: .leading
-        )
-        .contentShape(Rectangle())
-        .onTapGesture(count: 2) {
-          selection = card.id
-          showDetails = true
-        }
-        .onTapGesture {
-          selection = card.id
-        }
+      if let due = card.dueDate {
+        CardDueView(dueDate: due, dueComplete: card.dueComplete, markAsDone: { boardVm.markCardAsDone(cardId: card.id) }, compact: preferences.compactDueDate)
+          .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity,
+            alignment: .leading
+          )
+          .contentShape(Rectangle())
+          .onTapGesture(count: 2) {
+            selection = card.id
+            showDetails = true
+          }
+          .onTapGesture {
+            selection = card.id
+          }
+      }
     }
   }
   

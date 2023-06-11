@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct TrelloListNameView: View {
-  @EnvironmentObject var boardVm: BoardState
   let listId: String
   let name: String
+  var onRename: (String) -> Void = { _ in }
   
   @FocusState private var focusedField: String?
   @State var editing: Bool = false
@@ -61,8 +61,7 @@ struct TrelloListNameView: View {
   
   private func updateName() {
     self.editing = false
-    
-    boardVm.setListName(listId: self.listId, name: self.newName)
+    onRename(self.newName)
   }
 }
 

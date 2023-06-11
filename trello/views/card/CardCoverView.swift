@@ -47,7 +47,7 @@ struct CardCoverView: View {
             self.attachment = attachment
             
             trelloApi.downloadAttachment(url: attachment.previews.last!.url, completion: { data in
-              guard var nsImage = NSImage(data: data) else { return }
+              guard let nsImage = NSImage(data: data) else { return }
               self.image = Image(nsImage: nsImage)
             })
           }
