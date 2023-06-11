@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct RightSidebarView: View {
+  @EnvironmentObject var state: AppState
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var board: Board
+  @EnvironmentObject var boardVm: BoardState
+  
   var doneList: Binding<List>?;
   
   @State private var showDoneList: Bool = false
@@ -21,11 +23,6 @@ struct RightSidebarView: View {
   @State private var archivedCards: [Card] = []
   @State private var boardActions: [ActionUpdateCard] = []
   
-  init(doneList: Binding<List>? = nil, board: Binding<Board>) {
-    self.doneList = doneList
-    self._board = board
-  }
-  
   var body: some View {
     HStack {
       VStack {
@@ -36,9 +33,7 @@ struct RightSidebarView: View {
           .popover(isPresented: self.$showCreateMenu, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
             VStack {
               Button("List", action: {
-                self.trelloApi.createList(boardId: self.trelloApi.board.id, name: "New list") { _ in
-                  
-                }
+                boardVm.createList(name: "New list")
               })
               .buttonStyle(.plain)
               .font(.title3)
@@ -51,7 +46,7 @@ struct RightSidebarView: View {
         }) { }
           .buttonStyle(IconButton(icon: "tag"))
           .sheet(isPresented: self.$showManageLabels) {
-            ManageBoardLabelsView(labels: self.$trelloApi.board.labels)
+            ManageBoardLabelsView(labels: self.$boardVm.board.labels)
           }
         
         if let dl = doneList {
@@ -74,7 +69,7 @@ struct RightSidebarView: View {
               .frame(minWidth: 400, minHeight: 600)
             }
             .task {
-              trelloApi.getBoardUpdateCardActions(boardId: board.id) { actions in
+              trelloApi.getBoardUpdateCardActions(boardId: boardVm.board.id) { actions in
                 boardActions = actions
               }
             }
@@ -90,7 +85,7 @@ struct RightSidebarView: View {
         )
         .symbolRenderingMode(.hierarchical)
         .popover(isPresented: self.$showMembers, arrowEdge: .bottom) {
-          MembersView(members: self.$trelloApi.board.members)
+          MembersView(members: self.$boardVm.board.members)
         }
         
         Spacer()
@@ -115,18 +110,19 @@ struct RightSidebarView: View {
         }
       }
     }
-    .onChange(of: board) { nl in
-      trelloApi.getBoardCards(id: trelloApi.board.id, filter: "closed", limit: 50) { cards in
-        self.archivedCards = cards
-      }
-    }
+    // TODO: implement better
+//    .onChange(of: board) { nl in
+//      trelloApi.getBoardCards(id: state.board!.id, filter: "closed", limit: 50) { cards in
+//        self.archivedCards = cards
+//      }
+//    }
     .padding(8)
   }
 }
 
 struct RightSidebarView_Previews: PreviewProvider {
   static var previews: some View {
-    RightSidebarView(doneList: nil, board: .constant(Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs(), boardStars: [])))
+    RightSidebarView(doneList: nil)
       .environmentObject(TrelloApi.testing)
   }
 }

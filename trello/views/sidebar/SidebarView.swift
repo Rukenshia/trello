@@ -10,6 +10,7 @@ import SwiftUI
 struct SidebarView: View {
   @EnvironmentObject var preferences: Preferences
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var state: AppState
   
   @State var organizations: [Organization] = []
   @State private var stars: [BoardStar] = []
@@ -76,7 +77,7 @@ struct SidebarView: View {
     .onChange(of: self.expandFavorites) { value in
       preferences.updateShowFavorites(value)
     }
-    .onChange(of: trelloApi.board.boardStars) { _ in
+    .onChange(of: state.selectedBoard?.boardStars) { _ in
       trelloApi.getMemberBoardStars { stars in
         self.stars = stars
       }

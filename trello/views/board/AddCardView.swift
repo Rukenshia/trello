@@ -9,8 +9,11 @@ import SwiftUI
 import AppKit
 
 struct AddCardView: View {
+  @EnvironmentObject var state: AppState
+  @EnvironmentObject var boardVm: BoardState
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var list: List
+  
+  let list: List
   @Binding var showAddCard: Bool
   var onFocusLost: (() -> Void) = {}
   
@@ -35,11 +38,8 @@ struct AddCardView: View {
           .textFieldStyle(.plain)
           .scrollContentBackground(.hidden)
           .onSubmit {
-            self.trelloApi.createCard(list: self.list, name: self.name, description: "") { card in
-              print("card \(card.name) created")
-              
-              self.showAddCard = false
-            }
+            boardVm.createCard(listId: self.list.id, name: self.name, description: "")
+            self.showAddCard = false
           }
           .onChange(of: focusedField) { field in
             if field != .name {
@@ -96,9 +96,7 @@ struct AddCardView: View {
     
     self.name = ""
     
-    self.trelloApi.createCard(list: self.list, name: newName, description: "") { card in
-      print("card \(card.name) created")
-    }
+    boardVm.createCard(listId: self.list.id, name: newName, description: "")
   }
   
   func debounce(interval: TimeInterval, queue: DispatchQueue = DispatchQueue.main, action: @escaping (() -> Void)) -> () -> Void {
@@ -122,6 +120,6 @@ struct AddCardView: View {
 
 struct AddCardView_Previews: PreviewProvider {
   static var previews: some View {
-    AddCardView(list: .constant(List(id: "id", name: "list name")), showAddCard: .constant(true))
+    AddCardView(list: List(id: "id", name: "list name"), showAddCard: .constant(true))
   }
 }

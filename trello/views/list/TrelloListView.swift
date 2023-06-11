@@ -32,6 +32,8 @@ enum PopoverState {
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var appState: AppState
+  @EnvironmentObject var boardVm: BoardState
+  
   @Binding var list: List
   @Binding var scale: CGFloat
   
@@ -50,7 +52,7 @@ struct TrelloListView: View {
   var body: some View {
     VStack(spacing: 4) {
       HStack {
-        TrelloListNameView(list: self.$list)
+        TrelloListNameView(listId: list.id, name: list.name)
           .font(.system(size: 12 * scale))
         Spacer()
         Button(action: {
@@ -60,7 +62,7 @@ struct TrelloListView: View {
         }
         .buttonStyle(IconButton(icon: "ellipsis", iconColor: .primary, size: 12 * scale, color: .clear, hoverColor: .clear))
         .popover(isPresented: self.$showMenu, arrowEdge: .bottom) {
-          TrelloListMenuView(list: self.$list)
+          TrelloListMenuView(listId: list.id)
         }
       }
       Divider()
@@ -97,7 +99,7 @@ struct TrelloListView: View {
         }
         
         if showAddCard {
-          AddCardView(list: self.$list, showAddCard: self.$showAddCard, onFocusLost: {
+          AddCardView(list: self.list, showAddCard: self.$showAddCard, onFocusLost: {
             showAddCard = false
           })
           //            .listRowInsets(EdgeInsets(top: 4, leading: -10, bottom: 0, trailing: 0))
@@ -173,7 +175,7 @@ struct TrelloListView: View {
     DispatchQueue.main.async {
       print(from, to)
       self.list.cards[from].pos = newPos
-      trelloApi.updateCard(cardId: cardId, pos: newPos) { newCard in }
+      boardVm.updateCard(cardId: cardId, pos: newPos)
       
       self.list.cards.move(fromOffsets: [from], toOffset: to)
     }
@@ -189,7 +191,7 @@ struct TrelloListView: View {
           }
           
           // Card was probably dropped from another list - transfer it
-          if let card = trelloApi.board.cards.first(where: { card in card.id == cardId }) {
+          if let card = boardVm.board.cards.first(where: { card in card.id == cardId }) {
             if card.idList == list.id {
               print("something weird happened")
               return
@@ -197,8 +199,7 @@ struct TrelloListView: View {
           }
           
           DispatchQueue.main.async {
-            trelloApi.updateCard(cardId: cardId, listId: list.id) { card in
-            }
+            boardVm.updateCard(cardId: cardId, listId: list.id)
           }
         }
       }

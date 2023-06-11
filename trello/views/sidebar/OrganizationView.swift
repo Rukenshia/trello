@@ -10,7 +10,6 @@ import Alamofire
 import CachedAsyncImage
 
 struct OrganizationView: View {
-  @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var preferences: Preferences
   
   let organization: Organization

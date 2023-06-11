@@ -14,9 +14,12 @@ enum BoardViewType {
 }
 
 struct ContentView: View {
+  @EnvironmentObject var state: AppState
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var preferences: Preferences
   @Binding var showCommandBar: Bool
+  
+  @State private var boardVm: BoardState? = nil
   
   @State private var cancellable: AnyCancellable?
   
@@ -34,10 +37,18 @@ struct ContentView: View {
           SidebarView()
             .listStyle(SidebarListStyle())
           
-          HStack {
-            BoardView(board: $trelloApi.board)
-            
-            RightSidebarView(doneList: $trelloApi.board.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$trelloApi.board).frame(maxWidth: 48)
+          if state.loadingBoard {
+            ProgressView()
+          } else {
+            if let boardVm = boardVm {
+              HStack {
+                BoardView()
+                
+                // TODO: add me back
+                //              RightSidebarView(doneList: $state.board?.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$state.board?).frame(maxWidth: 48)
+              }
+              .environmentObject(boardVm)
+            }
           }
         }.toolbar {
           ToolbarItem(placement: .navigation) {
@@ -51,14 +62,6 @@ struct ContentView: View {
         
       }
       .onAppear {
-        self.cancellable = trelloApi.$board.sink { newBoard in
-          if newBoard.id == "" {
-            return
-          }
-          
-          UserDefaults.standard.set(newBoard.id, forKey: PreferenceKeys.currentBoard)
-        }
-        
         // Allow a faster refresh when having multiple credentials
         if preferences.credentials.count > 0 {
           timer.upstream.connect().cancel()
@@ -74,22 +77,25 @@ struct ContentView: View {
           if let currentBoard = UserDefaults.standard.string(forKey: PreferenceKeys.currentBoard) {
             if currentBoard.isEmpty {
               if (boards.count > 0) {
-                trelloApi.getBoard(id: boards[0].id)
+                state.selectBoard(id: boards[0].id)
               }
             } else {
-              trelloApi.getBoard(id: currentBoard)
+              state.selectBoard(id: currentBoard)
             }
           } else {
             if (boards.count > 0) {
-              trelloApi.getBoard(id: boards[0].id)
+              state.selectBoard(id: boards[0].id)
             }
           }
         }
       }
       .frame(minWidth: 900, minHeight: 600, alignment: .top)
       .onReceive(timer) { newTime in
-//        self.trelloApi.getBoard(id: self.trelloApi.board.id) { board in
-//        }
+        if let boardVm {
+          self.trelloApi.getBoard(id: boardVm.board.id) { board in
+            boardVm.board = board
+          }
+       }
       }
       .sheet(isPresented: $showCommandBar) {
           VStack {
@@ -97,6 +103,15 @@ struct ContentView: View {
           }
           .background(.black.opacity(0.8))
           .frame(minWidth: 400, minHeight: 600)
+      }
+    }
+    .onChange(of: state.selectedBoard) { newBoard in
+      if let selectedBoard = newBoard {
+        if let boardVm {
+          boardVm.selectBoard(board: selectedBoard)
+        } else {
+          boardVm = BoardState(api: state.api!, board: selectedBoard)
+        }
       }
     }
   }

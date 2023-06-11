@@ -15,24 +15,16 @@ extension TrelloApi {
       "idCardSource": sourceCardId,
       "idList": listId,
     ], result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      
-      self.board.lists[listIdx].cards.append(card)
-      
       completion(card)
     }
   }
   
-  func createCard(list: List, name: String, description: String, completion: @escaping (Card) -> Void) {
+  func createCard(listId: String, name: String, description: String, completion: @escaping (Card) -> Void) {
     self.request("/cards", method: .post, parameters: [
-      "idList": list.id,
+      "idList": listId,
       "name": name,
       "desc": description,
     ], result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      
-      self.board.lists[listIdx].cards.append(card)
-      
       completion(card)
     }
   }
@@ -54,10 +46,6 @@ extension TrelloApi {
       self.request("/cards/\(card.id)", method: .put, parameters: [
         "idLabels": (card.idLabels + labelIds).joined(separator: ","),
       ], result: Card.self) { response, card in
-        let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-        let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-        
-        self.board.lists[listIdx].cards[cardIdx] = card
         completion(card)
       }
     }
@@ -67,10 +55,6 @@ extension TrelloApi {
     self.request("/cards/\(card.id)", method: .put, parameters: [
       "idLabels": card.idLabels.filter{ label in !labelIds.contains(where: { l in l == label }) }.joined(separator: ",")
     ], result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-      
-      self.board.lists[listIdx].cards[cardIdx] = card
       completion(card)
     }
   }
@@ -81,22 +65,12 @@ extension TrelloApi {
     ]
     
     self.request("/cards/\(cardId)", method: .put, parameters: body, encoder: JSONParameterEncoder.default, result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-      
-      self.board.lists[listIdx].cards[cardIdx] = card
-      
       completion(response.value!)
     }
   }
   
   func removeCardCover(cardId: String, completion: @escaping (Card) -> Void) {
     self.request("/cards/\(cardId)", method: .put, parameters: ["cover": ""], encoder: JSONParameterEncoder.default, result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-      
-      self.board.lists[listIdx].cards[cardIdx] = card
-      
       completion(response.value!)
     }
   }
@@ -130,51 +104,12 @@ extension TrelloApi {
     }
     
     self.request("/cards/\(cardId)", method: .put, parameters: parameters, result: Card.self) { response, card in
-      if let listId = listId {
-        // find old card
-        if var card = self.board.cards.first(where: { card in card.id == cardId }) {
-          // Remove from old list and add to new locally
-          if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
-            if let index = self.board.lists[oldList].cards.firstIndex(of: card) {
-              self.board.lists[oldList].cards.remove(at: index)
-            }
-          }
-          
-          card.idList = listId
-          
-          if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
-            self.board.lists[newList].cards.append(card)
-          }
-          
-          // Update the list on the card so that you can move the card again
-          if let index = self.board.cards.firstIndex(where: { card in card.id == cardId }) {
-            self.board.cards[index].idList = listId
-          }
-        } else {
-          if let newList = self.board.lists.firstIndex(where: { list in list.id == listId }) {
-            self.board.lists[newList].cards.append(card)
-          }
-        }
-      } else {
-        if let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList }) {
-          if let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id }) {
-            
-            self.board.lists[listIdx].cards[cardIdx] = card
-          }
-        }
-      }
-      
       completion(response.value!)
     }
   }
   
   func removeCardDue(cardId: String, completion: @escaping (Card) -> Void) {
     self.request("/cards/\(cardId)", method: .put, parameters: ["due": "null"], result: Card.self) { response, card in
-      let listIdx = self.board.lists.firstIndex(where: { l in l.id == card.idList })!
-      let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == card.id })!
-      
-      self.board.lists[listIdx].cards[cardIdx].due = nil
-      
       completion(card)
     }
   }

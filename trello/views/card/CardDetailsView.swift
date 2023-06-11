@@ -11,6 +11,7 @@ import MarkdownUI
 
 struct CardDetailsView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var boardVm: BoardState
   
   @Binding var card: Card
   @State private var loadingComments = true
@@ -152,7 +153,7 @@ struct CardDetailsView: View {
                   .font(.title2)
               }
               
-              CardDetailsMembersView(members: trelloApi.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: trelloApi.board.members, onAdd: { member in
+              CardDetailsMembersView(members: boardVm.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: boardVm.board.members, onAdd: { member in
                 self.trelloApi.addMemberToCard(cardId: card.id, memberId: member.id) {
                   card.idMembers.append(member.id)
                 }
@@ -214,12 +215,12 @@ struct CardDetailsView: View {
               }) { Spacer() }
                 .buttonStyle(FlatButton(icon: "tag", text: "Labels"))
                 .popover(isPresented: $showManageLabels, arrowEdge: .bottom) {
-                  ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: self.$card)
+                  ContextMenuManageLabelsView(labels: self.$boardVm.board.labels, card: self.$card)
                     .frame(idealWidth: 180)
                 }
               
               Button(action: {
-                self.trelloApi.createCard(listId: self.card.idList, sourceCardId: self.card.id) { _ in }
+                boardVm.createCard(listId: self.card.idList, sourceCardId: self.card.id)
                 self.isVisible = false
               }) { Spacer() }
                 .buttonStyle(FlatButton(icon: "doc.on.doc", text: "Copy"))
@@ -229,7 +230,7 @@ struct CardDetailsView: View {
               }) { Spacer() }
                 .buttonStyle(FlatButton(icon: "rectangle.leadinghalf.inset.filled.arrow.leading", text: "Move"))
                 .popover(isPresented: $showMove, arrowEdge: .bottom) {
-                  ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
+                  ForEach(self.$boardVm.board.lists.filter{ l in l.id != card.idList}) { list in
                     ContextMenuMoveListView(list: list, card: $card)
                   }
                   .padding()

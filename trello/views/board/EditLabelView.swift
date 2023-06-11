@@ -61,6 +61,7 @@ struct LabelColorView: View {
 
 struct EditLabelView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var boardVm: BoardState
   
   @Binding var label: Label
   let isNew: Bool
@@ -120,7 +121,7 @@ struct EditLabelView: View {
       HStack {
         Button(action: {
           if isNew {
-            self.trelloApi.createLabel(boardId: self.trelloApi.board.id, name: self.name, color: self.color) { label in
+            self.trelloApi.createLabel(boardId: self.boardVm.board.id, name: self.name, color: self.color) { label in
               self.name = ""
               self.color = nil
             }

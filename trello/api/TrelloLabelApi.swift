@@ -14,10 +14,6 @@ extension TrelloApi {
       "name": name,
       "color": color?.rawValue ?? "",
     ], result: Label.self) { response, label in
-      if let idx = self.board.labels.firstIndex(where: { l in l.id == labelId }) {
-        self.board.labels[idx] = label
-      }
-      
       completion(label)
     }
   }
@@ -28,16 +24,12 @@ extension TrelloApi {
       "name": name,
       "color": color?.rawValue ?? "",
     ], result: Label.self) { response, label in
-      self.board.labels.append(label)
-      
       completion(label)
     }
   }
   
   func deleteLabel(labelId: String, completion: @escaping () -> Void) {
     self.request("/labels/\(labelId)", method: .delete) { response in
-      self.board.labels.removeAll(where: { l in l.id == labelId })
-      
       completion()
     }
   }

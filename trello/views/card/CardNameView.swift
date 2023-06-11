@@ -8,61 +8,59 @@
 import SwiftUI
 
 struct CardNameView: View {
-    @EnvironmentObject var trelloApi: TrelloApi
-    @Binding var card: Card
-    
-    @FocusState private var focusedField: String?
-    @State var editing: Bool = false
-    @State var newName: String = ""
-    
-    var body: some View {
-        HStack {
-            HStack {
-                if self.editing {
-                    Button(action: self.updateName) {
-                        
-                    }
-                    .buttonStyle(IconButton(icon: "checkmark", size: 16))
-                    TextField("Card name", text: $newName, onCommit: self.updateName)
-                        .textFieldStyle(.plain)
-                        .focused($focusedField, equals: "name")
-                } else {
-                    Button(action: {
-                        self.editing = true
-                        self.focusedField = "name"
-                        self.newName = card.name
-                    }) {
-                        
-                    }
-                    .buttonStyle(IconButton(icon: "square.and.pencil", size: 16))
-                    Text(card.name)
-                    
-                }
-                Spacer()
-            }
-            .onTapGesture {
-              if !editing {
-                editing = true
-                self.newName = card.name
-                self.focusedField = "name"
-              }
-            }
-            .font(.title)
-            Spacer()
-        }
-    }
-    
-    private func updateName() {
-        self.editing = false
-        
-        self.trelloApi.updateCard(cardId: self.card.id, name: self.newName) { newCard in
+  @EnvironmentObject var boardVm: BoardState
+  @Binding var card: Card
+  
+  @FocusState private var focusedField: String?
+  @State var editing: Bool = false
+  @State var newName: String = ""
+  
+  var body: some View {
+    HStack {
+      HStack {
+        if self.editing {
+          Button(action: self.updateName) {
             
+          }
+          .buttonStyle(IconButton(icon: "checkmark", size: 16))
+          TextField("Card name", text: $newName, onCommit: self.updateName)
+            .textFieldStyle(.plain)
+            .focused($focusedField, equals: "name")
+        } else {
+          Button(action: {
+            self.editing = true
+            self.focusedField = "name"
+            self.newName = card.name
+          }) {
+            
+          }
+          .buttonStyle(IconButton(icon: "square.and.pencil", size: 16))
+          Text(card.name)
+          
         }
+        Spacer()
+      }
+      .onTapGesture {
+        if !editing {
+          editing = true
+          self.newName = card.name
+          self.focusedField = "name"
+        }
+      }
+      .font(.title)
+      Spacer()
     }
+  }
+  
+  private func updateName() {
+    self.editing = false
+    
+    boardVm.updateCard(cardId: self.card.id, name: self.newName)
+  }
 }
 
 struct CardNameView_Previews: PreviewProvider {
-    static var previews: some View {
-        CardNameView(card: .constant(Card(id: "id", name: "card name")))
-    }
+  static var previews: some View {
+    CardNameView(card: .constant(Card(id: "id", name: "card name")))
+  }
 }

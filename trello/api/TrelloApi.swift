@@ -10,11 +10,10 @@ import Combine
 import Alamofire
 
 class TrelloApi: ObservableObject {
-  let key: String
-  let token: String
-  let credentials: [Credential]
+  var key: String
+  var token: String
+  var credentials: [Credential]
   
-  @Published var board: Board
   @Published var boards: [BasicBoard]
   
   internal var session: Session
@@ -28,11 +27,18 @@ class TrelloApi: ObservableObject {
     return TrelloApi(key: prefs.trelloKey!, token: prefs.trelloToken!, credentials: prefs.credentials)
   }
   
-  init(key: String, token: String, credentials: [Credential]) {
+  init(key: String = "", token: String = "", credentials: [Credential] = []) {
     self.key = key
     self.token = token
     self.credentials = credentials
-    self.board = Board(id: "", idOrganization: "", name: "", prefs: BoardPrefs(), boardStars: [])
+    self.boards = []
+    self.session = Session()
+  }
+  
+  func setAuth(key: String, token: String, credentials: [Credential]) {
+    self.key = key
+    self.token = token
+    self.credentials = credentials
     self.boards = []
     
     if credentials.count > 0 {

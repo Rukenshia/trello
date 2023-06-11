@@ -26,12 +26,23 @@ struct VisualEffectView: NSViewRepresentable {
 
 @main
 struct trelloApp: App {
-  @State var preferences: Preferences = Preferences()
-  @State var appState = AppState()
+  @State var preferences: Preferences
+  @State var appState: AppState
+  @State var trelloApi: TrelloApi
   
-  @State private var showCommandBar = false
+  @State private var showCommandBar: Bool
   
   private let updaterController: SPUStandardUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+  
+  init() {
+    self.preferences = Preferences()
+    self.trelloApi = TrelloApi()
+    self.appState = AppState(api: nil)
+    self.showCommandBar = false
+    
+    trelloApi.setAuth(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials)
+    appState.api = trelloApi
+  }
   
   var body: some Scene {
     Settings {
@@ -42,13 +53,13 @@ struct trelloApp: App {
     WindowGroup {
       if preferences.trelloKey != nil && preferences.trelloToken != nil {
         ContentView(showCommandBar: $showCommandBar)
-          .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials))
           .environmentObject(preferences)
           .environmentObject(appState)
+          .environmentObject(trelloApi)
           .onAppear {
-//            DevEnv()
+            DevEnv()
           }
-//          .preferredColorScheme(.light)
+        //          .preferredColorScheme(.light)
       } else {
         OnboardingView()
           .environmentObject(preferences)
@@ -63,7 +74,7 @@ struct trelloApp: App {
         Button("Open Command Bar") {
           showCommandBar.toggle()
         }
-          .keyboardShortcut("p", modifiers: [.command])
+        .keyboardShortcut("p", modifiers: [.command])
       }
     }
     WindowGroup("Attachment", for: Attachment.self) { attachment in

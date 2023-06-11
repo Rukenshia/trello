@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct SidebarBoardView: View {
-  @EnvironmentObject var trelloApi: TrelloApi;
+  @EnvironmentObject var state: AppState
   let board: BasicBoard;
   let starred: Bool;
   
@@ -18,7 +18,7 @@ struct SidebarBoardView: View {
   
   var body: some View {
     Button(action: {
-      trelloApi.getBoard(id: board.id)
+      state.selectBoard(id: board.id)
     }) {
       HStack {
         Text(board.name)
@@ -40,7 +40,7 @@ struct SidebarBoardView: View {
         isHovering = hover
         
         withAnimation(.easeInOut(duration: 0.05)) {
-          if trelloApi.board.id == self.board.id {
+          if state.selectedBoard?.id == self.board.id {
             if hover {
               self.color = Color("CardBackground")
             } else {
@@ -52,22 +52,26 @@ struct SidebarBoardView: View {
           if hover {
             self.color = Color("CardBackground")
           } else {
-            self.color = Color("CardBackground").opacity(0)
+            self.color = .clear
           }
         }
       })
     }
     .buttonStyle(.plain)
     .onAppear {
-      if trelloApi.board.id == self.board.id {
+      if state.selectedBoard?.id == self.board.id {
         self.color = .accentColor
       }
     }
-    .onChange(of: trelloApi.board) { newBoard in
-      if newBoard.id == self.board.id {
+    .onChange(of: state.selectedBoard?.id) { newBoard in
+      if state.selectedBoard?.id == self.board.id {
         self.color = .accentColor
       } else {
-        self.color = .clear
+        if isHovering {
+          self.color = Color("CardBackground")
+        } else {
+          self.color = .clear
+        }
       }
     }
   }

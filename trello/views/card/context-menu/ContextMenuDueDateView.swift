@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContextMenuDueDateView: View {
+  @EnvironmentObject var boardVm: BoardState
   @EnvironmentObject var trelloApi: TrelloApi;
+  
   @Binding var card: Card;
   
   @State private var date: Date = Date.now;
@@ -23,9 +25,7 @@ struct ContextMenuDueDateView: View {
       HStack {
         if card.due != nil {
           Button(action: {
-            self.trelloApi.removeCardDue(cardId: card.id, completion: { card in
-              print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
-            })
+            boardVm.removeCardDue(cardId: card.id)
           }) {
             Text("Remove Due")
           }
@@ -35,9 +35,7 @@ struct ContextMenuDueDateView: View {
         }
         
         Button(action: {
-          self.trelloApi.updateCard(cardId: card.id, due: self.date, completion: { card in
-            print("\(card.name): due updated to \(TrelloApi.DateFormatter.string(from: self.date))")
-          })
+          boardVm.updateCard(cardId: card.id, due: self.date)
         }) {
           Text("Save")
         }

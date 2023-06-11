@@ -10,7 +10,7 @@ import CachedAsyncImage
 
 struct BoardView: View {
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var board: Board
+  @EnvironmentObject var boardVm: BoardState
   
   @State private var viewType: BoardViewType = .lists
   
@@ -20,7 +20,7 @@ struct BoardView: View {
   @State private var scale: CGFloat = 1.0
   
   var backgroundImage: AnyView {
-    guard let url = trelloApi.board.prefs.backgroundImage else {
+    guard let url = boardVm.board.prefs.backgroundImage else {
       return AnyView(Image("DefaultBoardBackground")
         .resizable()
         .aspectRatio(contentMode: .fill))
@@ -57,7 +57,7 @@ struct BoardView: View {
         ScrollView([.horizontal]) {
           VStack(alignment: .leading) {
             HStack(alignment: .top) {
-              ForEach(self.$board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
+              ForEach($boardVm.board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
                 TrelloListView(list: list, scale: $scale)
               }
             }
@@ -69,24 +69,24 @@ struct BoardView: View {
           self.backgroundImage.allowsHitTesting(false)
         )
         .clipped()
-        .navigationTitle(board.name)
+        .navigationTitle(boardVm.board.name)
         .navigationSubtitle(organization?.displayName ?? "")
         .toolbar {
           
           ToolbarItem(placement: .navigation) {
             Button() {
-              if board.boardStars.isEmpty {
-                trelloApi.createMemberBoardStar(boardId: board.id) { boardStar in
-                  board.boardStars = [boardStar]
+              if boardVm.board.boardStars.isEmpty {
+                trelloApi.createMemberBoardStar(boardId: boardVm.board.id) { boardStar in
+                  boardVm.board.boardStars = [boardStar]
                 }
               } else {
-                trelloApi.deleteMemberBoardStar(boardStarId: board.boardStars[0].id ?? board.boardStars[0]._id!) {
-                  board.boardStars = []
+                trelloApi.deleteMemberBoardStar(boardStarId: boardVm.board.boardStars[0].id ?? boardVm.board.boardStars[0]._id!) {
+                  boardVm.board.boardStars = []
                 }
               }
             } label: {
-              Image(systemName: !board.boardStars.isEmpty ? "star.fill" : "star")
-                .foregroundColor(!board.boardStars.isEmpty ? .yellow : .secondary )
+              Image(systemName: !boardVm.board.boardStars.isEmpty ? "star.fill" : "star")
+                .foregroundColor(!boardVm.board.boardStars.isEmpty ? .yellow : .secondary )
             }
           }
           
@@ -107,23 +107,24 @@ struct BoardView: View {
           }
         }
       case .table:
-        BoardTableView(board: $board)
+        BoardTableView(board: $boardVm.board)
           .background(
             self.backgroundImage.allowsHitTesting(false).opacity(0.05)
           )
           .clipped()
-          .navigationTitle(board.name)
+          .navigationTitle(boardVm.board.name)
           .navigationSubtitle(organization?.displayName ?? "")
           .toolbar {
             ToolbarBoardVisualisationView(viewType: $viewType)
           }
       }
     }
-    .onChange(of: board) { board in
-      self.trelloApi.getOrganization(id: board.idOrganization) { organization in
-        self.organization = organization
-      }
-    }
+    // TODO: needed?
+//    .onChange(of: board) { board in
+//      self.trelloApi.getOrganization(id: board.idOrganization) { organization in
+//        self.organization = organization
+//      }
+//    }
     .onAppear {
       scale = preferences.scale;
     }
@@ -148,7 +149,7 @@ struct BoardView: View {
 
 struct BoardView_Previews: PreviewProvider {
   static var previews: some View {
-    BoardView(board: .constant(Board(id: "id", idOrganization: "orgId", name: "board", prefs: BoardPrefs(), boardStars: [], lists: [List(id: "foo", name: "foo"), List(id: "bar", name: "bar")])))
+    BoardView()
       .environmentObject(TrelloApi.testing)
   }
 }

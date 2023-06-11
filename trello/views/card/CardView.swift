@@ -13,6 +13,7 @@ struct CardView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var preferences: Preferences
   @EnvironmentObject var appState: AppState
+  @EnvironmentObject var boardVm: BoardState
   
   @Binding var card: Card
   @State private var showDetails = false
@@ -188,7 +189,7 @@ struct CardView: View {
           }
           .font(.system(size: 10 * scale))
           
-          CardMembersView(members: trelloApi.board.members.filter({ m in card.idMembers.contains(m.id) }))
+          CardMembersView(members: boardVm.board.members.filter({ m in card.idMembers.contains(m.id) }))
         }.padding(8 * scale)
         
         Spacer()
@@ -211,12 +212,12 @@ struct CardView: View {
       switch (self.popoverState) {
       case .moveToList:
         VStack(spacing: 8) {
-          ForEach(self.$trelloApi.board.lists.filter{ l in l.id != card.idList}) { list in
+          ForEach(self.$boardVm.board.lists.filter{ l in l.id != card.idList}) { list in
             ContextMenuMoveListView(list: list, card: $card)
           }
         }.padding(8)
       case .manageLabels:
-        ContextMenuManageLabelsView(labels: self.$trelloApi.board.labels, card: $card)
+        ContextMenuManageLabelsView(labels: self.$boardVm.board.labels, card: $card)
       case .dueDate:
         ContextMenuDueDateView(card: $card)
       case .cardColor:
@@ -226,7 +227,7 @@ struct CardView: View {
           .padding(8)
           .frame(minWidth: 240)
       case .manageMembers:
-        ContextMenuManageMembersView(members: trelloApi.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: trelloApi.board.members, onAdd: { member in
+        ContextMenuManageMembersView(members: boardVm.board.members.filter{ m in card.idMembers.contains(m.id) }, allMembers: boardVm.board.members, onAdd: { member in
           self.trelloApi.addMemberToCard(cardId: card.id, memberId: member.id) {
             card.idMembers.append(member.id)
           }
@@ -276,9 +277,7 @@ struct CardView: View {
           self.popoverState = .editCard
           showPopover = true
         case "r":
-          trelloApi.updateCard(cardId: card.id, closed: true) { _ in
-            card.closed = true
-          }
+          boardVm.updateCard(cardId: card.id, closed: true)
         default:
           ()
         }

@@ -54,8 +54,7 @@ extension TrelloApi {
                     board.lists[i] = list
                 }
                 
-                self.board = board
-                completion(self.board)
+                completion(board)
             }
         }
     }

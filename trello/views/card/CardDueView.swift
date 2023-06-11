@@ -10,6 +10,7 @@ import Combine
 
 struct CardDueView: View {
   @EnvironmentObject var trelloApi: TrelloApi
+  @EnvironmentObject var boardVm: BoardState
   let cardId: String // TODO: remove
   let dueDate: Date? // TODO: remove optional, use 
   let dueComplete: Bool
@@ -63,7 +64,7 @@ struct CardDueView: View {
   
   private var hoverButton: some View {
     Button(action: {
-      self.trelloApi.markAsDone(cardId: self.cardId) { _ in }
+      boardVm.markCardAsDone(cardId: self.cardId)
     }) {
       Image(systemName: "checkmark")
         .padding(10)
@@ -94,7 +95,7 @@ struct CardDueView: View {
   var body: some View {
     if let due = dueDate {
       Button(action: {
-        self.trelloApi.markAsDone(cardId: cardId) { _ in }
+        boardVm.markCardAsDone(cardId: cardId)
       }) {
         HStack(alignment: .center, spacing: 2) {
           Image(systemName: "clock")

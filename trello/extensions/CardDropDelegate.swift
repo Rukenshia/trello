@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 struct CardDropDelegate: DropDelegate {
+  @EnvironmentObject var state: AppState
+  @EnvironmentObject var boardVm: BoardState
+  
   var trelloApi: TrelloApi;
   @Binding var list: List;
   
@@ -22,7 +25,7 @@ struct CardDropDelegate: DropDelegate {
     
     let cardId = String(describing: draggedItems[0])
     
-    if let card = trelloApi.board.cards.first(where: { card in card.id == cardId }) {
+    if let card = boardVm.board.cards.first(where: { card in card.id == cardId }) {
       if card.idList == list.id {
         return false
       }
@@ -41,15 +44,14 @@ struct CardDropDelegate: DropDelegate {
     
     let cardId = String(describing: draggedItems[0])
     
-    if let card = trelloApi.board.cards.first(where: { card in card.id == cardId }) {
+    if let card = boardVm.board.cards.first(where: { card in card.id == cardId }) {
       if card.idList == list.id {
         return false
       }
     }
     
     DispatchQueue.main.async {
-      trelloApi.updateCard(cardId: cardId, listId: list.id) { card in
-      }
+      boardVm.updateCard(cardId: cardId, listId: list.id)
     }
     
     return true
