@@ -232,9 +232,19 @@ struct CardView: View {
     .onTapGesture {
       showDetails = true
     }
+    .onChange(of: showDetails) { [showDetails] newValue in
+      if showDetails && !newValue {
+        appState.showingDetails = false
+      }
+      
+      if newValue {
+        appState.showingDetails = true
+      }
+    }
     .background(self.background)
     .sheet(isPresented: $showDetails) {
       CardDetailsView(card: $card, isVisible: $showDetails)
+        .padding(.horizontal, 16)
     }
     .popover(isPresented: $showPopover, attachmentAnchor: .point(.bottom), arrowEdge: .bottom) {
       switch (self.popoverState) {
@@ -278,6 +288,10 @@ struct CardView: View {
         }
         
         if showDetails {
+          return nsevent
+        }
+        
+        if appState.showingDetails {
           return nsevent
         }
         

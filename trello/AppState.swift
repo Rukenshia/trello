@@ -13,12 +13,14 @@ class AppState: ObservableObject {
   @Published var creatingCard: Bool
   @Published var selectedBoard: Board?
   @Published var loadingBoard: Bool
+  @Published var showingDetails: Bool
   
   init(api: TrelloApi?) {
     self.api = api
     self.creatingCard = false
     self.selectedBoard = nil
     self.loadingBoard = false
+    self.showingDetails = false
   }
   
   func selectBoard(id: String) {

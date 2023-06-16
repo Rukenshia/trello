@@ -10,7 +10,7 @@ import MarkdownUI
 import CachedAsyncImage
 
 struct CommentView: View {
-  @Binding var comment: ActionCommentCard
+  let comment: ActionCommentCard
   
   let onSave: (String) -> Void
   let onDelete: () -> Void
@@ -18,8 +18,9 @@ struct CommentView: View {
   @State private var editing: Bool = false
   @State private var newText: String = ""
   
-  var avatar: AnyView {
-    return AnyView(CachedAsyncImage(url: URL(string: "\(self.comment.memberCreator.avatarUrl)/50.png"), urlCache: .imageCache) { phase in
+  @ViewBuilder
+  var avatar: some View {
+    CachedAsyncImage(url: URL(string: "\(self.comment.memberCreator.avatarUrl)/50.png"), urlCache: .imageCache) { phase in
       switch phase {
       case .empty:
         Circle()
@@ -37,7 +38,7 @@ struct CommentView: View {
       @unknown default:
         EmptyView()
       }
-    })
+    }
   }
   
   var body: some View {
@@ -70,6 +71,7 @@ struct CommentView: View {
               }
             } else {
               Markdown(comment.data.text)
+                .fixedSize()
             }
             Spacer()
           }
@@ -113,6 +115,6 @@ struct CommentView: View {
 
 struct CommentView_Previews: PreviewProvider {
   static var previews: some View {
-    CommentView(comment: .constant(ActionCommentCard(id: "id", idMemberCreator: "member-id", type: .commentCard, data: ActionDataCommentCard(text: "comment text"), memberCreator: Member(id: "member-id", username: "member-username", avatarUrl: "https://trello-members.s3.amazonaws.com/5e4919458e3371666e3be20c/f30eb004ca0926ea216e7dc32e00ead1", fullName: "member full name", initials: "MF"), date: TrelloApi.DateFormatter.string(from: Date.now))), onSave: { _ in }, onDelete: {})
+    CommentView(comment: ActionCommentCard(id: "id", idMemberCreator: "member-id", type: .commentCard, data: ActionDataCommentCard(text: "comment text"), memberCreator: Member(id: "member-id", username: "member-username", avatarUrl: "https://trello-members.s3.amazonaws.com/5e4919458e3371666e3be20c/f30eb004ca0926ea216e7dc32e00ead1", fullName: "member full name", initials: "MF"), date: TrelloApi.DateFormatter.string(from: Date.now)), onSave: { _ in }, onDelete: {})
   }
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AddCommentView: View {
-  @Binding var card: Card
   let addComment: (String) -> Void
   
   @State private var text: String = ""
@@ -41,6 +40,6 @@ struct AddCommentView: View {
 
 struct AddCommentView_Previews: PreviewProvider {
   static var previews: some View {
-    AddCommentView(card: .constant(Card(id: "id", name: "name")), addComment: { _ in })
+    AddCommentView(addComment: { _ in })
   }
 }

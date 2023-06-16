@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire",
       "state" : {
-        "revision" : "8dd85aee02e39dd280c75eef88ffdb86eed4b07b",
-        "version" : "5.6.2"
+        "revision" : "bc268c28fb170f494de9e9927c371b8342979ece",
+        "version" : "5.7.1"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/gonzalezreal/MarkdownUI",
       "state" : {
         "branch" : "main",
-        "revision" : "295b78c646ea9de1ce272d464de82ff9e0e92e75"
+        "revision" : "5f977ba52ddc99a8d891090270b1c5ab1bb9f91d"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
-        "revision" : "2a98381dfe72e24bf593c5c06d2c4fc1763c3f19",
-        "version" : "2.3.0"
+        "revision" : "7907f058bcef1132c9b4af6c049cac598330a5f9",
+        "version" : "2.4.1"
       }
     },
     {

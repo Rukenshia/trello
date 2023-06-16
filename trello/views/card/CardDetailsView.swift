@@ -113,7 +113,7 @@ struct CardDetailsView: View {
                 }
                 .padding(4)
                 
-                AddCommentView(card: self.$card, addComment: { text in
+                AddCommentView(addComment: { text in
                   self.trelloApi.addCardComment(id: self.card.id, text: text) { comment in
                     self.comments.insert(comment, at: 0)
                   }
@@ -124,7 +124,7 @@ struct CardDetailsView: View {
                 }
                 
                 if comments.count > 0 {
-                  ForEach(self.$comments) { comment in
+                  ForEach(self.comments) { comment in
                     CommentView(comment: comment, onSave: { text in
                       self.trelloApi.updateCardComment(cardId: card.id, commentId: comment.id, text: text) { newComment in
                         if let idx = self.comments.firstIndex(where: { c in c.id == comment.id }) {
