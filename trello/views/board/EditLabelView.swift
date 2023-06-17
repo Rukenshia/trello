@@ -60,7 +60,6 @@ struct LabelColorView: View {
 }
 
 struct EditLabelView: View {
-  @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var boardVm: BoardState
   
   let label: Label
@@ -122,14 +121,11 @@ struct EditLabelView: View {
         Button(action: {
           // TODO: move to BoardState
           if isNew {
-            self.trelloApi.createLabel(boardId: self.boardVm.board.id, name: self.name, color: self.color) { label in
-              self.name = ""
-              self.color = nil
-            }
+            boardVm.createLabel(name: self.name, color: self.color)
+            self.name = ""
+            self.color = nil
           } else {
-            self.trelloApi.updateLabel(labelId: label.id, name: self.name, color: self.color) { label in
-              
-            }
+            boardVm.updateLabel(labelId: label.id, name: self.name, color: self.color)
           }
         }) {
           
@@ -139,7 +135,7 @@ struct EditLabelView: View {
         
         if !isNew {
           Button(action: {
-            self.trelloApi.deleteLabel(labelId: label.id) { }
+//            self.trelloApi.deleteLabel(labelId: label.id) { }
           }) {
           }
           .padding(.vertical, 8)

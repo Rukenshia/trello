@@ -11,8 +11,8 @@ import SwiftUI
 struct DoneListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   
-  @Binding var boardActions: [ActionUpdateCard]
-  @Binding var cards: [Card]
+  let boardActions: [ActionUpdateCard]
+  let cards: [Card]
   let list: List?
   
   @State private var actionForCard: Dictionary<String, ActionUpdateCard> = Dictionary()
@@ -140,6 +140,6 @@ struct BucketView: View {
 
 struct DoneListView_Previews: PreviewProvider {
   static var previews: some View {
-    DoneListView(boardActions: .constant([]), cards: .constant([]), list: List(id: "list", name: "list", cards: []))
+    DoneListView(boardActions: [], cards: [], list: List(id: "list", name: "list", cards: []))
   }
 }

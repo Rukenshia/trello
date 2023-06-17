@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ManageBoardLabelsView: View {
-  @EnvironmentObject var trelloApi: TrelloApi
-  
   let labels: [Label]
   @State private var selection: Label?
   
@@ -44,7 +42,7 @@ struct ManageBoardLabelsView: View {
         .frame(width: 200)
       } detail: {
         if let label = selection {
-          EditLabelView(label: selection!, isNew: label.id.isEmpty)
+          EditLabelView(label: label, isNew: label.id.isEmpty)
         } else {
           Text("Select a label to edit")
         }

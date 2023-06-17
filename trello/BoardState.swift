@@ -155,7 +155,7 @@ class BoardState: ObservableObject {
   func setListName(listId: String, name: String) {
     api.setListName(listId: listId, name: name) { list in
       let listIdx = self.board.lists.firstIndex(where: { l in l.id == listId })!
-
+      
       self.board.lists[listIdx].name = name
     }
   }
@@ -194,6 +194,23 @@ class BoardState: ObservableObject {
         let cardIdx = self.board.lists[listIdx].cards.firstIndex(where: { c in c.id == cardId })!
         
         self.board.lists[listIdx].cards[cardIdx].idMembers.removeAll(where: { m in m == memberId })
+      }
+    }
+  }
+  
+  func createLabel(name: String, color: LabelColor?) {
+    api.createLabel(boardId: board.id, name: name, color: color) { label in
+      self.board.labels.append(label)
+    }
+  }
+  
+  func updateLabel(labelId: String, name: String, color: LabelColor?) {
+    api.updateLabel(labelId: labelId, name: name, color: color) { label in
+      if let idx = self.board.labels.firstIndex(where: { l in l.id == labelId }) {
+        
+        self.board.labels[idx] = label
+      } else {
+        print("label \(labelId) updated, but could not be found in list of labels in board")
       }
     }
   }

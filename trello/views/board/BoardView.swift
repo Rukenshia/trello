@@ -19,6 +19,8 @@ struct BoardView: View {
   @State var preferences: Preferences = Preferences()
   @State private var scale: CGFloat = 1.0
   
+  @State private var showRightSidebar = false
+  
   @ViewBuilder
   var backgroundImage: some View {
     if let url = boardVm.board.prefs.backgroundImage {

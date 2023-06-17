@@ -12,8 +12,6 @@ struct RightSidebarView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var boardVm: BoardState
   
-  var doneList: Binding<List>?;
-  
   @State private var showDoneList: Bool = false
   @State private var showCreateMenu: Bool = false
   @State private var showErrors: Bool = false
@@ -22,6 +20,10 @@ struct RightSidebarView: View {
   
   @State private var archivedCards: [Card] = []
   @State private var boardActions: [ActionUpdateCard] = []
+  
+  var doneList: List? {
+    boardVm.board.lists.first(where: { l in l.name.starts(with: "✔️") })
+  }
   
   var body: some View {
     HStack {
@@ -46,7 +48,7 @@ struct RightSidebarView: View {
         }) { }
           .buttonStyle(IconButton(icon: "tag"))
           .sheet(isPresented: self.$showManageLabels) {
-            ManageBoardLabelsView(labels: self.boardVm.board.labels)
+            ManageBoardLabelsView(labels: boardVm.board.labels)
           }
         
         if let dl = doneList {
@@ -56,11 +58,11 @@ struct RightSidebarView: View {
             .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
             .sheet(isPresented: self.$showDoneList) {
               TabView {
-                DoneListView(boardActions: $boardActions, cards: dl.cards, list: dl.wrappedValue)
+                DoneListView(boardActions: boardActions, cards: dl.cards, list: dl)
                   .tabItem {
                     SwiftUI.Label("Done List", systemImage: "checkmark")
                   }
-                DoneListView(boardActions: $boardActions, cards: $archivedCards, list: nil)
+                DoneListView(boardActions: boardActions, cards: archivedCards, list: nil)
                   .frame(minWidth: 300, maxWidth: 300)
                   .tabItem {
                     SwiftUI.Label("Archive", systemImage: "archivebox")
@@ -85,7 +87,7 @@ struct RightSidebarView: View {
         )
         .symbolRenderingMode(.hierarchical)
         .popover(isPresented: self.$showMembers, arrowEdge: .bottom) {
-          MembersView(members: self.boardVm.board.members)
+          MembersView(members: boardVm.board.members)
         }
         
         Spacer()
@@ -110,19 +112,18 @@ struct RightSidebarView: View {
         }
       }
     }
-    // TODO: implement better
-//    .onChange(of: board) { nl in
-//      trelloApi.getBoardCards(id: state.board!.id, filter: "closed", limit: 50) { cards in
-//        self.archivedCards = cards
-//      }
-//    }
+    .task {
+      trelloApi.getBoardCards(id: boardVm.board.id, filter: "closed", limit: 50) { cards in
+        self.archivedCards = cards
+      }
+    }
     .padding(8)
   }
 }
 
 struct RightSidebarView_Previews: PreviewProvider {
   static var previews: some View {
-    RightSidebarView(doneList: nil)
+    RightSidebarView(board: Board(id: "board", idOrganization: "id", name: "board", prefs: BoardPrefs(), boardStars: []))
       .environmentObject(TrelloApi.testing)
   }
 }

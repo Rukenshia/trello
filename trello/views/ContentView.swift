@@ -44,8 +44,7 @@ struct ContentView: View {
               HStack {
                 BoardView()
                 
-                // TODO: add me back
-                //              RightSidebarView(doneList: $state.board?.lists.first(where: { list in list.name.wrappedValue.contains("✔️") }), board: self.$state.board?).frame(maxWidth: 48)
+                RightSidebarView().frame(maxWidth: 48)
               }
               .environmentObject(boardVm)
             }
