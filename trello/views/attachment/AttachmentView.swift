@@ -13,7 +13,7 @@ struct AttachmentView: View {
   @Environment(\.openURL) var openURL
   
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var attachment: Attachment
+  let attachment: Attachment
   let onDelete: () -> Void
   
   var isUrl: Bool {
@@ -52,7 +52,7 @@ struct AttachmentView: View {
           if let mimeType = attachment.mimeType {
             switch(mimeType) {
             case "image/png", "image/jpeg", "image/gif":
-              AttachmentImageView(attachment: $attachment)
+              AttachmentImageView(attachment: attachment)
                 .frame(width: 64, height: 64)
             case "application/zip":
               Image(systemName: "paperclip")
@@ -67,7 +67,7 @@ struct AttachmentView: View {
             }
           } else {
             if attachment.url.hasSuffix(".png") || attachment.url.hasSuffix(".jpg") {
-              AttachmentImageView(attachment: $attachment)
+              AttachmentImageView(attachment: attachment)
                 .frame(width: 64, height: 64)
             } else {
               EmptyView()
@@ -120,6 +120,6 @@ struct AttachmentView: View {
 
 struct AttachmentView_Previews: PreviewProvider {
   static var previews: some View {
-    AttachmentView(attachment: .constant(Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: "")), onDelete: { })
+    AttachmentView(attachment: Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: ""), onDelete: { })
   }
 }

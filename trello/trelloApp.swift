@@ -78,7 +78,7 @@ struct trelloApp: App {
       }
     }
     WindowGroup("Attachment", for: Attachment.self) { attachment in
-      AttachmentDetailView(attachment: Binding(attachment)!, onDelete: {})
+      AttachmentDetailView(attachment: attachment.wrappedValue!, onDelete: {})
         .navigationTitle("Attachment - " + attachment.wrappedValue!.name)
         .environmentObject(TrelloApi(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials))
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MembersView: View {
-  @Binding var members: [Member]
+  let members: [Member]
   var body: some View {
     VStack(alignment: .leading) {
       ForEach(members) { member in
@@ -21,6 +21,6 @@ struct MembersView: View {
 
 struct MembersView_Previews: PreviewProvider {
   static var previews: some View {
-    MembersView(members: .constant([Member(id: "id", username: "username", avatarUrl: "https://via.placeholder.com/50", fullName: "full name", initials: "fn")]))
+    MembersView(members: [Member(id: "id", username: "username", avatarUrl: "https://via.placeholder.com/50", fullName: "full name", initials: "fn")])
   }
 }

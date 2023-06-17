@@ -10,18 +10,18 @@ import SwiftUI
 struct ManageBoardLabelsView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   
-  @Binding var labels: [Label]
+  let labels: [Label]
   @State private var selection: Label?
   
   var body: some View {
     VStack {
       NavigationSplitView() {
         VStack {
-          SwiftUI.List($labels, selection: $selection) { label in
-            NavigationLink(value: label.wrappedValue) {
+          SwiftUI.List(labels, selection: $selection) { label in
+            NavigationLink(value: label) {
               HStack {
-                Circle().fill(label.wrappedValue.fgColor).frame(width: 6, height: 6)
-                Text(label.wrappedValue.name)
+                Circle().fill(label.fgColor).frame(width: 6, height: 6)
+                Text(label.name)
                   .font(.system(size: 14))
                   .foregroundColor(Color("LabelText"))
                   .lineLimit(1)
@@ -29,7 +29,7 @@ struct ManageBoardLabelsView: View {
               }
               .padding(.horizontal, 6)
               .padding(.vertical, 4)
-              .background(label.wrappedValue.bgColor)
+              .background(label.bgColor)
               .cornerRadius(4)
             }
           }
@@ -44,7 +44,7 @@ struct ManageBoardLabelsView: View {
         .frame(width: 200)
       } detail: {
         if let label = selection {
-          EditLabelView(label: Binding($selection)!, isNew: label.id.isEmpty)
+          EditLabelView(label: selection!, isNew: label.id.isEmpty)
         } else {
           Text("Select a label to edit")
         }
@@ -57,6 +57,6 @@ struct ManageBoardLabelsView: View {
 
 struct ManageBoardLabelsView_Previews: PreviewProvider {
   static var previews: some View {
-    ManageBoardLabelsView(labels: .constant([Label(id: "id", name: "name", color: "blue_light")]))
+    ManageBoardLabelsView(labels: [Label(id: "id", name: "name", color: "blue_light")])
   }
 }

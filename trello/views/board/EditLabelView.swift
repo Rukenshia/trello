@@ -63,7 +63,7 @@ struct EditLabelView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var boardVm: BoardState
   
-  @Binding var label: Label
+  let label: Label
   let isNew: Bool
   
   @State private var name: String = ""
@@ -120,6 +120,7 @@ struct EditLabelView: View {
       
       HStack {
         Button(action: {
+          // TODO: move to BoardState
           if isNew {
             self.trelloApi.createLabel(boardId: self.boardVm.board.id, name: self.name, color: self.color) { label in
               self.name = ""
@@ -170,6 +171,6 @@ struct EditLabelView: View {
 
 struct EditLabelView_Previews: PreviewProvider {
   static var previews: some View {
-    EditLabelView(label: .constant(Label(id: "id", name: "name", color: "red_dark")), isNew: false)
+    EditLabelView(label: Label(id: "id", name: "name", color: "red_dark"), isNew: false)
   }
 }

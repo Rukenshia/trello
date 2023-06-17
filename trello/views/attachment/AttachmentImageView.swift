@@ -11,7 +11,7 @@ import CachedAsyncImage
 
 struct AttachmentImageView: View {
   @EnvironmentObject var trelloApi: TrelloApi
-  @Binding var attachment: Attachment
+  let attachment: Attachment
   
   @State private var image: AnyView? = nil
   
@@ -52,6 +52,6 @@ struct AttachmentImageView: View {
 
 struct AttachmentImageView_Previews: PreviewProvider {
   static var previews: some View {
-    AttachmentImageView(attachment: .constant(Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: "")))
+    AttachmentImageView(attachment: Attachment(id: "id", bytes: 0, date: TrelloApi.DateFormatter.string(from: Date.now), edgeColor: "", idMember: "", isUpload: true, mimeType: "image/png", name: "image", pos: 0, previews: [Preview(id: "", scaled: false, url: "", bytes: 0, height: 64, width: 64)], url: ""))
   }
 }

@@ -46,7 +46,7 @@ struct RightSidebarView: View {
         }) { }
           .buttonStyle(IconButton(icon: "tag"))
           .sheet(isPresented: self.$showManageLabels) {
-            ManageBoardLabelsView(labels: self.$boardVm.board.labels)
+            ManageBoardLabelsView(labels: self.boardVm.board.labels)
           }
         
         if let dl = doneList {
@@ -85,7 +85,7 @@ struct RightSidebarView: View {
         )
         .symbolRenderingMode(.hierarchical)
         .popover(isPresented: self.$showMembers, arrowEdge: .bottom) {
-          MembersView(members: self.$boardVm.board.members)
+          MembersView(members: self.boardVm.board.members)
         }
         
         Spacer()
