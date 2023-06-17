@@ -259,7 +259,7 @@ struct CardView: View {
       case .dueDate:
         ContextMenuDueDateView(card: $card)
       case .cardColor:
-        ContextMenuCardColorView(card: $card, show: $showPopover)
+        ContextMenuCardColorView(card: card)
       case .editCard:
         ContextMenuEditCardView(card: $card, show: $showPopover)
           .padding(8)

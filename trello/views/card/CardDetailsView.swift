@@ -183,7 +183,7 @@ struct CardDetailsView: View {
               }) { Spacer() }
                 .buttonStyle(FlatButton(icon: "rectangle", text: "Cover"))
                 .popover(isPresented: self.$showCardCoverMenu, arrowEdge: .bottom) {
-                  ContextMenuCardColorView(card: self.$card, show: self.$showCardCoverMenu)
+                  ContextMenuCardColorView(card: self.card)
                 }
               
               

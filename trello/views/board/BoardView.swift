@@ -19,35 +19,34 @@ struct BoardView: View {
   @State var preferences: Preferences = Preferences()
   @State private var scale: CGFloat = 1.0
   
-  var backgroundImage: AnyView {
-    guard let url = boardVm.board.prefs.backgroundImage else {
-      return AnyView(Image("DefaultBoardBackground")
-        .resizable()
-        .aspectRatio(contentMode: .fill))
-    }
-    
-    // TODO: the old background image stays around until the new one is loaded, maybe there's a way
-    //       to force the placeholder in the meantime?
-    return AnyView(CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { phase in
-      switch phase {
-      case .empty:
-        ProgressView()
-      case .success(let image):
-        image.resizable()
-          .aspectRatio(contentMode: .fill)
-      case .failure:
-        HStack {
-          Image(systemName: "exclamationmark.triangle")
-            .symbolRenderingMode(.hierarchical)
-          
-          Text("could not load background image")
+  @ViewBuilder
+  var backgroundImage: some View {
+    if let url = boardVm.board.prefs.backgroundImage {
+      CachedAsyncImage(url: URL(string: url), urlCache: .imageCache) { phase in
+        switch phase {
+        case .empty:
+          ProgressView()
+        case .success(let image):
+          image.resizable()
+            .aspectRatio(contentMode: .fill)
+        case .failure:
+          HStack {
+            Image(systemName: "exclamationmark.triangle")
+              .symbolRenderingMode(.hierarchical)
+            
+            Text("could not load background image")
+          }
+          .foregroundColor(.red)
+          .font(.system(size: 24))
+        @unknown default:
+          EmptyView()
         }
-        .foregroundColor(.red)
-        .font(.system(size: 24))
-      @unknown default:
-        EmptyView()
       }
-    })
+    } else {
+      Image("DefaultBoardBackground")
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+    }
   }
   
   var body: some View {

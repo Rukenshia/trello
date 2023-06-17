@@ -15,8 +15,28 @@ struct OrganizationView: View {
   let organization: Organization
   let stars: [BoardStar]
   
-  @State private var image: AnyView? = nil
   @State private var expanded = true
+  
+  @ViewBuilder
+  var image: some View {
+    if let logoUrl = organization.logoUrl {
+      CachedAsyncImage(url: URL(string: "\(logoUrl)/50.png"), urlCache: .imageCache) { phase in
+        switch phase {
+        case .empty:
+          defaultLogo
+        case .success(let image):
+          image.resizable()
+            .frame(width: 32, height: 32)
+        case .failure:
+          defaultLogo
+        @unknown default:
+          EmptyView()
+        }
+      }
+    } else {
+      defaultLogo
+    }
+  }
   
   var defaultLogo: some View {
     Rectangle()
@@ -61,11 +81,7 @@ struct OrganizationView: View {
         .padding(.leading, 12)
       } label: {
         HStack {
-          if let image = self.image {
-            image
-          } else {
-            defaultLogo
-          }
+          self.image
           
           Text(organization.displayName)
             .font(.title2)
@@ -78,23 +94,6 @@ struct OrganizationView: View {
             expanded.toggle()
           }
         }
-      }
-    }
-    .task {
-      if let logoUrl = organization.logoUrl {
-        self.image = AnyView(CachedAsyncImage(url: URL(string: "\(logoUrl)/50.png"), urlCache: .imageCache) { phase in
-          switch phase {
-          case .empty:
-            defaultLogo
-          case .success(let image):
-            image.resizable()
-              .frame(width: 32, height: 32)
-          case .failure:
-            defaultLogo
-          @unknown default:
-            EmptyView()
-          }
-        })
       }
     }
     .onAppear {

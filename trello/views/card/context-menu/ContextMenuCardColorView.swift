@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ContextMenuCardColorView: View {
   @EnvironmentObject var boardVm: BoardState
-  @Binding var card: Card;
-  @Binding var show: Bool;
+  let card: Card;
   
   @State var size: CardCoverSize = .full
   
@@ -24,8 +23,8 @@ struct ContextMenuCardColorView: View {
         .font(.title3)
       LazyVGrid(columns: [GridItem(.flexible(minimum: 64)), GridItem(.flexible(minimum: 64)), GridItem(.flexible(minimum: 64))], spacing: 8) {
         ForEach(CardCoverColor.allCases, id: \.self) { colorName in
-          CardColorView(card: $card, colorName: colorName,
-                        apply: self.updateCover, show: self.$show)
+          CardColorView(card: card, colorName: colorName,
+                        apply: self.updateCover)
         }
         Button(action: {
           self.removeCover()
@@ -72,6 +71,6 @@ struct ContextMenuCardColorView: View {
 
 struct ContextMenuCardColorView_Previews: PreviewProvider {
   static var previews: some View {
-    ContextMenuCardColorView(card: .constant(Card(id: "cardid", name: "card")), show: .constant(true))
+    ContextMenuCardColorView(card: Card(id: "cardid", name: "card"))
   }
 }
