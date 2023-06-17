@@ -23,7 +23,7 @@ struct CardView: View {
   
   @State private var isHovering = false
   
-  @State private var bgImage: AnyView? = nil
+  @State private var bgImage: Image? = nil
   
   @State private var monitor: Any?;
   
@@ -43,6 +43,8 @@ struct CardView: View {
   private var bgHoverImage: some View {
     if let bgImage = self.bgImage {
       bgImage
+        .resizable()
+        .scaledToFill()
     } else {
       EmptyView()
     }
@@ -335,7 +337,7 @@ struct CardView: View {
             trelloApi.getCardAttachment(cardId: card.id, attachmentId: idAttachment) { attachment in
               trelloApi.downloadAttachment(url: attachment.previews.last!.url, completion: { data in
                 guard let nsImage = NSImage(data: data) else { return }
-                self.bgImage = AnyView(Image(nsImage: nsImage).resizable().scaledToFill())
+                self.bgImage = Image(nsImage: nsImage)
               })
             }
           }

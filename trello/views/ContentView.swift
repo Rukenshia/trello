@@ -94,7 +94,7 @@ struct ContentView: View {
         if let boardVm {
           self.trelloApi.getBoard(id: boardVm.board.id) { board in
             if (board.id == boardVm.board.id) {
-              boardVm.board = board
+              boardVm.selectBoard(board: board)
             }
           }
        }
