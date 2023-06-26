@@ -89,16 +89,14 @@ struct DoneListView: View {
   var body: some View {
     SwiftUI.List {
       ForEach(bucketKeys, id: \.self) { key in
-        if self.buckets[key]!.count > 0 {
-//          BucketView(key: key, cards: self.buckets[key]!, showDetails: $showDetails, showDetailsForCard: $showDetailsForCard)
-        }
+        BucketView(key: key, cards: self.buckets[key]!)
       }
     }
-    .onChange(of: boardActions) { actions in
+    .task {
       var newDict = Dictionary<String, ActionUpdateCard>()
       
       // Take the first action as it should be the newest one
-      for action in actions {
+      for action in boardActions {
         if newDict[action.data.card.id] != nil {
           continue
         }
@@ -132,7 +130,7 @@ struct BucketView: View {
     Text(key)
       .font(.headline)
     ForEach(cards) { card in
-      CardView(card: Binding(get: { card }, set: {_ in }), scale: .constant(1))
+      CardView(card: .constant(card), scale: .constant(1))
         .padding(4)
     }
   }

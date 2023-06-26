@@ -22,7 +22,7 @@ struct RightSidebarView: View {
   @State private var boardActions: [ActionUpdateCard] = []
   
   var doneList: List? {
-    boardVm.board.lists.first(where: { l in l.name.starts(with: "✔️") })
+    boardVm.board.lists.first(where: { l in l.name.contains("✔️") })
   }
   
   var body: some View {
@@ -123,7 +123,7 @@ struct RightSidebarView: View {
 
 struct RightSidebarView_Previews: PreviewProvider {
   static var previews: some View {
-    RightSidebarView(board: Board(id: "board", idOrganization: "id", name: "board", prefs: BoardPrefs(), boardStars: []))
+    RightSidebarView()
       .environmentObject(TrelloApi.testing)
   }
 }
