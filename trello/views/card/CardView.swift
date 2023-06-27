@@ -27,6 +27,10 @@ struct CardView: View {
   
   @State private var monitor: Any?;
   
+  private var hasFullColorCover: Bool {
+    card.cover != nil && card.cover?.color != nil && card.cover?.size == .full
+  }
+  
   private var hasBackgroundImage: Bool {
     if let cover = card.cover {
       if cover.idAttachment != nil {
@@ -174,19 +178,22 @@ struct CardView: View {
           CardCoverView(cardId: card.id, cover: cover)
         }
       }
-      HStack {
-        VStack(alignment: .leading, spacing: 0) {
+      
+      if hasFullColorCover {
+        VStack(spacing: 0) {
+          Spacer()
           
-          HStack {
-            if displayedLabels.count > 0 {
-              ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
-                LabelView(label: label, size: 11 * scale)
-              }
-              if card.labels.count > 2 {
-                Text("+\(card.labels.count - 2)")
-                  .font(.system(size: 11 * scale))
-              }
+          if preferences.showBadgesOnCoverCards {
+            
+            HStack {
+              badgeComponents
+              
+              Spacer()
             }
+            .font(.system(size: 11 * scale))
+            .padding(.top, 4 * scale)
+            
+            Spacer().frame(height: 4 * scale)
           }
           
           HStack {
@@ -194,29 +201,65 @@ struct CardView: View {
               Image(systemName: "archivebox")
             }
             Text(card.name)
-              .multilineTextAlignment(.leading)
-              .lineLimit(2)
-              .font(.system(size: 12 * scale))
+              .font(.system(size: 16 * scale).weight(.medium))
+              .foregroundColor(cardNameForegroundColor)
+            
+            Spacer()
           }
-          .foregroundColor(cardNameForegroundColor)
-          
-          
-          HStack {
-            if let dueDate = card.dueDate {
-              CardDueView(dueDate: dueDate, dueComplete: card.dueComplete, markAsDone: { boardVm.markCardAsDone(cardId: card.id) }, compact: preferences.compactDueDate)
-                .font(.system(size: 12 * scale))
+        }
+        .padding(8 * scale)
+        .padding(.top, preferences.showBadgesOnCoverCards ? 8 * scale : 12 * scale)
+      } else {
+        HStack {
+          VStack(alignment: .leading, spacing: 0) {
+            
+            if displayedLabels.count > 0 {
+              HStack {
+                ForEach(displayedLabels[0...min(displayedLabels.count - 1, 1)]) { label in
+                  LabelView(label: label, size: 11 * scale)
+                }
+                if card.labels.count > 2 {
+                  Text("+\(card.labels.count - 2)")
+                    .font(.system(size: 11 * scale))
+                }
+              }
             }
             
-            badgeComponents
-          }
-          .font(.system(size: 10 * scale))
+            HStack {
+              if card.closed {
+                Image(systemName: "archivebox")
+              }
+              Text(card.name)
+                .multilineTextAlignment(.leading)
+                .lineLimit(2)
+                .font(.system(size: 12 * scale))
+            }
+            .foregroundColor(cardNameForegroundColor)
+            
+            
+            if card.dueDate != nil || preferences.showBadgesOnCoverCards {
+              Spacer()
+            }
+            
+            HStack {
+              if let dueDate = card.dueDate {
+                CardDueView(dueDate: dueDate, dueComplete: card.dueComplete, markAsDone: { boardVm.markCardAsDone(cardId: card.id) }, compact: preferences.compactDueDate)
+                  .font(.system(size: 12 * scale))
+              }
+              
+              if preferences.showBadgesOnCoverCards {
+                badgeComponents
+              }
+            }
+            .font(.system(size: 10 * scale))
+            
+            if card.idMembers.count > 0 {
+              CardMembersView(members: boardVm.board.members.filter({ m in card.idMembers.contains(m.id) }))
+            }
+          }.padding(8 * scale)
           
-          if card.idMembers.count > 0 {
-            CardMembersView(members: boardVm.board.members.filter({ m in card.idMembers.contains(m.id) }))
-          }
-        }.padding(8 * scale)
-        
-        Spacer()
+          Spacer()
+        }
       }
     }
     .onHover { hover in
@@ -277,7 +320,7 @@ struct CardView: View {
       }
     }
     
-    .cornerRadius(4)
+    .cornerRadius(8)
     .shadow(color: .black.opacity(0.15), radius: 0, x: 0, y: 1)
     .onAppear {
       monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { nsevent in

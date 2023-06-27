@@ -16,6 +16,7 @@ struct PreferenceKeys {
   static let organizations = "organizations"
   static let showFavorites = "showFavorites"
   static let compactDueDate = "compactDueDate"
+  static let showBadgesOnCoverCards = "showBadgesOnCoverCards"
 }
 
 class OrganizationPreferences: Codable {
@@ -43,6 +44,7 @@ class Preferences: ObservableObject {
   var trelloToken: String?
   var scale: CGFloat
   var compactDueDate: Bool
+  @Published var showBadgesOnCoverCards: Bool
   @Published var organizations: [String: OrganizationPreferences]
   @Published var showFavorites: Bool
   
@@ -73,6 +75,12 @@ class Preferences: ObservableObject {
     self.showFavorites = UserDefaults.standard.bool(forKey: PreferenceKeys.showFavorites)
     self.compactDueDate = UserDefaults.standard.bool(forKey: PreferenceKeys.compactDueDate)
     
+    if UserDefaults.standard.value(forKey: PreferenceKeys.showBadgesOnCoverCards) == nil {
+      self.showBadgesOnCoverCards = true
+    } else {
+      self.showBadgesOnCoverCards = UserDefaults.standard.bool(forKey: PreferenceKeys.showBadgesOnCoverCards)
+    }
+    
     $credentials.sink { _ in
       self.save()
     }
@@ -92,6 +100,7 @@ class Preferences: ObservableObject {
     UserDefaults.standard.set(self.trelloToken, forKey: PreferenceKeys.trelloToken)
     UserDefaults.standard.set(self.scale, forKey: PreferenceKeys.scale)
     UserDefaults.standard.set(self.compactDueDate, forKey: PreferenceKeys.compactDueDate)
+    UserDefaults.standard.set(self.showBadgesOnCoverCards, forKey: PreferenceKeys.showBadgesOnCoverCards)
     
     UserDefaults.standard.set(try? PropertyListEncoder().encode(self.organizations), forKey: PreferenceKeys.organizations)
     UserDefaults.standard.set(try? PropertyListEncoder().encode(self.credentials), forKey: PreferenceKeys.credentials)
