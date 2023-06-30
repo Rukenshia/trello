@@ -20,6 +20,7 @@ struct SettingsView: View {
             SwiftUI.Label("API Settings", systemImage: "key")
           }
       }
+      .padding(16)
     }
 }
 

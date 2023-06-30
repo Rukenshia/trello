@@ -13,9 +13,6 @@ struct SidebarBoardView: View {
   let board: BasicBoard;
   let starred: Bool;
   
-  @State var isHovering: Bool = false;
-  @State var color: Color = Color(.clear);
-  
   var body: some View {
     Button(action: {
       state.selectBoard(id: board.id)
@@ -34,46 +31,11 @@ struct SidebarBoardView: View {
       .frame(maxWidth: .infinity)
       .padding(.horizontal, 4)
       .padding(.vertical, 6)
-      .background(self.color)
+      .foregroundColor(state.selectedBoard?.id == self.board.id ? Color.white : Color.primary)
+      .background(state.selectedBoard?.id == self.board.id ? Color.accentColor : Color.clear)
       .cornerRadius(4)
-      .onHover(perform: {hover in
-        isHovering = hover
-        
-        withAnimation(.easeInOut(duration: 0.05)) {
-          if state.selectedBoard?.id == self.board.id {
-            if hover {
-              self.color = Color("CardBackground")
-            } else {
-              self.color = .accentColor
-            }
-            return
-          }
-          
-          if hover {
-            self.color = Color("CardBackground")
-          } else {
-            self.color = .clear
-          }
-        }
-      })
     }
     .buttonStyle(.plain)
-    .onAppear {
-      if state.selectedBoard?.id == self.board.id {
-        self.color = .accentColor
-      }
-    }
-    .onChange(of: state.selectedBoard?.id) { newBoard in
-      if state.selectedBoard?.id == self.board.id {
-        self.color = .accentColor
-      } else {
-        if isHovering {
-          self.color = Color("CardBackground")
-        } else {
-          self.color = .clear
-        }
-      }
-    }
   }
 }
 

@@ -55,7 +55,6 @@ struct OrganizationView: View {
   
   var body: some View {
     VStack(alignment: .leading) {
-      
       DisclosureGroup(isExpanded: $expanded) {
         ForEach(organization.boards.sorted(by: { a, b in
           let starredA = stars.first(where: { s in s.idBoard == a.id})

@@ -31,7 +31,7 @@ struct LookAndFeelSettingsView: View {
       Spacer()
     }
     .padding()
-    .frame(minWidth: 300, minHeight: 200)
+    .frame(minWidth: 600, minHeight: 200)
     .onAppear {
       cardDueDateMode = preferences.compactDueDate ? "compact" : "full"
       
