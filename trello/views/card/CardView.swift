@@ -92,7 +92,7 @@ struct CardView: View {
     }
     
     if let color = cover.color {
-      return Color("CardNameCover_\(color.rawValue)")
+      return Color("CardCoverFg_\(color.rawValue)")
     }
     
     return Color(nsColor: .textColor)
@@ -121,7 +121,7 @@ struct CardView: View {
         .padding(.horizontal, 4)
         .padding(.vertical, 2)
         .background(Color("CardBackground"))
-        .cornerRadius(4)
+        .cornerRadius(3)
         
         Text(card.desc)
           .lineLimit(1)
@@ -138,7 +138,7 @@ struct CardView: View {
           .padding(.horizontal, 4)
           .padding(.vertical, 2)
           .background(Color("CardBackground"))
-          .cornerRadius(4)
+          .cornerRadius(3)
         }
         if commentsBadge {
           HStack(spacing: 1) {
@@ -149,7 +149,7 @@ struct CardView: View {
           .padding(.horizontal, 4)
           .padding(.vertical, 2)
           .background(Color("CardBackground"))
-          .cornerRadius(4)
+          .cornerRadius(3)
         }
         if attachmentsBadge {
           HStack(spacing: 1) {
@@ -160,7 +160,7 @@ struct CardView: View {
           .padding(.horizontal, 4)
           .padding(.vertical, 2)
           .background(Color("CardBackground"))
-          .cornerRadius(4)
+          .cornerRadius(3)
         }
         if hasDescription {
           Text(card.desc)
@@ -247,9 +247,9 @@ struct CardView: View {
                   .font(.system(size: 12 * scale))
               }
               
-              if preferences.showBadgesOnCoverCards {
-                badgeComponents
-              }
+              badgeComponents
+              
+              Spacer()
             }
             .font(.system(size: 10 * scale))
             

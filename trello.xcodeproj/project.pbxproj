@@ -94,6 +94,8 @@
 		3DEB767A291EB6430050A715 /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB7679291EB6430050A715 /* Member.swift */; };
 		3DEB767C291EB7290050A715 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEB767B291EB7290050A715 /* CommentView.swift */; };
 		3DECF5982913AAF8007A796C /* TrelloChecklistApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DECF5972913AAF8007A796C /* TrelloChecklistApi.swift */; };
+		3DED97D72A4B371D008C1098 /* Trello.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DED97D62A4B371D008C1098 /* Trello.xcassets */; };
+		3DED97D92A4B72A2008C1098 /* AppColors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DED97D82A4B72A2008C1098 /* AppColors.xcassets */; };
 		3DF1F3E528DF3DF800B2D7C7 /* CardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */; };
 		3DF2C2DF291120AC00ABF690 /* CardDetailsDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */; };
 		3DFDB89029327D89005BE925 /* AttachmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFDB88F29327D89005BE925 /* AttachmentDetailView.swift */; };
@@ -203,6 +205,8 @@
 		3DEB7679291EB6430050A715 /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		3DEB767B291EB7290050A715 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		3DECF5972913AAF8007A796C /* TrelloChecklistApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrelloChecklistApi.swift; sourceTree = "<group>"; };
+		3DED97D62A4B371D008C1098 /* Trello.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Trello.xcassets; sourceTree = "<group>"; };
+		3DED97D82A4B72A2008C1098 /* AppColors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = AppColors.xcassets; sourceTree = "<group>"; };
 		3DF1F3E428DF3DF800B2D7C7 /* CardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsView.swift; sourceTree = "<group>"; };
 		3DF2C2DE291120AC00ABF690 /* CardDetailsDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailsDescriptionView.swift; sourceTree = "<group>"; };
 		3DFDB88F29327D89005BE925 /* AttachmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentDetailView.swift; sourceTree = "<group>"; };
@@ -269,6 +273,8 @@
 				3D337EAA28FB25E80054DCB3 /* Info.plist */,
 				3D1483A628DEF4890021C6FC /* trello.entitlements */,
 				3D1483A128DEF4890021C6FC /* Assets.xcassets */,
+				3DED97D62A4B371D008C1098 /* Trello.xcassets */,
+				3DED97D82A4B72A2008C1098 /* AppColors.xcassets */,
 				3D582331293682AE00B2B87E /* devEnv.swift */,
 				3D14839D28DEF4870021C6FC /* trelloApp.swift */,
 				3DCFDDB2290ACA8200039C2F /* api */,
@@ -621,6 +627,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DC3E9B0291165EE00F5BF64 /* README.md in Resources */,
+				3DED97D92A4B72A2008C1098 /* AppColors.xcassets in Resources */,
+				3DED97D72A4B371D008C1098 /* Trello.xcassets in Resources */,
 				3D1483A528DEF4890021C6FC /* Preview Assets.xcassets in Resources */,
 				3D1483A228DEF4890021C6FC /* Assets.xcassets in Resources */,
 			);
@@ -887,7 +895,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
@@ -918,7 +926,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"trello/Preview Content\"";
 				DEVELOPMENT_TEAM = D5U62AMZ4T;
@@ -946,7 +954,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
@@ -965,7 +973,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.3;
@@ -983,7 +991,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -1000,7 +1008,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 157;
+				CURRENT_PROJECT_VERSION = 160;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;

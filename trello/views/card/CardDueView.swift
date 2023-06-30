@@ -18,20 +18,18 @@ struct CardDueView: View {
   
   private var dueColor: Color {
     if dueComplete {
-      return Color("CardDueCompleteBackground").opacity(0.85);
+      return Color("CardDueCompleteBackground");
     }
     
     if Date.now > dueDate {
-      return Color("CardOverdueBackground").opacity(0.85);
+      return Color("CardOverdueBackground");
     }
     
-    let diff = Calendar.current.dateComponents([.day], from: Date.now, to: dueDate);
-    
-    if diff.day! > 0 {
+    if !Calendar.current.isDate(Date.now, inSameDayAs: dueDate) {
       return Color.clear;
     }
     
-    return Color("CardDueSoonBackground").opacity(0.85);
+    return Color("CardDueSoonBackground");
   }
   
   private var hoverButton: some View {
@@ -49,7 +47,27 @@ struct CardDueView: View {
   }
   
   private var foregroundColor: Color {
-    return isHovering ? Color("TwGreen200") : .primary
+    if dueComplete {
+      return Color("CardDueComplete");
+    }
+    
+    if isHovering {
+      return Color("TwGreen200")
+    }
+    
+    if Date.now > dueDate {
+        if compact {
+          return Color("CardOverdueBackground")
+        }
+      
+        return Color("CardOverdue")
+    }
+    
+    if !Calendar.current.isDate(Date.now, inSameDayAs: dueDate) {
+      return .primary;
+    }
+    
+    return Color("CardDueSoon")
   }
   
   private var backgroundColor: Color {
@@ -64,6 +82,30 @@ struct CardDueView: View {
     return dueColor
   }
   
+  private var imageColor: Color {
+    if dueComplete {
+      return Color("CardDueComplete");
+    }
+    
+    if isHovering {
+      return Color("TwGreen200")
+    }
+    
+    if Date.now > dueDate {
+      if compact {
+        return Color("CardOverdue")
+      }
+      
+      return Color("CardOverdue")
+    }
+    
+    if !Calendar.current.isDate(Date.now, inSameDayAs: dueDate) {
+      return .primary;
+    }
+    
+    return Color("CardDueSoon")
+  }
+  
   private var dueString: String {
     if Calendar.current.isDateInToday(dueDate) {
       return TrelloApi.DateFormatterTime.string(from: dueDate)
@@ -76,10 +118,11 @@ struct CardDueView: View {
     Button(action: {
       markAsDone()
     }) {
-      HStack(alignment: .center, spacing: 2) {
+      HStack(spacing: 2) {
         Image(systemName: "clock")
-          .padding(compact ? 1 : 0)
+          .padding(.vertical, compact ? 1 : 0)
           .background(compact ? dueColor : Color.clear)
+          .foregroundColor(imageColor)
           .clipShape(Circle())
           .overlay {
             if isHovering {
@@ -93,12 +136,11 @@ struct CardDueView: View {
           isHovering = hover
         }
       }
-      .frame(alignment: .leading)
       .frame(minWidth: 60)
-      .padding(compact ? 1 : 2)
+      .padding(.vertical, compact ? 1 : 2)
       .foregroundColor(foregroundColor)
       .background(backgroundColor)
-      .cornerRadius(4)
+      .cornerRadius(3)
     }
     .buttonStyle(.plain)
   }

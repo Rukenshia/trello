@@ -30,7 +30,7 @@ struct CardColorView: View {
       CardCover(color: self.colorName, size: .full, brightness: .dark).displayColor
         .brightness(hovering ? 0.1 : 0.0)
     )
-    .cornerRadius(4)
+    .cornerRadius(8)
     .onHover { hover in
       hovering = hover
     }

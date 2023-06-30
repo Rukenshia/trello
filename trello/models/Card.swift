@@ -51,28 +51,19 @@ struct CardCover: Codable, Hashable {
   
   var displayColor: Color {
     switch self.color {
-    case .some(.red):
-      return Color("TwRed700")
-    case .some(.pink):
-      return Color("TwPink500")
-    case .some(.yellow):
-      return Color("TwYellow600")
-    case .some(.lime):
-      return Color("TwLime600")
-    case .some(.blue):
-      return Color("TwBlue700")
-    case .some(.black):
-      return Color("CardCoverBlack")
-    case .some(.orange):
-      return Color("TwAmber600")
-    case .some(.purple):
-      return Color("TwPurple700")
-    case .some(.sky):
-      return Color("TwSky600")
-    case .some(.green):
-      return Color("TwEmerald600")
+    case .some(let color):
+      return Color("CardCover_\(color.rawValue)")
     case .none:
       return Color("CardBackground")
+    }
+  }
+  
+  var foregroundColor: Color {
+    switch self.color {
+    case .some(let color):
+      return Color("CardCoverFg_\(color.rawValue)")
+    case .none:
+      return .primary
     }
   }
 }
