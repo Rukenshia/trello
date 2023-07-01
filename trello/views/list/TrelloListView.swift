@@ -29,6 +29,36 @@ enum PopoverState {
   case manageMembers
 }
 
+struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+    value = nextValue()
+  }
+}
+
+struct SizeModifier: ViewModifier {
+  private var sizeView: some View {
+    GeometryReader { geometry in
+      Color.clear.preference(key: SizePreferenceKey.self, value: geometry.size)
+    }
+  }
+  
+  func body(content: Content) -> some View {
+    content.overlay(sizeView)
+  }
+}
+
+extension View {
+  func getSize(perform: @escaping (CGSize) -> ()) -> some View {
+    self
+      .modifier(SizeModifier())
+      .onPreferenceChange(SizePreferenceKey.self) {
+        perform($0)
+      }
+  }
+}
+
 struct TrelloListView: View {
   @EnvironmentObject var trelloApi: TrelloApi
   @EnvironmentObject var appState: AppState
@@ -37,7 +67,7 @@ struct TrelloListView: View {
   @Binding var list: List
   @Binding var scale: CGFloat
   
-  @State private var selection: Card? = nil
+  @State private var dragging: Card? = nil
   @State private var addCardColor: Color = Color(.clear)
   @State private var showAddCard: Bool = false
   
@@ -45,8 +75,10 @@ struct TrelloListView: View {
   
   @State private var width: CGFloat = 150
   
+  @State private var scrollViewContentSize: CGSize = .zero
+  
   var background: Color {
-    return Color("ListBackground").opacity(0.6)
+    return Color("ListBackground").opacity(0.95)
   }
   
   var body: some View {
@@ -56,6 +88,7 @@ struct TrelloListView: View {
           boardVm.setListName(listId: list.id, name: newName)
         })
         .font(.system(size: 12 * scale))
+        .fontWeight(.medium)
         Spacer()
         Button(action: {
           self.showMenu = true
@@ -68,36 +101,42 @@ struct TrelloListView: View {
         }
       }
       Divider()
-      SwiftUI.List {
         if $list.cards.count == 0 {
           if !showAddCard {
-            Spacer()
-              .frame(height: 180 * scale)
-              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
+            Rectangle()
+              .fill(.clear)
+              .frame(height: 80 * scale)
+              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: "", list: self.$list))
           }
         } else {
-          ForEach(self.$list.cards, id: \.id) { card in
-            CardView(card: card,
-                     scale: $scale)
-            .onDrag {
-              NSItemProvider(object: card.id as NSString)
+          GeometryReader { proxy in
+            ScrollView {
+              LazyVStack(spacing: 4) {
+                ForEach(self.$list.cards, id: \.id) { card in
+                  CardView(card: card,
+                           scale: $scale)
+                  .onDrag {
+                    dragging = card.wrappedValue
+                    print("dragging \(card.id)")
+                    return NSItemProvider(object: card.id as NSString)
+                  }
+                  .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: card.wrappedValue.id, list: self.$list))
+                }
+              }
+              .background(
+                GeometryReader { geo -> Color in
+                  DispatchQueue.main.async {
+                    scrollViewContentSize = geo.size
+                  }
+                  return Color.clear
+                }
+              )
             }
+            .scrollIndicators(.never) // FIXME: with the scroll indicators visible, there's always some white background
           }
-          .onMove { source, dest in
-            if dest < 0 {
-              return
-            }
-            
-            for sourceIdx in source {
-              moveCard(cardId: self.list.cards[sourceIdx].id, from: sourceIdx, to: dest)
-            }
-          }
-          .onDelete { offsets in
-            self.list.cards.remove(atOffsets: offsets)
-          }
-          .onInsert(of: ["public.text"], perform: onInsert)
-          .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
-          .deleteDisabled(true)
+          .frame(
+            maxHeight: scrollViewContentSize.height + 8
+          )
         }
         
         if showAddCard {
@@ -105,9 +144,6 @@ struct TrelloListView: View {
             showAddCard = false
           })
         }
-      }
-      .listStyle(.plain)
-      .scrollIndicators(.never) // FIXME: with the scroll indicators visible, there's always some white background
       Button(action: {
         self.showAddCard = true
         
@@ -138,7 +174,6 @@ struct TrelloListView: View {
       }
       .buttonStyle(.plain)
     }
-    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, list: self.$list))
     .onChange(of: list.cards) { cards in
       withAnimation {
         setWidth()
@@ -155,57 +190,12 @@ struct TrelloListView: View {
     }
     .padding(8)
     .background(background)
-    .cornerRadius(4)
+    .cornerRadius(8)
     .frame(idealWidth:width)
   }
   
   private func setWidth() {
     self.width = self.list.cards.count > 0 || showAddCard ? 260 * scale : 150 * scale
-  }
-  
-  private func moveCard(cardId: String, from: Int, to: Int) {
-    
-    var newPos: Float = 0.0
-    if to == self.list.cards.count {
-      newPos = self.list.cards[self.list.cards.count - 1].pos + 1024
-    } else if to == 0 {
-      newPos = self.list.cards[0].pos - 1024
-    } else {
-      newPos = (self.list.cards[to - 1].pos + self.list.cards[to].pos) / 2
-    }
-    
-    DispatchQueue.main.async {
-      print(from, to)
-      self.list.cards[from].pos = newPos
-      boardVm.updateCard(cardId: cardId, pos: newPos)
-      
-      self.list.cards.move(fromOffsets: [from], toOffset: to)
-    }
-  }
-  
-  private func onInsert(at offset: Int, itemProviders: [NSItemProvider]) {
-    for item in itemProviders {
-      _ = item.loadObject(ofClass: String.self) { droppedString, _ in
-        if let cardId = droppedString {
-          if let from = list.cards.firstIndex(where: { card in card.id == cardId }) {
-            moveCard(cardId: cardId, from: from, to: offset)
-            return
-          }
-          
-          // Card was probably dropped from another list - transfer it
-          if let card = boardVm.board.cards.first(where: { card in card.id == cardId }) {
-            if card.idList == list.id {
-              print("something weird happened")
-              return
-            }
-          }
-          
-          DispatchQueue.main.async {
-            boardVm.updateCard(cardId: cardId, listId: list.id)
-          }
-        }
-      }
-    }
   }
 }
 

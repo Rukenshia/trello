@@ -10,17 +10,34 @@ import Foundation
 class BoardState: ObservableObject {
   var api: TrelloApi
   @Published var board: Board
+  @Published var updating: Bool
   
   
   init(api: TrelloApi, board: Board) {
     self.api = api
     self.board = board
+    self.updating = true
   }
   
   func selectBoard(board: Board) {
+    if (!updating) {
+      print("rejecting board update")
+      
+      return
+    }
+    
     self.board = board
     UserDefaults.standard.set(board.id, forKey: PreferenceKeys.currentBoard)
   }
+  
+  func startUpdating() {
+    updating = true
+  }
+  
+  func stopUpdating() {
+    updating = false
+  }
+  
   
   func createCard(listId: String, sourceCardId: String) {
     api.createCard(listId: listId, sourceCardId: sourceCardId) { card in

@@ -76,7 +76,7 @@ struct CardView: View {
     if hasBackgroundImage {
       bgHoverImage.brightness(isHovering ? -0.1 : 0.0)
     } else {
-      cardBgColor.brightness(isHovering ? -0.1 : 0.0)
+      cardBgColor.brightness(isHovering ? -0.05 : 0.0)
     }
   }
   
@@ -183,34 +183,36 @@ struct CardView: View {
         VStack(spacing: 0) {
           Spacer()
           
-          if preferences.showBadgesOnCoverCards {
+          VStack {
+            if preferences.showBadgesOnCoverCards {
+              
+              HStack {
+                badgeComponents
+                
+                Spacer()
+              }
+              .font(.system(size: 11 * scale))
+              .padding(.top, 4 * scale)
+              
+              Spacer().frame(height: 4 * scale)
+            }
             
             HStack {
-              badgeComponents
+              if card.closed {
+                Image(systemName: "archivebox")
+              }
+              Text(card.name)
+                .font(.system(size: 16 * scale).weight(.medium))
+                .foregroundColor(cardNameForegroundColor)
               
               Spacer()
             }
-            .font(.system(size: 11 * scale))
-            .padding(.top, 4 * scale)
-            
-            Spacer().frame(height: 4 * scale)
           }
-          
-          HStack {
-            if card.closed {
-              Image(systemName: "archivebox")
-            }
-            Text(card.name)
-              .font(.system(size: 16 * scale).weight(.medium))
-              .foregroundColor(cardNameForegroundColor)
-            
-            Spacer()
-          }
+          .padding(8 * scale)
+          .padding(.top, preferences.showBadgesOnCoverCards ? 8 * scale : 12 * scale)
         }
-        .padding(8 * scale)
-        .padding(.top, preferences.showBadgesOnCoverCards ? 8 * scale : 12 * scale)
       } else {
-        HStack {
+        HStack(spacing: 0) {
           VStack(alignment: .leading, spacing: 0) {
             
             if displayedLabels.count > 0 {
@@ -319,7 +321,6 @@ struct CardView: View {
         EmptyView()
       }
     }
-    
     .cornerRadius(8)
     .shadow(color: .black.opacity(0.15), radius: 0, x: 0, y: 1)
     .onAppear {
