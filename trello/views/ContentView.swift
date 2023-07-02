@@ -96,20 +96,21 @@ struct ContentView: View {
               boardVm.selectBoard(board: board)
             }
           }
-       }
+        }
       }
       .sheet(isPresented: $showCommandBar) {
-          VStack {
-            CommandBarView()
-          }
-          .background(.black.opacity(0.8))
-          .frame(minWidth: 400, minHeight: 600)
+        VStack {
+          CommandBarView()
+        }
+        .background(.black.opacity(0.8))
+        .frame(minWidth: 400, minHeight: 600)
       }
     }
     .onChange(of: state.selectedBoard) { newBoard in
       if let selectedBoard = newBoard {
-          boardVm = BoardState(api: state.api!, board: selectedBoard)
+        UserDefaults.standard.set(selectedBoard.id, forKey: PreferenceKeys.currentBoard)
         
+        boardVm = BoardState(api: state.api!, board: selectedBoard)
       }
     }
   }

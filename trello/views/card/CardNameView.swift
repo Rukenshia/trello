@@ -34,7 +34,7 @@ struct CardNameView: View {
           }) {
             
           }
-          .buttonStyle(IconButton(icon: "square.and.pencil", size: 16))
+          .buttonStyle(IconButton(icon: "square.and.pencil", size: 16, color: .clear, hoverColor: .clear))
           Text(card.name)
           
         }

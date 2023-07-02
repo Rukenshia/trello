@@ -117,6 +117,11 @@ struct RightSidebarView: View {
         self.archivedCards = cards
       }
     }
+    .onChange(of: boardVm.board) { board in
+      trelloApi.getBoardCards(id: board.id, filter: "closed", limit: 50) { cards in
+        self.archivedCards = cards
+      }
+    }
     .padding(8)
   }
 }

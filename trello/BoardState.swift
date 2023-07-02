@@ -27,7 +27,6 @@ class BoardState: ObservableObject {
     }
     
     self.board = board
-    UserDefaults.standard.set(board.id, forKey: PreferenceKeys.currentBoard)
   }
   
   func startUpdating() {

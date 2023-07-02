@@ -9,10 +9,10 @@ import SwiftUI
 
 struct IconButton: ButtonStyle {
     var icon: String
-    var iconColor: Color = .white
+    var iconColor: Color = .primary
     var size: CGFloat = 24
-    var color: Color = Color("IconButtonBackground").opacity(0.5)
-    var hoverColor: Color = Color("IconButtonBackground")
+    var color: Color = Color("ButtonBackground").opacity(0.8)
+    var hoverColor: Color = Color("ButtonBackground")
     var padding: CGFloat = 4.0
     
     @State var hovering: Bool = false

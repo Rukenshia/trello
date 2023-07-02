@@ -29,7 +29,7 @@ struct TrelloListNameView: View {
             .textFieldStyle(.plain)
             .focused($focusedField, equals: "name")
         } else {
-          HStack {
+          HStack(spacing: 2) {
             Text(name)
             if self.hovering {
               Button(action: {
@@ -38,18 +38,18 @@ struct TrelloListNameView: View {
                 self.newName = name
               }) {
               }
-              .buttonStyle(IconButton(icon: "square.and.pencil", size: 16, color: .clear, hoverColor: .clear, padding: 0))
+              .buttonStyle(IconButton(icon: "square.and.pencil", size: 14, color: .clear, hoverColor: .clear, padding: 0))
             }
+            Spacer()
           }
           .onHover { hover in
             self.hovering = hover
           }
           .padding(.horizontal, 4)
           .padding(.vertical, 4)
-          .background(self.hovering ? Color("TwZinc600") : .clear)
+          .background(self.hovering ? Color("TwZinc600").opacity(0.2) : .clear)
           .cornerRadius(4)
         }
-        Spacer()
       }
       .lineLimit(1)
       .font(.title3)
