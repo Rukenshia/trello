@@ -38,6 +38,10 @@ struct CardDropDelegate: DropDelegate {
   }
   
   func dropEntered(info: DropInfo) {
+    if (item == "") {
+      return
+    }
+    
     boardVm.stopUpdating()
     
     let dragBoard = NSPasteboard(name: .drag)
@@ -68,6 +72,10 @@ struct CardDropDelegate: DropDelegate {
   }
   
   func dropExited(info: DropInfo) {
+    if (item == "") {
+      return
+    }
+    
     boardVm.startUpdating()
   }
   

@@ -100,50 +100,43 @@ struct TrelloListView: View {
           TrelloListMenuView(listId: list.id)
         }
       }
+      
       Divider()
-        if $list.cards.count == 0 {
-          if !showAddCard {
-            Rectangle()
-              .fill(.clear)
-              .frame(height: 80 * scale)
-              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: "", list: self.$list))
-          }
-        } else {
-          GeometryReader { proxy in
-            ScrollView {
-              LazyVStack(spacing: 4) {
-                ForEach(self.$list.cards, id: \.id) { card in
-                  CardView(card: card,
-                           scale: $scale)
-                  .onDrag {
-                    dragging = card.wrappedValue
-                    print("dragging \(card.id)")
-                    return NSItemProvider(object: card.id as NSString)
-                  }
-                  .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: card.wrappedValue.id, list: self.$list))
-                }
+      GeometryReader { proxy in
+        ScrollView {
+          LazyVStack(spacing: 4) {
+            ForEach(self.$list.cards, id: \.id) { card in
+              CardView(card: card,
+                       scale: $scale)
+              .onDrag {
+                dragging = card.wrappedValue
+                print("dragging \(card.id)")
+                return NSItemProvider(object: card.id as NSString)
               }
-              .background(
-                GeometryReader { geo -> Color in
-                  DispatchQueue.main.async {
-                    scrollViewContentSize = geo.size
-                  }
-                  return Color.clear
-                }
-              )
+              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: card.wrappedValue.id, list: self.$list))
             }
-            .scrollIndicators(.never) // FIXME: with the scroll indicators visible, there's always some white background
           }
-          .frame(
-            maxHeight: scrollViewContentSize.height + 8
+          .background(
+            GeometryReader { geo -> Color in
+              DispatchQueue.main.async {
+                scrollViewContentSize = geo.size
+              }
+              return Color.clear
+            }
           )
         }
-        
-        if showAddCard {
-          AddCardView(list: self.list, showAddCard: self.$showAddCard, onFocusLost: {
-            showAddCard = false
-          })
-        }
+        .scrollIndicators(.never) // FIXME: with the scroll indicators visible, there's always some white background
+      }
+      .frame(
+        maxHeight: scrollViewContentSize.height + 2
+      )
+      
+      
+      if showAddCard {
+        AddCardView(list: self.list, showAddCard: self.$showAddCard, onFocusLost: {
+          showAddCard = false
+        })
+      }
       Button(action: {
         self.showAddCard = true
         
@@ -157,6 +150,7 @@ struct TrelloListView: View {
           Text("Add card")
           Spacer()
         }
+        .font(.system(size: 12 * scale))
         .padding(4 * scale)
         .padding(.vertical, 6 * scale)
         .background(self.addCardColor)
@@ -174,6 +168,7 @@ struct TrelloListView: View {
       }
       .buttonStyle(.plain)
     }
+    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: "", list: self.$list))
     .onChange(of: list.cards) { cards in
       withAnimation {
         setWidth()

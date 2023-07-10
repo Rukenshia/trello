@@ -138,7 +138,10 @@ class TrelloApi: ObservableObject {
     .responseDecodable(of: result) { response in
       if case let .failure(error) = response.result {
         print("API error on '\(url)' \(String(describing: error.responseCode)) \(String(describing: response.response?.statusCode)): \(response)")
-        print(String(decoding: response.data!, as: UTF8.self))
+        
+        if let data = response.data {
+          print(String(decoding: data, as: UTF8.self))
+        }
         self.addError(error)
         return
       }

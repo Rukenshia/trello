@@ -213,7 +213,7 @@ struct CardView: View {
         }
       } else {
         HStack(spacing: 0) {
-          VStack(alignment: .leading, spacing: 0) {
+          VStack(alignment: .leading, spacing: 4) {
             
             if displayedLabels.count > 0 {
               HStack {
@@ -237,11 +237,6 @@ struct CardView: View {
                 .font(.system(size: 12 * scale))
             }
             .foregroundColor(cardNameForegroundColor)
-            
-            
-            if card.dueDate != nil || preferences.showBadgesOnCoverCards {
-              Spacer()
-            }
             
             HStack {
               if let dueDate = card.dueDate {

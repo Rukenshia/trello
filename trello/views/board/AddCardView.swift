@@ -37,6 +37,9 @@ struct AddCardView: View {
           .focused($focusedField, equals: .name)
           .textFieldStyle(.plain)
           .scrollContentBackground(.hidden)
+          .onExitCommand {
+            self.showAddCard = false
+          }
           .onSubmit {
             boardVm.createCard(listId: self.list.id, name: self.name, description: "")
             self.showAddCard = false

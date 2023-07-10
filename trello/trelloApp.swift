@@ -40,7 +40,9 @@ struct trelloApp: App {
     self.appState = AppState(api: nil)
     self.showCommandBar = false
     
-    trelloApi.setAuth(key: preferences.trelloKey!, token: preferences.trelloToken!, credentials: preferences.credentials)
+    if let key = preferences.trelloKey, let token = preferences.trelloToken {
+      trelloApi.setAuth(key: key, token: token, credentials: preferences.credentials)
+    }
     appState.api = trelloApi
   }
   

@@ -76,7 +76,7 @@ class Preferences: ObservableObject {
     self.compactDueDate = UserDefaults.standard.bool(forKey: PreferenceKeys.compactDueDate)
     
     if UserDefaults.standard.value(forKey: PreferenceKeys.showBadgesOnCoverCards) == nil {
-      self.showBadgesOnCoverCards = true
+      self.showBadgesOnCoverCards = false
     } else {
       self.showBadgesOnCoverCards = UserDefaults.standard.bool(forKey: PreferenceKeys.showBadgesOnCoverCards)
     }
@@ -87,6 +87,10 @@ class Preferences: ObservableObject {
     
     $organizations.sink { _ in
       self.save()
+    }
+    
+    $showBadgesOnCoverCards.sink { _ in
+      UserDefaults.standard.set(self.showBadgesOnCoverCards, forKey: PreferenceKeys.showBadgesOnCoverCards)
     }
   }
   
