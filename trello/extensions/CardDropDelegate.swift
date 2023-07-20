@@ -94,9 +94,24 @@ struct CardDropDelegate: DropDelegate {
 //      return false
 //    }
     
-    guard let card = boardVm.board.cards.first(where: { card in card.id == cardId }) else { return false }
+    
+    guard var card = boardVm.board.cards.first(where: { card in card.id == cardId }) else { return false }
+    
+    
     if card.idList == list.id {
       let from = list.cards.firstIndex(where: { c in c.id == cardId})!
+      
+      if item == "" { // in case this is the "drop zone" at the bottom / on an empty list
+        // Move to bottom
+        print("moving inside same list. from index \(from) to the bottom")
+        
+        withAnimation {
+          moveCard(cardId: cardId, from: from, to: list.cards.count - 1)
+        }
+        
+        return true
+      }
+      
       let to = list.cards.firstIndex(where: { c in c.id == item})!
       
       print("moving inside same list. from index \(from) to index \(to)")
@@ -106,7 +121,8 @@ struct CardDropDelegate: DropDelegate {
       }
     } else {
       DispatchQueue.main.async {
-        boardVm.updateCard(cardId: cardId, listId: list.id)
+        card.pos = 0.0
+        boardVm.updateCard(cardId: cardId, listId: list.id, pos: 0.0)
       }
     }
     

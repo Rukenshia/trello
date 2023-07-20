@@ -49,6 +49,7 @@ struct CardView: View {
       bgImage
         .resizable()
         .scaledToFill()
+        .allowsHitTesting(false)
     } else {
       EmptyView()
     }
@@ -283,6 +284,15 @@ struct CardView: View {
         appState.showingDetails = true
       }
     }
+    .onChange(of: showPopover) { [showPopover] newValue in
+      if showPopover && !newValue {
+        appState.showingCardContextMenu = false
+      }
+      
+      if newValue {
+        appState.showingCardContextMenu = true
+      }
+    }
     .background(self.background)
     .sheet(isPresented: $showDetails) {
       CardDetailsView(card: $card, isVisible: $showDetails)
@@ -332,7 +342,7 @@ struct CardView: View {
           return nsevent
         }
         
-        if appState.showingDetails {
+        if appState.showingDetails || appState.showingCardContextMenu {
           return nsevent
         }
         

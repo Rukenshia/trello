@@ -15,6 +15,7 @@ struct PreferenceKeys {
   static let scale = "scale"
   static let organizations = "organizations"
   static let showFavorites = "showFavorites"
+  static let showSharedBoards = "showSharedBoards"
   static let compactDueDate = "compactDueDate"
   static let showBadgesOnCoverCards = "showBadgesOnCoverCards"
 }
@@ -47,6 +48,7 @@ class Preferences: ObservableObject {
   @Published var showBadgesOnCoverCards: Bool
   @Published var organizations: [String: OrganizationPreferences]
   @Published var showFavorites: Bool
+  @Published var showSharedBoards: Bool
   
   init() {
     if let creds = UserDefaults.standard.value(forKey: PreferenceKeys.credentials) as? Data {
@@ -73,6 +75,7 @@ class Preferences: ObservableObject {
     }
     
     self.showFavorites = UserDefaults.standard.bool(forKey: PreferenceKeys.showFavorites)
+    self.showSharedBoards = UserDefaults.standard.bool(forKey: PreferenceKeys.showSharedBoards)
     self.compactDueDate = UserDefaults.standard.bool(forKey: PreferenceKeys.compactDueDate)
     
     if UserDefaults.standard.value(forKey: PreferenceKeys.showBadgesOnCoverCards) == nil {
@@ -97,6 +100,11 @@ class Preferences: ObservableObject {
   func updateShowFavorites(_ value: Bool) {
     self.showFavorites = value
     UserDefaults.standard.set(value, forKey: PreferenceKeys.showFavorites)
+  }
+  
+  func updateShowSharedBoards(_ value: Bool) {
+    self.showSharedBoards = value
+    UserDefaults.standard.set(value, forKey: PreferenceKeys.showSharedBoards)
   }
   
   func save() {

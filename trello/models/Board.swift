@@ -15,6 +15,7 @@ struct BoardPrefs: Codable, Hashable {
 
 struct BasicBoard: Identifiable, Codable {
   var id: String
+  var idOrganization: String?
   var name: String
   var prefs: BoardPrefs
   

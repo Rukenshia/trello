@@ -14,6 +14,7 @@ class AppState: ObservableObject {
   @Published var selectedBoard: Board?
   @Published var loadingBoard: Bool
   @Published var showingDetails: Bool
+  @Published var showingCardContextMenu: Bool
   
   init(api: TrelloApi?) {
     self.api = api
@@ -21,6 +22,7 @@ class AppState: ObservableObject {
     self.selectedBoard = nil
     self.loadingBoard = false
     self.showingDetails = false
+    self.showingCardContextMenu = false
   }
   
   func selectBoard(id: String) {

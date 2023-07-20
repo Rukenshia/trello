@@ -113,7 +113,7 @@ class BoardState: ObservableObject {
             
             // If the card was moved within the list, reorder it
             self.board.lists[newList].cards = self.board.lists[newList].cards.sorted(by: { a, b in
-              return a.pos > b.pos
+              return a.pos < b.pos
             })
           }
           
