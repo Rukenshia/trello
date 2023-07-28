@@ -23,6 +23,10 @@ struct CardAttachmentsView: View {
           }
         })
       }
+      CardAttachmentDropView(cardId: card.id, onCreate: { attachment in
+        attachments.append(attachment)
+      })
+      .frame(height: 80)
     }
     .task {
       self.trelloApi.getCardAttachments(id: card.id) { attachments in

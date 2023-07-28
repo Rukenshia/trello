@@ -25,6 +25,8 @@ struct AttachmentImageView: View {
     }
     .task {
       if attachment.isUpload {
+        if attachment.previews.isEmpty { return }
+        
         self.trelloApi.downloadAttachment(url: attachment.previews.last!.url) { data in
           guard let nsImage = NSImage(data: data) else { return }
           self.image = AnyView(Image(nsImage: nsImage)

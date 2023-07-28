@@ -12,12 +12,21 @@ class BoardState: ObservableObject {
   @Published var board: Board
   @Published var updating: Bool
   
+  @Published var draggedCard: Card? = nil
+  
   
   init(api: TrelloApi, board: Board) {
     self.api = api
     self.board = board
     self.updating = true
   }
+  
+  static var testing: BoardState {
+    let api = TrelloApi.testing
+    
+    return BoardState(api: api, board: Board(id: "id", idOrganization: "orgId", name: "name", prefs: BoardPrefs(), boardStars: []))
+  }
+  
   
   func selectBoard(board: Board) {
     if (!updating) {
@@ -30,10 +39,12 @@ class BoardState: ObservableObject {
   }
   
   func startUpdating() {
+    print("boardVm.startUpdating")
     updating = true
   }
   
   func stopUpdating() {
+    print("boardVm.stopUpdating")
     updating = false
   }
   
@@ -55,6 +66,7 @@ class BoardState: ObservableObject {
       self.board.lists[listIdx].cards.append(card)
     }
   }
+  
   
   func addLabelsToCard(cardId: String, labelIds: [String]) {
     api.addLabelsToCard(cardId: cardId, labelIds: labelIds) { card in
@@ -101,6 +113,12 @@ class BoardState: ObservableObject {
         if var card = self.board.cards.first(where: { card in card.id == cardId }) {
           // Remove from old list and add to new locally
           if let oldList = self.board.lists.firstIndex(where: { list in list.id == card.idList }) {
+            
+            if card.idList == listId {
+              print("card already in list - skip post processing")
+              return
+            }
+            
             if let index = self.board.lists[oldList].cards.firstIndex(of: card) {
               self.board.lists[oldList].cards.remove(at: index)
             }

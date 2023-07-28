@@ -55,7 +55,7 @@ struct RightSidebarView: View {
           Button(action: {
             self.showDoneList = true
           }) { }
-            .buttonStyle(IconButton(icon: "checkmark.circle.fill"))
+            .buttonStyle(IconButton(icon: "checkmark.circle"))
             .sheet(isPresented: self.$showDoneList) {
               TabView {
                 DoneListView(boardActions: boardActions, cards: dl.cards, list: dl)

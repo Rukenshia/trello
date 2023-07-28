@@ -89,18 +89,17 @@ struct CardDetailsView: View {
                 .padding(.bottom, 8)
               }
               
-              if card.badges.attachments > 0 {
-                VStack {
-                  Divider()
-                  HStack {
-                    Image(systemName: "paperclip")
-                    Text("Attachments")
-                      .font(.title2)
-                    Spacer()
-                  }
-                  .padding(4)
-                  CardAttachmentsView(card: self.$card)
+              VStack {
+                Divider()
+                HStack {
+                  Image(systemName: "paperclip")
+                  Text("Attachments")
+                    .font(.title2)
+                  Spacer()
                 }
+                .padding(4)
+                
+                CardAttachmentsView(card: self.$card)
               }
               
               VStack {
@@ -264,6 +263,7 @@ struct CardDetailsView_Previews: PreviewProvider {
   static var previews: some View {
     CardDetailsView(card: .constant(Card(id: UUID().uuidString, name: "A card", desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis lectus nulla at volutpat diam ut. Nec dui nunc mattis enim ut tellus elementum sagittis. Dictum fusce ut placerat orci nulla. Lobortis elementum nibh tellus molestie nunc non blandit massa. Facilisis sed odio morbi quis")), isVisible: .constant(true))
       .environmentObject(TrelloApi.testing)
-      .frame(height: 600)
+      .environmentObject(BoardState.testing)
+      .frame(width: 800, height: 900)
   }
 }

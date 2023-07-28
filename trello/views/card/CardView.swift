@@ -96,7 +96,11 @@ struct CardView: View {
       return Color("CardCoverFg_\(color.rawValue)")
     }
     
-    return Color(nsColor: .textColor)
+    if cover.brightness == .dark {
+      return Color("CardForeground_dark")
+    } else {
+      return Color("CardForeground_light")
+    }
   }
   
   @ViewBuilder
@@ -204,11 +208,11 @@ struct CardView: View {
               }
               Text(card.name)
                 .font(.system(size: 16 * scale).weight(.medium))
-                .foregroundColor(cardNameForegroundColor)
               
               Spacer()
             }
           }
+          .foregroundColor(cardNameForegroundColor)
           .padding(8 * scale)
           .padding(.top, preferences.showBadgesOnCoverCards ? 8 * scale : 12 * scale)
         }
@@ -275,6 +279,16 @@ struct CardView: View {
     .onTapGesture {
       showDetails = true
     }
+//    .overlay {
+//      VStack {
+//        Spacer()
+//        HStack {
+//          Spacer()
+//          Text("\(Int(card.pos))")
+//            .background(Color.white.opacity(0.5))
+//        }
+//      }
+//    }
     .onChange(of: showDetails) { [showDetails] newValue in
       if showDetails && !newValue {
         appState.showingDetails = false

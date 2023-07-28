@@ -40,6 +40,10 @@ struct Card: Identifiable, Codable, Hashable {
     
     return TrelloApi.DateFormatter.date(from: self.due!)
   }
+  
+  static var empty: Card {
+    return Card(id: "", name: "")
+  }
 }
 
 struct CardCover: Codable, Hashable {

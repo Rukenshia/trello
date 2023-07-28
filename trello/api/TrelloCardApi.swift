@@ -31,7 +31,7 @@ extension TrelloApi {
   
   func getCard(id: String, completion: @escaping (Card) -> Void) {
     self.request("/cards/\(id)", result: Card.self) { response, card in
-        completion(card)
+      completion(card)
     }
   }
   
@@ -163,6 +163,19 @@ extension TrelloApi {
       completion(attachment)
     }
   }
+  
+  func createCardAttachment(cardId: String, name: String, filePath: URL, completion: @escaping (Attachment) -> Void) {
+    let url = URL(string: "https://api.trello.com/1/cards/\(cardId)/attachments")!
+    
+    self.session.upload(multipartFormData: { multiPart in
+      multiPart.append(filePath, withName: "file")
+    }, to: url)
+    .responseDecodable(of: Attachment.self) { response in
+      print(String(data: response.data!, encoding: .utf8)!)
+      completion(response.value!)
+    }
+  }
+  
   
   func downloadAttachment(url: String, completion: @escaping (Data) -> Void) {
     self.session.request(

@@ -67,7 +67,6 @@ struct TrelloListView: View {
   @Binding var list: List
   @Binding var scale: CGFloat
   
-  @State private var dragging: Card? = nil
   @State private var addCardColor: Color = Color(.clear)
   @State private var showAddCard: Bool = false
   
@@ -104,16 +103,26 @@ struct TrelloListView: View {
       Divider()
       GeometryReader { proxy in
         ScrollView {
-          LazyVStack(spacing: 4) {
+          // FIXME: will be very slow with many cards, should use LazyVStack or something but that feels laggier most of the time
+          VStack(spacing: 4) {
             ForEach(self.$list.cards, id: \.id) { card in
               CardView(card: card,
                        scale: $scale)
               .onDrag {
-                dragging = card.wrappedValue
-                print("dragging \(card.id)")
+                boardVm.draggedCard = card.wrappedValue
+                boardVm.stopUpdating()
                 return NSItemProvider(object: card.id as NSString)
               }
-              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: card.wrappedValue.id, list: self.$list))
+              .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, card: card, list: self.$list))
+              .gesture(
+                DragGesture()
+                  .onEnded { value in
+                    if boardVm.draggedCard != nil {
+                      boardVm.draggedCard = nil
+                      boardVm.startUpdating()
+                    }
+                  }
+              )
             }
           }
           .background(
@@ -168,7 +177,7 @@ struct TrelloListView: View {
       }
       .buttonStyle(.plain)
     }
-    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, item: "", list: self.$list))
+    .onDrop(of: ["public.text"], delegate: CardDropDelegate(trelloApi: self.trelloApi, boardVm: boardVm, card: Binding.constant(Card.empty), list: self.$list))
     .onChange(of: list.cards) { cards in
       withAnimation {
         setWidth()

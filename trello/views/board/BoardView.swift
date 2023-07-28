@@ -16,9 +16,6 @@ struct BoardView: View {
   
   @State private var organization: Organization?
   
-  @State var preferences: Preferences = Preferences()
-  @State private var scale: CGFloat = 1.0
-  
   @State private var showRightSidebar = false
   
   @ViewBuilder
@@ -55,58 +52,13 @@ struct BoardView: View {
     ZStack {
       switch viewType {
       case .lists:
-        ScrollView([.horizontal]) {
-          VStack(alignment: .leading) {
-            HStack(alignment: .top) {
-              ForEach($boardVm.board.lists.filter{ list in !list.wrappedValue.name.contains("✔️")}) { list in
-                TrelloListView(list: list, scale: $scale)
-              }
-            }
-          }
-          .padding()
-          Spacer()
-        }
-        .background(
-          self.backgroundImage.allowsHitTesting(false)
-        )
-        .clipped()
-        .navigationTitle(boardVm.board.name)
-        .navigationSubtitle(organization?.displayName ?? "")
-        .toolbar {
-          
-          ToolbarItem(placement: .navigation) {
-            Button() {
-              if boardVm.board.boardStars.isEmpty {
-                trelloApi.createMemberBoardStar(boardId: boardVm.board.id) { boardStar in
-                  boardVm.board.boardStars = [boardStar]
-                }
-              } else {
-                trelloApi.deleteMemberBoardStar(boardStarId: boardVm.board.boardStars[0].id ?? boardVm.board.boardStars[0]._id!) {
-                  boardVm.board.boardStars = []
-                }
-              }
-            } label: {
-              Image(systemName: !boardVm.board.boardStars.isEmpty ? "star.fill" : "star")
-                .foregroundColor(!boardVm.board.boardStars.isEmpty ? .yellow : .secondary )
-            }
-          }
-          
-          
-          
-          ToolbarItemGroup(placement: .primaryAction) {
-            
-            Button(action: { setScale(scale + 0.1) }) {
-              Image(systemName: "plus.magnifyingglass")
-            }
-            Button(action: { setScale(1.0) }) {
-              Text("\(Int(scale * 100))%")
-            }
-            Button(action: { setScale(scale - 0.1) }) {
-              Image(systemName: "minus.magnifyingglass")
-            }
-            ToolbarBoardVisualisationView(viewType: $viewType)
-          }
-        }
+        BoardListsView(board: $boardVm.board, viewType: $viewType)
+          .navigationTitle(boardVm.board.name)
+          .navigationSubtitle(organization?.displayName ?? "")
+          .background(
+            self.backgroundImage.allowsHitTesting(false)
+          )
+          .clipped()
       case .table:
         BoardTableView(board: $boardVm.board)
           .background(
@@ -115,9 +67,6 @@ struct BoardView: View {
           .clipped()
           .navigationTitle(boardVm.board.name)
           .navigationSubtitle(organization?.displayName ?? "")
-          .toolbar {
-            ToolbarBoardVisualisationView(viewType: $viewType)
-          }
       }
     }
     // TODO: needed?
@@ -127,28 +76,11 @@ struct BoardView: View {
       }
     }
     .onAppear {
-      scale = preferences.scale;
       
       self.trelloApi.getOrganization(id: boardVm.board.idOrganization) { organization in
         self.organization = organization
       }
     }
-  }
-  
-  private func setScale(_ newScale: CGFloat) {
-    scale = newScale;
-    
-    
-    if (scale < 0.3) {
-      scale = 0.3
-    }
-    
-    if (scale > 2) {
-      scale = 2
-    }
-    
-    preferences.scale = scale;
-    preferences.save();
   }
 }
 
